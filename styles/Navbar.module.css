@@ -1,3 +1,6 @@
 .modalStyle {
   width: 30%;
 }
+.sign:hover {
+  background-color: #d94b58;
+}

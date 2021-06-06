@@ -5,12 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Navbar from "../components/navbar";
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <div style={{ display: "contents" }}>
-      <Navbar />
-      <Component {...pageProps} />
-    </div>
-  );
+  return <Component {...pageProps} />;
 }
 
 export default MyApp;

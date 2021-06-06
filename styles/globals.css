@@ -7,7 +7,8 @@ body {
   height: 100%;
   width: 100%;
   display: flex;
-  background-color: #f2f2f2;
+  background: #181818;
+  background-size: cover;
 }
 #__next {
   height: 100%;
@@ -42,4 +43,29 @@ h5 {
   font-style: medium;
   font-weight: 500;
   font-display: swap;
+}
+@font-face {
+  font-family: "Vibur";
+  src: url(//fonts.googleapis.com/css?family=Vibur);
+  font-style: medium;
+  font-weight: 500;
+  font-display: swap;
+}
+.side-drawer {
+  z-index: 200;
+  display: none;
+}
+.side-drawer.open {
+  display: initial;
+  transition: display 0.3s ease-out;
+}
+.video.open {
+  width: 1440px;
+  transition: width 2s;
+}
+.video {
+  width: 75%;
+}
+.btn:hover {
+  background-color: #d94b58;
 }

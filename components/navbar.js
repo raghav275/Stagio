@@ -6,10 +6,8 @@ import Form from "react-bootstrap/Form";
 const mainStyle = {
   width: "100%",
   height: "60px",
-  backgroundColor: "#FFFFFF",
   display: "flex",
   alignItems: "center",
-  marginBottom: "60px",
 };
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -28,9 +26,10 @@ const Navbar = () => {
             fontFamily: "Poppins",
             fontWeight: 700,
             margin: 0,
+            color: "#5a5a5a",
           }}
         >
-          Sta<span style={{ color: "#007bff" }}>gio</span>
+          Sta<span style={{ color: "#d94b58" }}>gio</span>
         </p>
       </div>
       <div
@@ -55,10 +54,13 @@ const Navbar = () => {
           About Us
         </p>
         <Button
+          className={styles.sign}
           style={{
             borderRadius: "50px",
             borderWidth: 2,
             fontFamily: "Poppins-Medium",
+            borderColor: "#d94b58",
+            color: "#ffffff",
           }}
           onClick={handleOpen}
           variant="outline-primary"

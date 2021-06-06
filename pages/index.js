@@ -2,16 +2,22 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import Carousel from "react-bootstrap/Carousel";
-import Card from "react-bootstrap/Card";
+import Card from "../components/card";
 import Button from "react-bootstrap/Button";
 import Slider from "react-slick";
+import Navbar from "../components/navbar";
+import Neon from "../components/neon";
+import Footer from "../components/footer";
+import Circle from "../components/circle";
+import { urlObjectKeys } from "next/dist/next-server/lib/utils";
 
 const mainStyle = {
   height: "100%",
   width: "100%",
-  backgroundColor: "#f2f2f2",
   display: "flex",
   flexDirection: "column",
+  backgroundColor: "#181818",
+  backgroundSize: "cover",
 };
 export default function Home() {
   var settings = {
@@ -23,13 +29,23 @@ export default function Home() {
   };
   return (
     <div style={mainStyle}>
-      <div style={{ marginTop: "60px" }}>
+      <div style={{ zIndex: 12 }}>
+        <Navbar />
+      </div>
+      <div style={{ position: "relative", top: -60 }}>
         <Carousel>
-          <Carousel.Item>
+          <Carousel.Item
+            style={{
+              overflow: "hidden",
+              height: "700px",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
+            }}
+          >
             <img
               className="d-block w-100"
-              height="500px"
-              src="https://wowslider.com/sliders/demo-93/data1/images/lake.jpg"
+              height="800px"
+              src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="First slide"
             />
             <Carousel.Caption>
@@ -37,24 +53,38 @@ export default function Home() {
               <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item>
+          <Carousel.Item
+            style={{
+              overflow: "hidden",
+              height: "700px",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
+            }}
+          >
             <img
               className="d-block w-100"
-              src="https://wowslider.com/sliders/demo-93/data1/images/lake.jpg"
+              src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="Second slide"
-              height="500px"
+              height="800px"
             />
             <Carousel.Caption>
               <h3>Second slide label</h3>
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item>
+          <Carousel.Item
+            style={{
+              overflow: "hidden",
+              height: "700px",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
+            }}
+          >
             <img
               className="d-block w-100"
-              src="https://wowslider.com/sliders/demo-93/data1/images/lake.jpg"
+              src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="Third slide"
-              height="500px"
+              height="800px"
             />
             <Carousel.Caption>
               <h3>Third slide label</h3>
@@ -69,13 +99,22 @@ export default function Home() {
         style={{
           display: "flex",
           flexDirection: "column",
-          margin: "10px",
           padding: 20,
         }}
       >
-        <h3 style={{ marginLeft: 45, fontFamily: "Poppins" }}>
-          Live <span style={{ color: "#007bff" }}>Shows</span>
+        <h3
+          style={{
+            marginLeft: 65,
+            fontFamily: "Poppins",
+            color: "#d94b58",
+            fontSize: 40,
+          }}
+        >
+          Live Shows
         </h3>
+        <div
+          style={{ border: "4px solid white", width: 140, marginLeft: 65 }}
+        ></div>
         <div
           style={{
             display: "flex",
@@ -87,21 +126,10 @@ export default function Home() {
           <Slider {...settings}>
             {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
               return (
-                <div style={{}}>
-                  <Card style={{ marginLeft: 20, width: "18rem" }}>
-                    <Card.Img
-                      variant="top"
-                      src="https://wowslider.com/sliders/demo-93/data1/images/lake.jpg"
-                    />
-                    <Card.Body>
-                      <Card.Title>Card Title</Card.Title>
-                      <Card.Text>
-                        Some quick example text to build on the card title and
-                        make up the bulk of the card's content.
-                      </Card.Text>
-                      <Button variant="primary">Go somewhere</Button>
-                    </Card.Body>
-                  </Card>
+                <div key={i} style={{ background: "transparent", padding: 30 }}>
+                  <div style={{ padding: 30 }}>
+                    <Card />
+                  </div>
                 </div>
               );
             })}
@@ -110,16 +138,86 @@ export default function Home() {
       </div>
       <div
         style={{
+          width: "92%",
+          height: "500px",
+          background: "url(/banner1.png)",
+          alignSelf: "center",
+          marginTop: 40,
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "black",
+            opacity: 0.6,
+            padding: 50,
+          }}
+        >
+          <p style={{ fontSize: 100, color: "white" }}>
+            Bringing the stage <br />
+            to your screens
+          </p>
+          <p></p>
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: 20,
+          marginTop: 40,
+        }}
+      >
+        <h3
+          style={{
+            marginLeft: 65,
+            fontFamily: "Poppins",
+            color: "#d94b58",
+            fontSize: 40,
+          }}
+        >
+          Artists
+        </h3>
+        <div
+          style={{ border: "4px solid white", width: 100, marginLeft: 65 }}
+        ></div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            paddingLeft: 25,
+            paddingRight: 25,
+          }}
+        >
+          <Slider {...settings}>
+            {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
+              return (
+                <div key={i} style={{ background: "transparent", padding: 30 }}>
+                  <div style={{ padding: 30 }}>
+                    <Circle />
+                  </div>
+                </div>
+              );
+            })}
+          </Slider>
+        </div>
+      </div>
+      {/* <div
+        style={{
           display: "flex",
           margin: "10px",
           padding: 20,
           flexDirection: "column",
           alignItems: "center",
+          color: "#d94b58",
         }}
       >
-        <h1>
-          About <span style={{ color: "#007bff" }}>Us</span>
-        </h1>
+        <h1>About Us</h1>
+        <div style={{ border: "4px solid white", width: 140 }}></div>
         <div
           style={{
             alignSelf: "flex-start",
@@ -129,72 +227,37 @@ export default function Home() {
             width: "100%",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            <div>
+          <div>
+            <div
+              style={{
+                color: "#ffffff",
+                position: "relative",
+                top: 80,
+                zIndex: 12,
+                left: 90,
+              }}
+            >
               <p>
                 Lorem ipsum dolor sit amet,
+                <br /> efficitur eleifend. Fusce interdum <br />
+                mollis velit fringilla facilisis.
+                <br /> Lorem ipsum dolor sit amet,
                 <br /> efficitur eleifend. Fusce interdum <br />
                 mollis velit fringilla facilisis.{" "}
               </p>
             </div>
-            <div>
-              <img src="https://img.freepik.com/free-vector/abstract-grunge-live-music-poster_1017-9864.jpg?size=338&ext=jpg"></img>
+            <div
+              style={{ position: "relative", top: -390, textAlign: "right" }}
+            >
+              <img
+                style={{ borderRadius: 30 }}
+                src="https://images.unsplash.com/photo-1501612780327-45045538702b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y29uY2VydHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
+              ></img>
             </div>
           </div>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
-          backgroundColor: "#007bff",
-          padding: 30,
-          paddingTop: 60,
-          paddingBottom: 60,
-          marginTop: 30,
-        }}
-      >
-        <div
-          style={{ display: "flex", flexDirection: "column", color: "#ffffff" }}
-        >
-          <p>Link 1</p>
-          <p>Link 2</p>
-          <p>Link 3</p>
-          <p>Link 4</p>
-        </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", color: "#ffffff" }}
-        >
-          <p>Link 1</p>
-          <p>Link 2</p>
-          <p>Link 3</p>
-          <p>Link 4</p>
-        </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", color: "#ffffff" }}
-        >
-          <p>Link 1</p>
-          <p>Link 2</p>
-          <p>Link 3</p>
-          <p>Link 4</p>
-        </div>
-        <div
-          style={{ display: "flex", flexDirection: "column", color: "#ffffff" }}
-        >
-          <p>Link 1</p>
-          <p>Link 2</p>
-          <p>Link 3</p>
-          <p>Link 4</p>
-        </div>
-      </div>
+      </div> */}
+      <Footer />
     </div>
   );
 }

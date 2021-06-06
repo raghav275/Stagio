@@ -1,0 +1,35 @@
+import React, { useState, useEffect } from "react";
+
+const Circle = () => {
+  return (
+    <div
+      style={{ display: "flex", alignItems: "center", flexDirection: "column" }}
+    >
+      <div
+        style={{
+          width: 290,
+          height: 290,
+          overflow: "hidden",
+          borderRadius: 360,
+        }}
+      >
+        <img
+          width="290px"
+          height="290px"
+          src="https://dilliwaliblog.files.wordpress.com/2020/08/i0m27jp8_400x400.jpg"
+        ></img>
+      </div>
+      <p
+        style={{
+          color: "#ffffff",
+          marginTop: 10,
+          fontWeight: 800,
+          fontSize: 20,
+        }}
+      >
+        Anuv Jain
+      </p>
+    </div>
+  );
+};
+export default Circle;
