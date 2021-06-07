@@ -7,15 +7,15 @@ const Circle = () => {
     >
       <div
         style={{
-          width: 290,
-          height: 290,
+          width: 180,
+          height: 180,
           overflow: "hidden",
           borderRadius: 360,
         }}
       >
         <img
-          width="290px"
-          height="290px"
+          width="180px"
+          height="180px"
           src="https://dilliwaliblog.files.wordpress.com/2020/08/i0m27jp8_400x400.jpg"
         ></img>
       </div>

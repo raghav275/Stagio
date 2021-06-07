@@ -27,6 +27,13 @@ export default function Home() {
     slidesToShow: 4,
     slidesToScroll: 1,
   };
+  var artistSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+  };
   return (
     <div style={mainStyle}>
       <div style={{ zIndex: 12 }}>
@@ -155,13 +162,16 @@ export default function Home() {
             backgroundColor: "black",
             opacity: 0.6,
             padding: 50,
+            paddingTop: 100,
           }}
         >
-          <p style={{ fontSize: 100, color: "white" }}>
+          <p style={{ fontSize: 100, color: "white", lineHeight: 1 }}>
             Bringing the stage <br />
             to your screens
           </p>
-          <p></p>
+          <p style={{ fontSize: 50, color: "#d94b58" }}>
+            Grab your front-seat now.
+          </p>
         </div>
       </div>
       <div
@@ -193,7 +203,7 @@ export default function Home() {
             paddingRight: 25,
           }}
         >
-          <Slider {...settings}>
+          <Slider {...artistSettings}>
             {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
               return (
                 <div key={i} style={{ background: "transparent", padding: 30 }}>
