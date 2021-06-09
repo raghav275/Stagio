@@ -18,6 +18,8 @@ const Profile = () => {
         flexDirection: "row",
         backgroundColor: "#181818",
         width: "100%",
+        overflowX: "hidden",
+        overflowY: "hidden",
       }}
     >
       <div style={{ display: "flex", flex: 1, width: width / 3 }}>
