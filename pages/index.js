@@ -170,7 +170,7 @@ export default function Home() {
             to your screens
           </p>
           <p style={{ fontSize: 50, color: "#d94b58" }}>
-            Grab your front-seat now.
+            Grab your front seat now.
           </p>
         </div>
       </div>
