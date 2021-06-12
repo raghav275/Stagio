@@ -127,8 +127,8 @@ const Profile = () => {
           </p>
         </div>
         <div style={{ alignSelf: "center", width: "90%", overflowY: "scroll" }}>
-          {[0, 0, 0, 0, 0, 0, 0].map(() => {
-            return <Event />;
+          {[0, 0, 0, 0, 0, 0, 0].map((i) => {
+            return <Event key={i} />;
           })}
         </div>
       </div>

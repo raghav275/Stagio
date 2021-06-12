@@ -55,7 +55,9 @@ const EventPage = () => {
             fontWeight: 600,
           }}
         >
-          <p>June 10 | 6:00 PM</p>
+          <p>
+            June 10 <span style={{ color: "#ffffff" }}>|</span> 6:00 PM
+          </p>
         </div>
         <div style={{ padding: 10, fontSize: 20 }}>
           <p style={{ color: "#ffffff" }}>

@@ -69,3 +69,12 @@ h5 {
 .btn:hover {
   background-color: #d94b58;
 }
+.coming-soon {
+  text-transform: uppercase;
+  background: linear-gradient(to right, #d94b58 20%, #292929 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 20vw;
+  font-family: "Poppins", sans-serif;
+}
