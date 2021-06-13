@@ -74,26 +74,47 @@ const Navbar = () => {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           dialogClassName={styles.modalStyle}
+          contentClassName={styles.body}
         >
-          <Modal.Header closeButton style={{ border: "none" }}>
-            <Modal.Title id="contained-modal-title-vcenter">
+          <Modal.Header
+            closeButton
+            style={{ border: "none", color: "#d94b58" }}
+          >
+            <Modal.Title
+              style={{ color: "#d94b58" }}
+              id="contained-modal-title-vcenter"
+            >
               Sign In
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
-              <Form.Group>
-                <h5>Enter Your Phone Number to Sign In</h5>
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  placeholder="Phone Number"
-                />
-              </Form.Group>
-            </Form>
+            <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
+              Enter Your Email
+            </p>
+            <input
+              style={{
+                width: "100%",
+                padding: 10,
+                marginBottom: 10,
+                borderRadius: 60,
+                border: "2px solid #d94b58",
+                background: "transparent",
+                color: "#ffffff",
+                outline: "none",
+              }}
+              placeholder="Enter Here"
+            ></input>
           </Modal.Body>
           <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
-            <Button>Sign In</Button>
+            <Button
+              style={{
+                border: "none",
+                backgroundColor: "#d94b58",
+                borderRadius: 20,
+              }}
+            >
+              Sign In
+            </Button>
           </Modal.Footer>
         </Modal>
       </div>

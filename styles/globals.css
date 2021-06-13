@@ -78,3 +78,8 @@ h5 {
   font-size: 20vw;
   font-family: "Poppins", sans-serif;
 }
+button.close {
+  color: #d94b58;
+  opacity: 1;
+  text-shadow: none;
+}
