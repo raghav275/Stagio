@@ -75,7 +75,9 @@ h5 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 20vw;
+  font-size: 100px;
+  color: #a5a5a5d1;
+  font-weight: 800;
   font-family: "Poppins", sans-serif;
 }
 button.close {
@@ -83,3 +85,64 @@ button.close {
   opacity: 1;
   text-shadow: none;
 }
+
+.head{
+  font-size: 30px;
+  color: #d94b58;
+  font-weight: 800;
+  text-transform: uppercase;
+  width: 70%;
+}
+
+.description{
+  color: #fff;
+  width: 68%;
+}
+
+.container{
+  top: 25vh;
+}
+
+.footerContainer{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.title{
+  position: absolute;
+  margin-left: 30px;
+  top: 30px;
+}
+
+@media only screen and (max-width: 768px){
+  .coming-soon{
+    font-size : 40px;
+    font-weight: 600;
+  }
+  .head{
+    font-size: 15px;
+    font-weight: 600;
+    width: 100%;
+  }
+  .description{
+    font-size: 11px;
+    width: 100%;
+  }
+
+  .container{
+    top: 20vh;
+  }
+
+  .title{
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+
+  .footerContainer{
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+} 

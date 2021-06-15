@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 const ComingSoon = () => {
-  const [height, setHeight] = useState(0);
-  useEffect(() => {
-    setHeight(window.innerHeight);
-  }, []);
   return (
     <div
       style={{
@@ -25,20 +21,12 @@ const ComingSoon = () => {
           padding: 100,
         }}
       ></div>
-      <div style={{ position: "absolute", bottom: 0, right: 0 }}>
-        <p
-          className="coming-soon"
-          style={{
-            color: "#a5a5a5d1",
-            fontSize: 100,
-            fontWeight: "800",
-            textTransform: "uppercase",
-          }}
-        >
+      <div className="footerContainer">
+        <p className="coming-soon">
           Coming Soon
         </p>
       </div>
-      <div style={{ position: "absolute", top: 0, left: 0, margin: 30 }}>
+      <div className="title">
         <p
           style={{
             fontSize: 50,
@@ -52,47 +40,39 @@ const ComingSoon = () => {
         </p>
       </div>
       <div
+        className="container"
         style={{
           position: "absolute",
           display: "flex",
           flexDirection: "column",
-          width: "50%",
           left: 0,
-          top: height / 4,
           color: "#ffffff",
           paddingLeft: 30,
         }}
       >
-        <p
-          style={{
-            fontSize: 30,
-            color: "#d94b58",
-            fontWeight: 800,
-            textTransform: "uppercase",
-          }}
-        >
+        <p className="head">
           A 100% commission free platform for artists to host events
         </p>
-        <p>
+        <p className="description">
           A platform curated to narrow the gap between artists and their fans by
           hosting live shows giving you the front row experience at your home.
         </p>
-        <p>
+        <p className="description">
           On Stagio, artists perform live, online shows from their laptop that
           are never recorded or archived. That's right! Every Stagio show is a
           once-in-a-lifetime experience that's not to be missed.
         </p>
-        <p>
+        <p className="description">
           Stagio allows both fans and artists to be part of the show. Fans are
           encouraged to ask the artist questions, request songs, and even chat
           with other fans during the show.
         </p>
-        <p>
+        <p className="description">
           Stagio enables fans to support artists. Whether you're helping an
           artist finance their next album or contributing to the performer's
           favorite charity, Stagio artists actually get paid for their time.
         </p>
-        <p>
+        <p className="description">
           Contact us at{" "}
           <span style={{ color: "#d94b58" }}>stagiodotin@gmail.com</span> to
           join hundreds of other artists

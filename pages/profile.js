@@ -5,12 +5,6 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 import Button from "react-bootstrap/Button";
 import Event from "../components/event";
 const Profile = () => {
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  useEffect(() => {
-    setWidth(window.innerWidth);
-    setHeight(window.innerHeight);
-  }, []);
   return (
     <div
       style={{
@@ -26,8 +20,8 @@ const Profile = () => {
         <img
           style={{
             objectFit: "cover",
-            height: height,
-            width: width / 3,
+            height: "100vh",
+            width: "33.33vw",
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
           }}

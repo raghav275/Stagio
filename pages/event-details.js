@@ -2,10 +2,6 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 
 const EventPage = () => {
-  const [height, setHeight] = useState(0);
-  useEffect(() => {
-    setHeight(window.innerHeight);
-  }, []);
   return (
     <div
       style={{
@@ -32,7 +28,7 @@ const EventPage = () => {
         style={{
           position: "absolute",
           zIndex: 2,
-          top: height / 5,
+          top: "20vh",
           paddingLeft: 20,
         }}
       >
