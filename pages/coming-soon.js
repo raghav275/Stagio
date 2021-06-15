@@ -74,7 +74,7 @@ const ComingSoon = () => {
         </p>
         <p className="description">
           Contact us at{" "}
-          <span style={{ color: "#d94b58" }}>stagiodotin@gmail.com</span> to
+          <span className="email" style={{ color: "#d94b58" }}>stagiodotin@gmail.com</span> to
           join hundreds of other artists
         </p>
       </div>
