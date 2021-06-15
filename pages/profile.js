@@ -16,7 +16,7 @@ const Profile = () => {
         overflowY: "hidden",
       }}
     >
-      <div style={{ display: "flex", flex: 1, width: width / 3 }}>
+      <div style={{ display: "flex", flex: 1, width: "33.33vw" }}>
         <img
           style={{
             objectFit: "cover",
