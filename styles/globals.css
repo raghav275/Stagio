@@ -149,4 +149,27 @@ button.close {
   .email{
     font-weight: bold;
   }
+
+  @media only screen and (max-height: 639px){
+    .container{
+      top: 17vh;
+    }
+    .head{
+      font-size: 15px;
+      font-weight: 600;
+      width: 100%;
+    }
+    .description{
+      font-size: 11px;
+      width: 100%;
+    }
+    .title{
+      width: 100%;
+      margin: 0;
+      text-align: center;
+      top: 15px;
+    }
+  }
 } 
+
+
