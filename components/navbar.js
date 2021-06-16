@@ -159,6 +159,18 @@ const Navbar = () => {
               }}
               placeholder="Enter Here"
             ></input>
+            {selected === "Sign In"&&
+            <p 
+            style={{
+              color: "#ffffff",
+              cursor: "pointer", 
+              paddingLeft: 10, 
+              fontSize: 15
+            }} 
+            onClick={() => handleOpen("Forgot Password")}>
+              Forgot Password
+            </p>
+            }
             </div>}
           </Modal.Body>
           <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
@@ -173,7 +185,7 @@ const Navbar = () => {
             </Button>
             { selected === "Sign In" && 
               <div style={{marginLeft: 10}}>
-                <Button
+                {/* <Button
                 style={{
                 border: "none",
                 backgroundColor: "#d94b58",
@@ -182,18 +194,18 @@ const Navbar = () => {
               onClick={() => handleOpen("Register")}
             >
               New User?
-            </Button>
-            <Button
-                style={{
-                border: "none",
-                backgroundColor: "#d94b58",
-                borderRadius: 20,
-                marginLeft: 10
-              }}
-              onClick={() => handleOpen("Forgot Password")}
-            >
-              Forgot Password
-            </Button>
+            </Button> */}
+            <p 
+            style={{
+              color: "#d94b58",
+              cursor: "pointer", 
+              marginTop:15,
+              paddingLeft: 10, 
+              fontSize: 15
+            }} 
+            onClick={() => handleOpen("Register")}>
+              New User?
+            </p>
               </div>
             }
           </Modal.Footer>
