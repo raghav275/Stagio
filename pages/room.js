@@ -5,12 +5,30 @@ import Button from "react-bootstrap/Button";
 import Sidechat from "../components/sidechat";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import { ChatBubble } from "@material-ui/icons";
+import io from "socket.io-client";
+
 const Room = () => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
+
+  const [messages, setMessages] = useState([]);
   useEffect(() => {
     setHeight(window.innerHeight);
     setWidth(window.innerWidth);
+  }, []);
+
+  const [response, setResponse] = useState("");
+
+  useEffect(() => {
+    const socket = io(process.env.BASE_URL);
+    socket.emit("room", "12345");
+    socket.on("message", (data) => {
+      setMessages((messages) => {
+        return [...messages, data.message];
+      });
+    });
+
+    return () => socket.disconnect();
   }, []);
   const [open, setOpen] = useState(true);
   return (
@@ -90,8 +108,8 @@ const Room = () => {
             marginBottom: 10,
           }}
         >
-          {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
-            return <Chatbubble key={i} name="Random" text="hello" />;
+          {messages.map((data, i) => {
+            return <Chatbubble key={i} name="random" text={data} />;
           })}
         </div>
         <div
