@@ -128,6 +128,7 @@ const Room = () => {
           style={{
             width: "100%",
             height: width / 2,
+            backgroundSize: "cover",
             borderRadius: 10,
           }}
           ref={videoRef}
