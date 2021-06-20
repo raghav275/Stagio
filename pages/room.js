@@ -8,7 +8,7 @@ import { ChatBubble } from "@material-ui/icons";
 import io from "socket.io-client";
 import * as webrtc from "wrtc";
 import axios from "axios";
-
+axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const Room = () => {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
@@ -18,11 +18,10 @@ const Room = () => {
     setHeight(window.innerHeight);
     setWidth(window.innerWidth);
   }, []);
-
   const [response, setResponse] = useState("");
 
   useEffect(() => {
-    const socket = io("https://stagio-backend.herokuapp.com/");
+    const socket = io(process.env.BASE_URL);
     socket.emit("room", "12345");
     socket.on("message", (data) => {
       setMessages((messages) => {
@@ -65,7 +64,7 @@ const Room = () => {
       sdp: peer.localDescription,
     };
     const { data } = await axios.post(
-      "https://stagio-backend.herokuapp.com/api/event/broadcast",
+      process.env.BASE_URL + "api/event/broadcast",
       payload
     );
     const desc = new webrtc.RTCSessionDescription(data.sdp);
@@ -96,7 +95,7 @@ const Room = () => {
       sdp: peer.localDescription,
     };
     const { data } = await axios.post(
-      "https://stagio-backend.herokuapp.com/" + "api/event/consumer",
+      process.env.BASE_URL + "api/event/consumer",
       payload
     );
     // console.log(data);
