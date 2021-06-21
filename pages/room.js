@@ -45,6 +45,7 @@ const Room = () => {
   };
   const handleStreamer = () => {
     const socket = io(process.env.NEXT_BASE_URL);
+
     socket.on("answer", (id, description) => {
       peerConnections[id].setRemoteDescription(description);
     });
