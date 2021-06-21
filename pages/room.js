@@ -10,7 +10,6 @@ import * as webrtc from "wrtc";
 import axios from "axios";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const Room = () => {
-  console.log(process.env.NEXT_BASE_URL);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const videoRef = useRef(null);
@@ -21,15 +20,16 @@ const Room = () => {
   }, []);
   const [response, setResponse] = useState("");
 
-  // useEffect(() => {
-  //   // socket.emit("room", "12345");
-  //   // socket.on("message", (data) => {
-  //   //   setMessages((messages) => {
-  //   //     return [...messages, data.message];
-  //   //   });
-  //   // });
-  //   // return () => socket.disconnect();
-  // }, []);
+  useEffect(() => {
+    const socket = io(process.env.NEXT_BASE_URL);
+    socket.emit("room", "12345");
+    socket.on("message", (data) => {
+      setMessages((messages) => {
+        return [...messages, data.message];
+      });
+    });
+    return () => socket.disconnect();
+  }, []);
   const peerConnections = {};
   const config = {
     iceServers: [
@@ -44,7 +44,7 @@ const Room = () => {
     ],
   };
   const handleStreamer = () => {
-    const socket = io(process.env.BASE_URL);
+    const socket = io(process.env.NEXT_BASE_URL);
     socket.on("answer", (id, description) => {
       peerConnections[id].setRemoteDescription(description);
     });
