@@ -21,7 +21,7 @@ const Room = () => {
   const [response, setResponse] = useState("");
 
   useEffect(() => {
-    const socket = io(process.env.BASE_URL);
+    const socket = io("https://stagio-backend.herokuapp.com/");
     socket.emit("room", "12345");
     socket.on("message", (data) => {
       setMessages((messages) => {
@@ -64,7 +64,7 @@ const Room = () => {
       sdp: peer.localDescription,
     };
     const { data } = await axios.post(
-      process.env.BASE_URL + "api/event/broadcast",
+      "https://stagio-backend.herokuapp.com/" + "api/event/broadcast",
       payload
     );
     const desc = new webrtc.RTCSessionDescription(data.sdp);
@@ -95,7 +95,7 @@ const Room = () => {
       sdp: peer.localDescription,
     };
     const { data } = await axios.post(
-      process.env.BASE_URL + "api/event/consumer",
+      "https://stagio-backend.herokuapp.com/" + "api/event/consumer",
       payload
     );
     // console.log(data);
