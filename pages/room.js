@@ -119,7 +119,7 @@ const Room = () => {
   //Start of watcher
 
   const handleViewer = () => {
-    const socket = io(process.env.BASE_URL);
+    const socket = io(process.env.NEXT_BASE_URL);
     let peerConnection;
     socket.on("offer", (id, description) => {
       console.log("here");
