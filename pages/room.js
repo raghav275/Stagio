@@ -10,6 +10,7 @@ import * as webrtc from "wrtc";
 import axios from "axios";
 axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
 const Room = () => {
+  console.log(process.env.NEXT_BASE_URL);
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
   const videoRef = useRef(null);
