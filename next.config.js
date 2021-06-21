@@ -10,3 +10,9 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = {
+  env: {
+    NEXT_BASE_URL: "https://stagio-backend.herokuapp.com/",
+  },
+};
