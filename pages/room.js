@@ -20,91 +20,146 @@ const Room = () => {
   }, []);
   const [response, setResponse] = useState("");
 
-  useEffect(() => {
-    const socket = io("https://stagio-backend.herokuapp.com/");
-    socket.emit("room", "12345");
-    socket.on("message", (data) => {
-      setMessages((messages) => {
-        return [...messages, data.message];
-      });
+  // useEffect(() => {
+  //   // socket.emit("room", "12345");
+  //   // socket.on("message", (data) => {
+  //   //   setMessages((messages) => {
+  //   //     return [...messages, data.message];
+  //   //   });
+  //   // });
+  //   // return () => socket.disconnect();
+  // }, []);
+  const peerConnections = {};
+  const config = {
+    iceServers: [
+      {
+        urls: "stun:stun.l.google.com:19302",
+      },
+      // {
+      //   "urls": "turn:TURN_IP?transport=tcp",
+      //   "username": "TURN_USERNAME",
+      //   "credential": "TURN_CREDENTIALS"
+      // }
+    ],
+  };
+  const handleStreamer = () => {
+    const socket = io(process.env.BASE_URL);
+    socket.on("answer", (id, description) => {
+      peerConnections[id].setRemoteDescription(description);
     });
 
-    return () => socket.disconnect();
-  }, []);
-  const handleStreamer = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      });
+    socket.on("watcher", (id) => {
+      const peerConnection = new RTCPeerConnection(config);
+      peerConnections[id] = peerConnection;
+
+      let stream = videoRef.current.srcObject;
+      stream
+        .getTracks()
+        .forEach((track) => peerConnection.addTrack(track, stream));
+
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit("candidate", id, event.candidate);
+        }
+      };
+
+      peerConnection
+        .createOffer()
+        .then((sdp) => peerConnection.setLocalDescription(sdp))
+        .then(() => {
+          socket.emit("offer", id, peerConnection.localDescription);
+        });
+    });
+
+    socket.on("candidate", (id, candidate) => {
+      peerConnections[id].addIceCandidate(new RTCIceCandidate(candidate));
+    });
+
+    socket.on("disconnectPeer", (id) => {
+      peerConnections[id].close();
+      delete peerConnections[id];
+    });
+
+    window.onunload = window.onbeforeunload = () => {
+      socket.close();
+    };
+
+    getStream().then(getDevices);
+
+    function getStream() {
+      if (window.stream) {
+        window.stream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+      return navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(gotStream)
+        .catch(handleError);
+    }
+
+    function gotStream(stream) {
+      window.stream = stream;
       videoRef.current.srcObject = stream;
-      const peer = createPeer();
-      stream.getTracks().forEach((track) => peer.addTrack(track, stream));
-    } catch (err) {
-      console.log(err);
+      console.log(stream);
+      console.log(videoRef);
+      socket.emit("broadcaster");
+    }
+
+    function handleError(error) {
+      console.error("Error: ", error);
+    }
+
+    function getDevices() {
+      return navigator.mediaDevices.enumerateDevices();
     }
   };
+  //End of broadcaster
 
-  const createPeer = () => {
-    const peer = new webrtc.RTCPeerConnection({
-      iceServers: [
-        {
-          urls: "stun:stun.stunprotocols.org",
-        },
-      ],
-    });
-    peer.onnegotiationneeded = () => handleNegotiationNeededEvent(peer);
-    return peer;
-  };
-
-  const handleNegotiationNeededEvent = async (peer) => {
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    const payload = {
-      sdp: peer.localDescription,
-    };
-    const { data } = await axios.post(
-      "https://stagio-backend.herokuapp.com/" + "api/event/broadcast",
-      payload
-    );
-    const desc = new webrtc.RTCSessionDescription(data.sdp);
-    peer.setRemoteDescription(desc).catch((e) => console.log(e));
-  };
+  //Start of watcher
 
   const handleViewer = () => {
-    const peer = createPeerV();
-    peer.addTransceiver("video", { direction: "recvonly" });
-  };
-
-  const createPeerV = () => {
-    const peer = new webrtc.RTCPeerConnection({
-      iceServers: [
-        {
-          urls: "stun:stun.stunprotocols.org",
-        },
-      ],
+    const socket = io(process.env.BASE_URL);
+    let peerConnection;
+    socket.on("offer", (id, description) => {
+      console.log("here");
+      peerConnection = new RTCPeerConnection(config);
+      peerConnection
+        .setRemoteDescription(description)
+        .then(() => peerConnection.createAnswer())
+        .then((sdp) => peerConnection.setLocalDescription(sdp))
+        .then(() => {
+          socket.emit("answer", id, peerConnection.localDescription);
+        });
+      peerConnection.ontrack = (event) => {
+        console.log(event.streams);
+        videoRef.current.srcObject = event.streams[0];
+      };
+      peerConnection.onicecandidate = (event) => {
+        if (event.candidate) {
+          socket.emit("candidate", id, event.candidate);
+        }
+      };
     });
-    peer.ontrack = handleTrackEvent;
-    peer.onnegotiationneeded = () => handleNegotiationNeededEventV(peer);
-    return peer;
-  };
-  const handleNegotiationNeededEventV = async (peer) => {
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    const payload = {
-      sdp: peer.localDescription,
-    };
-    const { data } = await axios.post(
-      "https://stagio-backend.herokuapp.com/" + "api/event/consumer",
-      payload
-    );
-    // console.log(data);
-    const desc = new webrtc.RTCSessionDescription(data.sdp);
-    peer.setRemoteDescription(desc).catch((e) => console.log(e));
-  };
 
-  const handleTrackEvent = (e) => {
-    videoRef.current.srcObject = e.streams[0];
+    socket.on("candidate", (id, candidate) => {
+      peerConnection
+        .addIceCandidate(new RTCIceCandidate(candidate))
+        .catch((e) => console.error(e));
+    });
+
+    socket.on("connect", () => {
+      socket.emit("watcher");
+    });
+
+    socket.on("broadcaster", () => {
+      socket.emit("watcher");
+    });
+
+    window.onunload = window.onbeforeunload = () => {
+      socket.close();
+      peerConnection.close();
+    };
   };
   const [open, setOpen] = useState(true);
   return (
