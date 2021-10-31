@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Chatbubble from "./chatbubble";
+import Chatbubble from "./Chatbubble";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-const Sidechat = ({ open, setOpen }) => {
+
+interface Props {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const Sidechat = (props: Props) => {
+  const { open, setOpen } = props;
   const [height, setHeight] = useState(0);
   useEffect(() => {
     setHeight(window.innerHeight);

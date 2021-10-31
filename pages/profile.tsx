@@ -3,7 +3,7 @@ import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Button from "react-bootstrap/Button";
-import Event from "../components/event";
+import Event from "@components/Event";
 const Profile = () => {
   return (
     <div
@@ -12,8 +12,8 @@ const Profile = () => {
         flexDirection: "row",
         backgroundColor: "#181818",
         width: "100%",
-        overflowX: "hidden",
-        overflowY: "hidden",
+        height: "100vh",
+        overflow: "hidden",
       }}
     >
       <div style={{ display: "flex", flex: 1, width: "33.33vw" }}>
@@ -120,7 +120,7 @@ const Profile = () => {
             Upcoming Live Shows
           </p>
         </div>
-        <div style={{ alignSelf: "center", width: "90%", overflowY: "scroll" }}>
+        <div style={{ alignSelf: "center", width: "90%", overflow: "auto" }}>
           {[0, 0, 0, 0, 0, 0, 0].map((i) => {
             return <Event key={i} />;
           })}

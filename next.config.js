@@ -1,18 +1,12 @@
-const webpack = require("webpack");
-
-const { parsed: myEnv } = require("dotenv").config({
-  path: "./.env",
-});
-
+/** @type {import('next').NextConfig} */
+const path = require("path")
 module.exports = {
-  webpack(config) {
-    config.plugins.push(new webpack.EnvironmentPlugin(myEnv));
-    return config;
+  reactStrictMode: true,
+  resolve: {
+    alias: {
+      "@components": path.resolve(__dirname, "components"),
+      "@actions": path.resolve(__dirname, 'actions'),
+    },
   },
-};
+}
 
-module.exports = {
-  env: {
-    NEXT_BASE_URL: "https://stagio-backend.herokuapp.com/",
-  },
-};

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { css, cx } from '@emotion/css'
 
 const Circle = () => {
   return (
@@ -16,6 +17,7 @@ const Circle = () => {
         <img
           width="180px"
           height="180px"
+          style={{ objectFit: "cover" }}
           src="https://dilliwaliblog.files.wordpress.com/2020/08/i0m27jp8_400x400.jpg"
         ></img>
       </div>

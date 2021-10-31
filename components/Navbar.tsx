@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import styles from "../styles/Navbar.module.css";
-import Form from "react-bootstrap/Form";
 import Login from "./Navbar/login";
 import Register from "./Navbar/register";
+import Link from "next/link";
 const mainStyle = {
   width: "100%",
   height: "60px",
@@ -17,7 +14,7 @@ const Navbar = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleOpen = (str) => {
+  const handleOpen = (str: string) => {
     setOpen(true);
     setSelected(str);
   };
@@ -46,19 +43,24 @@ const Navbar = () => {
           right: 40,
         }}
       >
-        <p
-          style={{
-            fontSize: 15,
-            fontFamily: "Poppins",
-            fontWeight: 700,
-            margin: 0,
-            marginRight: 20,
-          }}
-        >
-          About Us
-        </p>
-        <Login status={false} showButton={true}/>
-        <Register status={false} showButton={true}/>
+        <Link href={"/create-event"}>
+          <div
+            style={{
+              fontSize: 15,
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              margin: 0,
+              marginRight: 20,
+              color: "#ffffff",
+              borderBottom: "1px solid #d94b58",
+              cursor: "pointer",
+            }}
+          >
+            + Create
+          </div>
+        </Link>
+        <Login status={false} showButton={true} />
+        <Register status={false} showButton={true} />
       </div>
     </div>
   );

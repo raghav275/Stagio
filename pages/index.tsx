@@ -1,24 +1,18 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import Carousel from "react-bootstrap/Carousel";
-import Card from "../components/card";
-import Button from "react-bootstrap/Button";
 import Slider from "react-slick";
-import Navbar from "../components/navbar";
-import Neon from "../components/neon";
-import Footer from "../components/footer";
-import Circle from "../components/circle";
-import { urlObjectKeys } from "next/dist/next-server/lib/utils";
+import Card from "@components/Card";
+import Circle from "@components/Circle";
+import Footer from "@components/Footer";
+import Navbar from "@components/Navbar";
+import { css } from "@emotion/css";
 
-const mainStyle = {
-  height: "100%",
+const mainStyle = css({
   width: "100%",
   display: "flex",
   flexDirection: "column",
   backgroundColor: "#181818",
   backgroundSize: "cover",
-};
+});
 export default function Home() {
   var settings = {
     dots: true,
@@ -35,8 +29,16 @@ export default function Home() {
     slidesToScroll: 1,
   };
   return (
-    <div style={mainStyle}>
-      <div style={{ zIndex: 12 }}>
+    <div className={mainStyle}>
+      <div
+        style={{
+          marginBottom: 60,
+          position: "sticky",
+          top: 0,
+          zIndex: 3,
+          backgroundColor: "#050505",
+        }}
+      >
         <Navbar />
       </div>
       <div style={{ position: "relative", top: -60 }}>
@@ -109,16 +111,26 @@ export default function Home() {
           padding: 20,
         }}
       >
-        <h3
-          style={{
-            marginLeft: 65,
-            fontFamily: "Poppins",
-            color: "#d94b58",
-            fontSize: 40,
-          }}
+        <div
+          className={css({
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          })}
         >
-          Live Shows
-        </h3>
+          <h3
+            style={{
+              marginLeft: 65,
+              fontFamily: "Poppins",
+              color: "#d94b58",
+              fontSize: 40,
+            }}
+          >
+            Live Shows
+          </h3>
+        </div>
         <div
           style={{ border: "4px solid white", width: 140, marginLeft: 65 }}
         ></div>

@@ -3,7 +3,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import styles from "../../styles/Navbar.module.css";
 
-const Forgot = (props) => {
+interface Props{
+    status:boolean;
+}
+const Forgot = (props:Props) => {
     const {status} = props;
     const [open, setOpen] = useState(status);
     const [email, setEmail] = useState("");
@@ -14,7 +17,7 @@ const Forgot = (props) => {
         setOpen(false);
       };
 
-      const onSubmit = async(e) => {
+      const onSubmit = async(e: { preventDefault: () => void; }) => {
         e.preventDefault();
         let user = { email };
         await fetch("https://stagio-backend.herokuapp.com/api/auth/forgot",{

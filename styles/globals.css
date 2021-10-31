@@ -1,23 +1,17 @@
-html,
 body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  background: #181818;
-  background-size: cover;
-}
-#__next {
-  height: 100%;
-  width: 100%;
-  display: flex;
+  background-color: #181818 !important;
 }
 a {
   color: inherit;
   text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
 }
 p,
 h1,
@@ -38,7 +32,7 @@ h5 {
   font-display: swap;
 }
 @font-face {
-  font-family: "Poppins";
+  font-family: "Poppins-Medium";
   src: url("/fonts/Poppins/Poppins-Medium.ttf");
   font-style: medium;
   font-weight: 500;
@@ -86,7 +80,7 @@ button.close {
   text-shadow: none;
 }
 
-.head{
+.head {
   font-size: 30px;
   color: #d94b58;
   font-weight: 800;
@@ -94,82 +88,87 @@ button.close {
   width: 70%;
 }
 
-.description{
+.description {
   color: #fff;
   width: 68%;
 }
 
-.container{
+.container {
   top: 25vh;
 }
 
-.footerContainer{
+.footerContainer {
   position: absolute;
   bottom: 0;
   right: 0;
 }
 
-.title{
+.title {
   position: absolute;
   margin-left: 30px;
   top: 30px;
 }
-
-@media only screen and (max-width: 768px){
-  .coming-soon{
-    font-size : 40px;
+@media only screen and (max-width: 768px) {
+  .coming-soon {
+    font-size: 40px;
     font-weight: 600;
   }
-  .head{
+  .head {
     font-size: 16px;
     font-weight: 600;
     width: 100%;
   }
-  .description{
+  .description {
     font-size: 12px;
     width: 100%;
   }
 
-  .container{
+  .container {
     top: 20vh;
   }
 
-  .title{
+  .title {
     width: 100%;
     margin: 0;
     text-align: center;
   }
 
-  .footerContainer{
+  .footerContainer {
     width: 100%;
     margin: 0;
     text-align: center;
   }
 
-  .email{
+  .email {
     font-weight: bold;
   }
 
-  @media only screen and (max-height: 639px){
-    .container{
+  @media only screen and (max-height: 639px) {
+    .container {
       top: 17vh;
     }
-    .head{
+    .head {
       font-size: 15px;
       font-weight: 600;
       width: 100%;
     }
-    .description{
+    .description {
       font-size: 11px;
       width: 100%;
     }
-    .title{
+    .title {
       width: 100%;
       margin: 0;
       text-align: center;
       top: 15px;
     }
   }
-} 
-
-
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(40%) sepia(37%) saturate(4616%) hue-rotate(330deg)
+    brightness(93%) contrast(82%);
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(40%) sepia(37%) saturate(4616%) hue-rotate(330deg)
+    brightness(93%) contrast(82%);
+}

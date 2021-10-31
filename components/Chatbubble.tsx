@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
-const Chatbubble = (props) => {
-  const text = props.text;
-  const name = props.name;
+interface Props {
+  text: string;
+  name: string;
+}
+const Chatbubble = (props: Props) => {
+  const { text, name } = props;
   return (
     <div
       style={{
