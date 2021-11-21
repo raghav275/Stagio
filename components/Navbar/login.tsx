@@ -32,7 +32,7 @@ const Login = (props: Props) => {
       e.preventDefault();
       console.log(url);
       let u = { email, password };
-      const res = await fetch(`${process.env.DEV_URL}api/auth/login`, {
+      const res = await fetch(`${process.env.BASE_URL}api/auth/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",

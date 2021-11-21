@@ -10,7 +10,6 @@ module.exports = {
     },
   },
   env: {
-    DEV_URL: "http://localhost:5000/",
-    PROD_URL: "https://stagio-backend.herokuapp.com/",
+    BASE_URL: "http://localhost:5000/",
   },
 };
