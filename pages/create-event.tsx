@@ -3,9 +3,11 @@ import { css, cx } from "@emotion/css";
 import { makeStyles, TextField } from "@material-ui/core";
 import styles from "../styles/Navbar.module.css";
 import Button from "react-bootstrap/Button";
-import { Formik } from "formik";
+import { Formik, FormikValues } from "formik";
 import React from "react";
 import ImageUploading, { ImageType } from "react-images-uploading";
+import { createEvent } from "@actions/event";
+import { useAppSelector } from "@app/hooks";
 
 const useStyles = makeStyles({
   underline: {
@@ -23,6 +25,8 @@ const useStyles = makeStyles({
 });
 
 const CreateEvent = () => {
+  const userState = useAppSelector((state) => state.user);
+  console.log(userState);
   const classes = useStyles();
   const [poster, setPoster] = React.useState<ImageType[]>([]);
   const [banner, setBanner] = React.useState<ImageType[]>([]);
@@ -51,6 +55,12 @@ const CreateEvent = () => {
   const smallHeading = css({
     color: "#d94b58",
   });
+  const submitEvent = async (val: FormikValues) => {
+    const { title, description, date, time, price } = val;
+    console.log(val);
+    const res = await createEvent(title, description, date, time, price, "abc");
+    console.log(res);
+  };
   return (
     <>
       <div
@@ -90,11 +100,9 @@ const CreateEvent = () => {
             time: new Date(),
             price: null,
           }}
-          onSubmit={(val) => {
-            console.log(val);
-          }}
+          onSubmit={submitEvent}
         >
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, submitForm }) => {
             return (
               <div
                 className={cx(
@@ -125,7 +133,8 @@ const CreateEvent = () => {
                       <TextField
                         placeholder="Title"
                         onChange={(e) => {
-                          setFieldValue("title", e);
+                          console.log(e.target.value);
+                          setFieldValue("title", e.target.value);
                         }}
                         InputProps={{
                           classes: {
@@ -141,7 +150,7 @@ const CreateEvent = () => {
                         multiline
                         placeholder="Description"
                         onChange={(e) => {
-                          setFieldValue("description", e);
+                          setFieldValue("description", e.target.value);
                         }}
                         InputProps={{
                           classes: {
@@ -347,7 +356,9 @@ const CreateEvent = () => {
                       margin: "50px 0px",
                       fontSize: 14,
                     }}
-                    onClick={() => {}}
+                    onClick={() => {
+                      submitForm();
+                    }}
                     variant="outline-primary"
                   >
                     Create

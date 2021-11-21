@@ -4,7 +4,10 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Button from "react-bootstrap/Button";
 import Event from "@components/Event";
+import { useAppSelector } from "@app/hooks";
 const Profile = () => {
+  const userState = useAppSelector((state) => state.user);
+  console.log(userState);
   return (
     <div
       style={{

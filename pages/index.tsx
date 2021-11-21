@@ -13,7 +13,7 @@ const mainStyle = css({
   backgroundColor: "#181818",
   backgroundSize: "cover",
 });
-export default function Home() {
+function Home() {
   var settings = {
     dots: true,
     infinite: false,
@@ -283,3 +283,4 @@ export default function Home() {
     </div>
   );
 }
+export default Home;

@@ -4,6 +4,8 @@ import Modal from "react-bootstrap/Modal";
 import styles from "../../styles/Navbar.module.css";
 import Register from "./register";
 import Forgot from "./forgot-password";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { user } from "slices/userSlice";
 interface Props {
   status: boolean;
   showButton: boolean;
@@ -14,6 +16,7 @@ const Login = (props: Props) => {
   const [selected, setSelected] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useAppDispatch();
   const handleOpen = () => {
     setOpen(true);
     setSelected("Login");
@@ -23,19 +26,27 @@ const Login = (props: Props) => {
   };
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    let user = { email, password };
-    await fetch("https://stagio-backend.herokuapp.com/api/auth/login", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    setEmail("");
-    setPassword("");
-    setOpen(false);
+    try {
+      e.preventDefault();
+      let u = { email, password };
+      const res = await fetch(
+        "https://stagio-backend.herokuapp.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(u),
+        }
+      ).then((res) => res.json());
+      dispatch(user({ name: "abc", email: email }));
+      setEmail("");
+      setPassword("");
+      setOpen(false);
+    } catch (e) {
+      throw e;
+    }
   };
 
   return (
