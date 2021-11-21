@@ -6,6 +6,7 @@ import Register from "./register";
 import Forgot from "./forgot-password";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { user } from "slices/userSlice";
+import { useCookies } from "react-cookie";
 interface Props {
   status: boolean;
   showButton: boolean;
@@ -16,6 +17,7 @@ const Login = (props: Props) => {
   const [selected, setSelected] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cookie, setCookie] = useCookies(["user"]);
   const dispatch = useAppDispatch();
   const handleOpen = () => {
     setOpen(true);
@@ -24,23 +26,26 @@ const Login = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const url = process.env.DEV_URL;
   const onSubmit = async (e: { preventDefault: () => void }) => {
     try {
       e.preventDefault();
+      console.log(url);
       let u = { email, password };
-      const res = await fetch(
-        "https://stagio-backend.herokuapp.com/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(u),
-        }
-      ).then((res) => res.json());
+      const res = await fetch(`${process.env.DEV_URL}api/auth/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(u),
+      }).then((res) => res.json());
       dispatch(user({ name: "abc", email: email }));
+      setCookie("user", JSON.stringify(res.token), {
+        path: "/",
+        maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
+        sameSite: true,
+      });
       setEmail("");
       setPassword("");
       setOpen(false);

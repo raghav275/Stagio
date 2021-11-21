@@ -9,4 +9,8 @@ module.exports = {
       "@app": path.resolve(__dirname, "app"),
     },
   },
+  env: {
+    DEV_URL: "http://localhost:5000/",
+    PROD_URL: "https://stagio-backend.herokuapp.com/",
+  },
 };

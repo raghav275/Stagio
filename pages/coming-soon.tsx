@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const ComingSoon = () => {
   return (
@@ -22,9 +22,7 @@ const ComingSoon = () => {
         }}
       ></div>
       <div className="footerContainer">
-        <p className="coming-soon">
-          Coming Soon
-        </p>
+        <p className="coming-soon">Coming Soon</p>
       </div>
       <div className="title">
         <p
@@ -74,8 +72,10 @@ const ComingSoon = () => {
         </p>
         <p className="description">
           Contact us at{" "}
-          <span className="email" style={{ color: "#d94b58" }}>stagiodotin@gmail.com</span> to
-          join hundreds of other artists
+          <span className="email" style={{ color: "#d94b58" }}>
+            stagiodotin@gmail.com
+          </span>{" "}
+          to join hundreds of other artists
         </p>
       </div>
     </div>
