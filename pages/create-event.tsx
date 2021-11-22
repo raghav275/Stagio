@@ -8,6 +8,9 @@ import React from "react";
 import ImageUploading, { ImageType } from "react-images-uploading";
 import { createEvent } from "@actions/event";
 import { useAppSelector } from "@app/hooks";
+import { NextPageContext } from "next";
+import { parseCookies } from "utils/parseCookie";
+import axios from "axios";
 
 const useStyles = makeStyles({
   underline: {
@@ -371,5 +374,18 @@ const CreateEvent = () => {
       </div>
     </>
   );
+};
+CreateEvent.getInitialProps = async ({ req, res }: NextPageContext) => {
+  const data = parseCookies(req);
+  if (res) {
+    await axios
+      .get(`${process.env.BASE_URL}api/auth/authToken/` + decodeURI(data.user))
+      .then((response) => {
+        console.log(response);
+      });
+  }
+  return {
+    data: data && data,
+  };
 };
 export default CreateEvent;

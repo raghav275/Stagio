@@ -41,7 +41,7 @@ const Login = (props: Props) => {
         body: JSON.stringify(u),
       }).then((res) => res.json());
       dispatch(user({ name: "abc", email: email }));
-      setCookie("user", JSON.stringify(res.token), {
+      setCookie("user", res.token, {
         path: "/",
         maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
         sameSite: true,
