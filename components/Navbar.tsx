@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { css } from "@emotion/css";
 import Dropdown from "react-bootstrap/Dropdown";
+import { useRouter } from "next/router";
 const mainStyle = {
   width: "100%",
   height: "60px",
@@ -12,6 +13,7 @@ const mainStyle = {
   alignItems: "center",
 };
 const Navbar = () => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
   const handleClose = () => {
@@ -90,7 +92,12 @@ const Navbar = () => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item className={css({ color: "#d94b58" })}>
+                <Dropdown.Item
+                  onClick={() => {
+                    router.push(`/profile/${session.user.username}`);
+                  }}
+                  className={css({ color: "#d94b58" })}
+                >
                   Profile
                 </Dropdown.Item>
                 <Dropdown.Item
