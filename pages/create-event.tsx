@@ -8,6 +8,7 @@ import React from "react";
 import ImageUploading, { ImageType } from "react-images-uploading";
 import { createEvent } from "@actions/event";
 import { useAppSelector } from "@app/hooks";
+import { useSession } from "next-auth/react";
 import { NextPageContext } from "next";
 import { parseCookies } from "utils/parseCookie";
 import axios from "axios";
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
 
 const CreateEvent = () => {
   const userState = useAppSelector((state) => state.user);
-  console.log(userState);
+  // console.log(userState);
   const classes = useStyles();
   const [poster, setPoster] = React.useState<ImageType[]>([]);
   const [banner, setBanner] = React.useState<ImageType[]>([]);
@@ -40,7 +41,7 @@ const CreateEvent = () => {
     addUpdateIndex?: number[]
   ) => {
     // data for submit
-    console.log(imageList, addUpdateIndex);
+    // console.log(imageList, addUpdateIndex);
     state(imageList);
   };
   const buttonStyle = {
@@ -58,25 +59,22 @@ const CreateEvent = () => {
   const smallHeading = css({
     color: "#d94b58",
   });
+  const { data: session, status } = useSession();
   const submitEvent = async (val: FormikValues) => {
     const { title, description, date, time, price } = val;
-    console.log(val);
-    const res = await createEvent(title, description, date, time, price, "abc");
-    console.log(res);
+    const res = await createEvent(
+      title,
+      description,
+      date,
+      time,
+      price,
+      session?.user.email,
+      poster[0].data_url!,
+      banner[0].data_url,
+    );
   };
   return (
     <>
-      <div
-        style={{
-          marginBottom: 60,
-          position: "sticky",
-          top: 0,
-          zIndex: 3,
-          backgroundColor: "#050505",
-        }}
-      >
-        <Navbar />
-      </div>
       <div
         className={css({
           display: "flex",
@@ -136,7 +134,7 @@ const CreateEvent = () => {
                       <TextField
                         placeholder="Title"
                         onChange={(e) => {
-                          console.log(e.target.value);
+                          // console.log(e.target.value);
                           setFieldValue("title", e.target.value);
                         }}
                         InputProps={{
@@ -375,17 +373,5 @@ const CreateEvent = () => {
     </>
   );
 };
-CreateEvent.getInitialProps = async ({ req, res }: NextPageContext) => {
-  const data = parseCookies(req);
-  if (res) {
-    await axios
-      .get(`${process.env.BASE_URL}api/auth/authToken/` + decodeURI(data.user))
-      .then((response) => {
-        console.log(response);
-      });
-  }
-  return {
-    data: data && data,
-  };
-};
+
 export default CreateEvent;

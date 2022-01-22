@@ -1,17 +1,30 @@
 import React from "react";
 import styles from "../styles/Card.module.css";
+import Link from "next/link";
+import { css } from "@emotion/css";
+import { Event } from "@typings/event";
 
-const Card = () => {
+interface Props {
+  event: Event;
+}
+const Card = (props: Props) => {
+  const { title, description, date, time, price, id, poster, banner } =
+    props.event;
   return (
     <div className={styles.card}>
-      <img src="https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?auto=format&amp;fit=crop&amp;w=311&amp;q=80&amp;ixid=dW5zcGxhc2guY29tOzs7Ozs%3D" />
+      <img src={poster} />
       <div className={styles.info}>
-        <h3>Suno Bey presents LoL from Home |Tue,Wed, Sat & Sunday</h3>
-        <p>
-          Lorem Ipsum is simply dummy text from the printing and typeseting
-          industry
+        <h3>{title}</h3>
+        <p
+          className={css({
+            textOverflow: "ellipsis",
+          })}
+        >
+          {description}
         </p>
-        <button>Read More</button>
+        <Link href={`/event-details/${id}`}>
+          <button>Buy Ticket</button>
+        </Link>
       </div>
     </div>
   );

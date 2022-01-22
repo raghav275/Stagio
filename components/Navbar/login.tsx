@@ -7,11 +7,17 @@ import Forgot from "./forgot-password";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { user } from "slices/userSlice";
 import { useCookies } from "react-cookie";
+import { login } from "@actions/auth";
+import { useSession, signIn, signOut } from "next-auth/react";
 interface Props {
   status: boolean;
   showButton: boolean;
 }
 const Login = (props: Props) => {
+  const { data: session, status: lol } = useSession();
+  React.useEffect(() => {
+    console.log(session);
+  }, [session]);
   const { status, showButton } = props;
   const [open, setOpen] = useState(status);
   const [selected, setSelected] = useState("Login");
@@ -26,34 +32,25 @@ const Login = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const url = process.env.DEV_URL;
+
   const onSubmit = async (e: { preventDefault: () => void }) => {
     try {
       e.preventDefault();
-      console.log(url);
-      let u = { email, password };
-      const res = await fetch(`${process.env.BASE_URL}api/auth/login`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(u),
-      }).then((res) => res.json());
       dispatch(user({ name: "abc", email: email }));
-      setCookie("user", res.token, {
-        path: "/",
-        maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
-        sameSite: true,
-      });
+      // const res = await login(email, password);
+      // setCookie("user", "Bearer " + res.token, {
+      //   path: "/",
+      //   maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
+      //   sameSite: true,
+      // });
       setEmail("");
       setPassword("");
       setOpen(false);
+      signIn("credentials", { email, password });
     } catch (e) {
       throw e;
     }
   };
-
   return (
     <>
       {showButton && (

@@ -3,11 +3,19 @@ import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Button from "react-bootstrap/Button";
-import Event from "@components/Event";
 import { useAppSelector } from "@app/hooks";
-const Profile = () => {
-  const userState = useAppSelector((state) => state.user);
-  console.log(userState);
+import { GetServerSideProps } from "next";
+import { getProfile } from "@actions/profile";
+import { User } from "@typings/profile";
+import { Event } from "@typings/event";
+import EventItem from "@components/EventItem";
+
+interface Props {
+  profile: User;
+}
+const Profile = (props: Props) => {
+  const { username, email, events } = props.profile;
+  console.log(props.profile);
   return (
     <div
       style={{
@@ -15,7 +23,7 @@ const Profile = () => {
         flexDirection: "row",
         backgroundColor: "#181818",
         width: "100%",
-        height: "100vh",
+        height: "calc(100vh - 60px)",
         overflow: "hidden",
       }}
     >
@@ -23,7 +31,7 @@ const Profile = () => {
         <img
           style={{
             objectFit: "cover",
-            height: "100vh",
+            height: "calc(100vh - 60px)",
             width: "33.33vw",
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
@@ -124,61 +132,20 @@ const Profile = () => {
           </p>
         </div>
         <div style={{ alignSelf: "center", width: "90%", overflow: "auto" }}>
-          {[0, 0, 0, 0, 0, 0, 0].map((i) => {
-            return <Event key={i} />;
+          {events.map((event: Event, i: number) => {
+            return <EventItem key={i} event={event} />;
           })}
         </div>
       </div>
     </div>
   );
 };
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const res = await getProfile(params?.id as string);
+  return {
+    props: {
+      profile: res.user,
+    },
+  };
+};
 export default Profile;
-
-{
-  /* <div style={{ display: "flex", flexDirection: "column" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                margin: 20,
-              }}
-            >
-              <InstagramIcon
-                style={{
-                  fontSize: 40,
-                  margin: 20,
-                  marginTop: 0,
-                  color: "#5a5a5a",
-                }}
-              />
-              <FacebookIcon
-                style={{
-                  fontSize: 40,
-                  margin: 20,
-                  marginTop: 0,
-                  color: "#5a5a5a",
-                }}
-              />
-              <TwitterIcon
-                style={{
-                  fontSize: 40,
-                  margin: 20,
-                  marginTop: 0,
-                  color: "#5a5a5a",
-                }}
-              />
-            </div>
-            <div style={{ margin: 20, paddingLeft: 10 }}>
-              <Button
-                style={{
-                  border: "none",
-                  backgroundColor: "#d94b58",
-                  borderRadius: 20,
-                }}
-              >
-                Follow to stay Updated
-              </Button>
-            </div>
-          </div> */
-}

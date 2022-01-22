@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Login from "./Navbar/login";
 import Register from "./Navbar/register";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { css } from "@emotion/css";
+import Dropdown from "react-bootstrap/Dropdown";
 const mainStyle = {
   width: "100%",
   height: "60px",
@@ -18,21 +21,24 @@ const Navbar = () => {
     setOpen(true);
     setSelected(str);
   };
+  const { data: session, status } = useSession();
   return (
     <div style={mainStyle}>
-      <div style={{ position: "absolute", left: 40 }}>
-        <p
-          style={{
-            fontSize: 20,
-            fontFamily: "Poppins",
-            fontWeight: 700,
-            margin: 0,
-            color: "#5a5a5a",
-          }}
-        >
-          Sta<span style={{ color: "#d94b58" }}>gio</span>
-        </p>
-      </div>
+      <Link href={"/"}>
+        <div style={{ position: "absolute", left: 40, cursor: "pointer" }}>
+          <p
+            style={{
+              fontSize: 20,
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              margin: 0,
+              color: "#5a5a5a",
+            }}
+          >
+            Sta<span style={{ color: "#d94b58" }}>gio</span>
+          </p>
+        </div>
+      </Link>
       <div
         style={{
           display: "flex",
@@ -59,8 +65,44 @@ const Navbar = () => {
             + Create
           </div>
         </Link>
-        <Login status={false} showButton={true} />
-        <Register status={false} showButton={true} />
+        {!session ? (
+          <>
+            {" "}
+            <Login status={false} showButton={true} />
+            <Register status={false} showButton={true} />
+          </>
+        ) : (
+          <div className={css({ color: "#ffffff" })}>
+            <Dropdown>
+              <Dropdown.Toggle
+                className={css({
+                  backgroundColor: "transparent",
+                  border: "none",
+                  "&:hover": {
+                    backgroundColor: "#d94b58",
+                  },
+                  "&:focus": {
+                    backgroundColor: "#d94b58",
+                  },
+                })}
+              >
+                Hi {session.user.username}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item className={css({ color: "#d94b58" })}>
+                  Profile
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => signOut()}
+                  className={css({ color: "#d94b58" })}
+                >
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        )}
       </div>
     </div>
   );

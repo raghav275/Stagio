@@ -16,10 +16,11 @@
     "jsx": "preserve",
     "paths": {
       "@actions/*": ["./actions/*"],
+      "@typings/*": ["./typings/*"],
       "@components/*": ["./components/*"],
       "@app/*": ["./app/*"],
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/auth/[...nextAuth].js", "lib/mongodb.js"],
   "exclude": ["node_modules"]
 }

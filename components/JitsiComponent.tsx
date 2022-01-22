@@ -105,7 +105,13 @@ const JitsiComponent = (props: Props) => {
     // api.execute()
   };
   return (
-    <div className={css({ display: "flex", width: "100%", height: "100vh" })}>
+    <div
+      className={css({
+        display: "flex",
+        width: "100%",
+        height: "calc(100vh-60px)",
+      })}
+    >
       <div
         className={css({ width: "100%", height: "100%" })}
         id="jitsi-iframe"

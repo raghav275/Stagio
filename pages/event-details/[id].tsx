@@ -1,35 +1,48 @@
+import { getEvent, razorpay } from "@actions/event";
+import { NextPageContext } from "next";
+import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
+import { Event } from "@typings/event";
+import { format, parse } from "date-fns";
+import { GetServerSideProps } from "next";
+import { useSession } from "next-auth/react";
+
 declare global {
   interface Window {
     Razorpay: any;
   }
 }
-const EventPage = () => {
-  const showRazorpay = () => {
-    var options = {
-      key: "rzp_test_MlcYP95WX6DCWy",
+interface Props {
+  event: Event;
+}
+const EventPage = (props: Props) => {
+  // console.log(props.event);
+  const { data: session, status } = useSession();
+  const user = session?.user
+  const { title, description, date, time, price, poster, banner ,id} = props.event;
+  const showRazorpay =async () => {
+    const res = await razorpay(id);
+    const options = {
+      key: `${process.env.RZP_KEY}`,
+      amount:res.amount,
       currency: "INR",
-      name: "Acme Corp",
-      description: "Test Transaction",
+      name: "Stagio",
+      description: `booking for ${title}`,
       image: "https://example.com/your_logo",
-      order_id: "order_I4w8sW5E3j85gI", 
+      order_id: res.id,
       handler: function (response: {
-        razorpay_payment_id: any;
-        razorpay_order_id: any;
-        razorpay_signature: any;
+        razorpay_payment_id: string;
+        razorpay_order_id: string;
+        razorpay_signature: string;
       }) {
         alert(response.razorpay_payment_id);
         alert(response.razorpay_order_id);
         alert(response.razorpay_signature);
       },
       prefill: {
-        name: "Gaurav Kumar",
-        email: "gaurav.kumar@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
+        name: user.username,
+        email: user.email, 
       },
       theme: {
         color: "#3399cc",
@@ -64,9 +77,8 @@ const EventPage = () => {
       style={{
         display: "flex",
         width: "100%",
-        height: "100vh",
-        backgroundImage:
-          "url(https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129)",
+        height: "calc(100vh - 60px)",
+        backgroundImage: `url(${banner})`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -97,7 +109,7 @@ const EventPage = () => {
           }}
         >
           <p style={{ color: "#ffffff", fontSize: 50, fontWeight: 800 }}>
-            Suno Bey presents LoL from Home
+            {title}
           </p>
         </div>
         <div
@@ -109,20 +121,27 @@ const EventPage = () => {
           }}
         >
           <p>
-            June 10 <span style={{ color: "#ffffff" }}>|</span> 6:00 PM
+            {format(new Date(date), "dd MMMM yyyy")}{" "}
+            <span style={{ color: "#ffffff" }}>|</span>{" "}
+            {format(parse(time, "HH:mm", new Date()), "hh:mm a")}
           </p>
         </div>
         <div style={{ padding: 10, fontSize: 20 }}>
-          <p style={{ color: "#ffffff" }}>
-            Lorem ipsum dolor sit amet,
-            <br /> efficitur eleifend. Fusce interdum <br />
-            mollis velit fringilla facilisis.
-            <br /> Lorem ipsum dolor sit amet,
-            <br /> efficitur eleifend. Fusce interdum <br />
-            mollis velit fringilla facilisis.{" "}
-          </p>
+          <p style={{ color: "#ffffff" }}>{description}</p>
         </div>
-        <div style={{ padding: 10 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            padding: 10,
+            alignItems: "center",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", fontSize: 20 }}>
+            <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
+              &#8377; {price}
+            </p>
+          </div>
           <Button
             style={{
               border: "none",
@@ -133,11 +152,20 @@ const EventPage = () => {
               showRazorpay();
             }}
           >
-            Buy Ticket
+            Buy Now
           </Button>
         </div>
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const event = await getEvent(params?.id as string);
+  return {
+    props: {
+      event: event.event,
+    },
+  };
 };
 export default EventPage;

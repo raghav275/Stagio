@@ -13,6 +13,7 @@ a {
 * {
   box-sizing: border-box;
 }
+div,
 p,
 h1,
 h2,
@@ -171,4 +172,19 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(40%) sepia(37%) saturate(4616%) hue-rotate(330deg)
     brightness(93%) contrast(82%);
+}
+.slick-track {
+  margin-left: 0 !important;
+}
+.show > .btn-primary.dropdown-toggle {
+  background-color: #d94b58 !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.btn-primary:hover {
+  background-color: #d94b58 !important;
+}
+button:focus {
+  box-shadow: none !important;
 }

@@ -1,10 +1,17 @@
-import Carousel from "react-bootstrap/Carousel";
-import Slider from "react-slick";
+import { getEvent } from "@actions/event";
+import { getProfile } from "@actions/profile";
 import Card from "@components/Card";
 import Circle from "@components/Circle";
 import Footer from "@components/Footer";
-import Navbar from "@components/Navbar";
 import { css } from "@emotion/css";
+import { Event } from "@typings/event";
+import { User } from "@typings/profile";
+import { NextPageContext } from "next";
+import Link from "next/link";
+import Carousel from "react-bootstrap/Carousel";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
 
 const mainStyle = css({
   width: "100%",
@@ -13,7 +20,11 @@ const mainStyle = css({
   backgroundColor: "#181818",
   backgroundSize: "cover",
 });
-function Home() {
+interface Props {
+  events: Event[];
+  artists: User[];
+}
+function Home(props: Props) {
   var settings = {
     dots: true,
     infinite: false,
@@ -30,18 +41,7 @@ function Home() {
   };
   return (
     <div className={mainStyle}>
-      <div
-        style={{
-          marginBottom: 60,
-          position: "sticky",
-          top: 0,
-          zIndex: 3,
-          backgroundColor: "#050505",
-        }}
-      >
-        <Navbar />
-      </div>
-      <div style={{ position: "relative", top: -60 }}>
+      <div style={{ position: "relative" }}>
         <Carousel>
           <Carousel.Item
             style={{
@@ -143,11 +143,11 @@ function Home() {
           }}
         >
           <Slider {...settings}>
-            {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
+            {props.events.map((event: Event, i: number) => {
               return (
                 <div key={i} style={{ background: "transparent", padding: 30 }}>
                   <div style={{ padding: 30 }}>
-                    <Card />
+                    <Card event={event} />
                   </div>
                 </div>
               );
@@ -216,71 +216,84 @@ function Home() {
           }}
         >
           <Slider {...artistSettings}>
-            {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((i) => {
+            {props.artists.map((artist, id) => {
               return (
-                <div key={i} style={{ background: "transparent", padding: 30 }}>
-                  <div style={{ padding: 30 }}>
-                    <Circle />
+                <Link href={`/profile/${artist.username}`}>
+                  <div
+                    key={id}
+                    style={{ background: "transparent", padding: 30 }}
+                  >
+                    <div style={{ padding: 30 }}>
+                      <Circle />
+                    </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </Slider>
         </div>
       </div>
       {/* <div
-        style={{
-          display: "flex",
-          margin: "10px",
-          padding: 20,
-          flexDirection: "column",
-          alignItems: "center",
-          color: "#d94b58",
-        }}
-      >
-        <h1>About Us</h1>
-        <div style={{ border: "4px solid white", width: 140 }}></div>
-        <div
           style={{
-            alignSelf: "flex-start",
-            marginTop: 40,
-            fontSize: 40,
-            fontWeight: 800,
-            width: "100%",
+            display: "flex",
+            margin: "10px",
+            padding: 20,
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#d94b58",
           }}
         >
-          <div>
-            <div
-              style={{
-                color: "#ffffff",
-                position: "relative",
-                top: 80,
-                zIndex: 12,
-                left: 90,
-              }}
-            >
-              <p>
-                Lorem ipsum dolor sit amet,
-                <br /> efficitur eleifend. Fusce interdum <br />
-                mollis velit fringilla facilisis.
-                <br /> Lorem ipsum dolor sit amet,
-                <br /> efficitur eleifend. Fusce interdum <br />
-                mollis velit fringilla facilisis.{" "}
-              </p>
-            </div>
-            <div
-              style={{ position: "relative", top: -390, textAlign: "right" }}
-            >
-              <img
-                style={{ borderRadius: 30 }}
-                src="https://images.unsplash.com/photo-1501612780327-45045538702b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y29uY2VydHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
-              ></img>
+          <h1>About Us</h1>
+          <div style={{ border: "4px solid white", width: 140 }}></div>
+          <div
+            style={{
+              alignSelf: "flex-start",
+              marginTop: 40,
+              fontSize: 40,
+              fontWeight: 800,
+              width: "100%",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  color: "#ffffff",
+                  position: "relative",
+                  top: 80,
+                  zIndex: 12,
+                  left: 90,
+                }}
+              >
+                <p>
+                  Lorem ipsum dolor sit amet,
+                  <br /> efficitur eleifend. Fusce interdum <br />
+                  mollis velit fringilla facilisis.
+                  <br /> Lorem ipsum dolor sit amet,
+                  <br /> efficitur eleifend. Fusce interdum <br />
+                  mollis velit fringilla facilisis.{" "}
+                </p>
+              </div>
+              <div
+                style={{ position: "relative", top: -390, textAlign: "right" }}
+              >
+                <img
+                  style={{ borderRadius: 30 }}
+                  src="https://images.unsplash.com/photo-1501612780327-45045538702b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y29uY2VydHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
+                ></img>
+              </div>
             </div>
           </div>
-        </div>
-      </div> */}
+        </div> */}
       <Footer />
     </div>
   );
 }
+Home.getInitialProps = async (ctx: NextPageContext) => {
+  const { event } = await getEvent();
+  const { user } = await getProfile();
+  return {
+    events: event,
+    artists: user,
+  };
+};
 export default Home;

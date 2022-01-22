@@ -1,3 +1,4 @@
+import { forgot } from "@actions/auth";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -20,14 +21,7 @@ const Forgot = (props:Props) => {
       const onSubmit = async(e: { preventDefault: () => void; }) => {
         e.preventDefault();
         let user = { email };
-        await fetch("https://stagio-backend.herokuapp.com/api/auth/forgot",{
-            method: 'POST',
-            headers: {
-                'Accept' : 'application/json',
-                'Content-Type' : 'application/json'
-            },
-            body : JSON.stringify(user)
-        })
+        const res = await forgot(email);
         setEmail("");
         setOpen(false);
     }
