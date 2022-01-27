@@ -8,16 +8,16 @@ import { useAppDispatch, useAppSelector } from "app/hooks";
 import { user } from "slices/userSlice";
 import { useCookies } from "react-cookie";
 import { login } from "@actions/auth";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, SignInResponse } from "next-auth/react";
+import { toast } from "react-toastify";
+import { css } from "@emotion/css";
+import { RedirectableProviderType } from "next-auth/providers";
 interface Props {
   status: boolean;
   showButton: boolean;
 }
 const Login = (props: Props) => {
   const { data: session, status: lol } = useSession();
-  React.useEffect(() => {
-    console.log(session);
-  }, [session]);
   const { status, showButton } = props;
   const [open, setOpen] = useState(status);
   const [selected, setSelected] = useState("Login");
@@ -34,21 +34,24 @@ const Login = (props: Props) => {
   };
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
-    try {
-      e.preventDefault();
-      dispatch(user({ name: "abc", email: email }));
-      // const res = await login(email, password);
-      // setCookie("user", "Bearer " + res.token, {
-      //   path: "/",
-      //   maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
-      //   sameSite: true,
-      // });
-      setEmail("");
-      setPassword("");
-      setOpen(false);
-      signIn("credentials", { email, password });
-    } catch (e) {
-      throw e;
+    e.preventDefault();
+    // const res = await login(email, password);
+    // setCookie("user", "Bearer " + res.token, {
+    //   path: "/",
+    //   maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
+    //   sameSite: true,
+    // });
+    setEmail("");
+    setPassword("");
+    setOpen(false);
+    const res = await signIn<RedirectableProviderType>("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+    if (res?.error!==null) toast.dark("Invalid Credentials");
+    else {
+      toast.dark("Logged In Successfully");
     }
   };
   return (
@@ -78,8 +81,12 @@ const Login = (props: Props) => {
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
-          dialogClassName={styles.modalStyle}
-          contentClassName={styles.body}
+          dialogClassName={css({
+            width: "30%",
+          })}
+          contentClassName={css({
+            backgroundColor: "#181818",
+          })}
         >
           <Modal.Header
             closeButton

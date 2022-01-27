@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../styles/Card.module.css";
 import Link from "next/link";
 import { css } from "@emotion/css";
 import { Event } from "@typings/event";
+import { useSession } from "next-auth/react";
+import { formatISO, parse } from "date-fns";
 
 interface Props {
   event: Event;
 }
 const Card = (props: Props) => {
-  const { title, description, date, time, price, id, poster, banner } =
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const { title, description, date, time, price, id, poster, banner, users } =
     props.event;
+  const [bought, setBought] = useState(false);
+  useEffect(() => {
+    if (user && users && users.includes(user.email)) {
+      setBought(true);
+    }
+  }, [user]);
+  function mergeDateandTime(date: string, time: string) {
+    return `${date.split("T")[0]}T${time.split("T")[1]}`;
+  }
   return (
     <div className={styles.card}>
       <img src={poster} />
@@ -23,7 +36,7 @@ const Card = (props: Props) => {
           {description}
         </p>
         <Link href={`/event-details/${id}`}>
-          <button>Buy Ticket</button>
+          <button>{bought ? "Already Bought" : "Buy Ticket"}</button>
         </Link>
       </div>
     </div>

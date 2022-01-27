@@ -1,13 +1,20 @@
-import "../styles/globals.css";
+import Navbar from "@components/Navbar";
+import { store } from "app/store";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { SessionProvider } from "next-auth/react";
+import { AppProps } from "next/app";
+import React, { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
 import { Provider } from "react-redux";
-import { AppContext, AppProps } from "next/app";
-import React, { useEffect } from "react";
-import Head from "next/head";
-import { store } from "app/store";
-import Navbar from "@components/Navbar";
-import { SessionProvider } from "next-auth/react";
+import { ToastContainer } from "react-toastify";
+import { injectStyle } from "react-toastify/dist/inject-style";
+
+
+import "../styles/globals.css";
+
+if (typeof window !== "undefined") {
+  injectStyle();
+}
 
 export default function MyApp({
   Component,
@@ -19,10 +26,8 @@ export default function MyApp({
   return (
     <Provider store={store}>
       <CookiesProvider>
-        <Head>
-          <script src="https://meet.jit.si/external_api.js" />
-          <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-        </Head>
+        <script src="https://meet.jit.si/external_api.js" />
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <SessionProvider session={session}>
           <div
             style={{
@@ -36,6 +41,15 @@ export default function MyApp({
             <Navbar />
           </div>
           <Component {...pageProps} />
+          <ToastContainer
+            position="top-right"
+            autoClose={8000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            draggable={false}
+            closeOnClick
+            pauseOnHover
+          />
         </SessionProvider>
       </CookiesProvider>
     </Provider>

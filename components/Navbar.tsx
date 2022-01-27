@@ -6,6 +6,7 @@ import { useSession, signOut } from "next-auth/react";
 import { css } from "@emotion/css";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 const mainStyle = {
   width: "100%",
   height: "60px",
@@ -101,7 +102,10 @@ const Navbar = () => {
                   Profile
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => signOut()}
+                  onClick={() => {
+                    signOut({ redirect: false });
+                    toast.dark("Logged Out Successfully");
+                  }}
                   className={css({ color: "#d94b58" })}
                 >
                   Logout

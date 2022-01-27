@@ -1,21 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Button from "react-bootstrap/Button";
 import { useAppSelector } from "@app/hooks";
 import { GetServerSideProps } from "next";
-import { getProfile } from "@actions/profile";
+import { getProfile, updateProfilePic } from "@actions/profile";
 import { User } from "@typings/profile";
 import { Event } from "@typings/event";
 import EventItem from "@components/EventItem";
+import { css } from "@emotion/css";
+import { useSession } from "next-auth/react";
+import getBase64 from "@utils/getBase64";
 
 interface Props {
   profile: User;
 }
+
 const Profile = (props: Props) => {
-  const { username, email, events } = props.profile;
-  console.log(props.profile);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { username, email, events, profilePic, name } = props.profile;
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  useEffect(() => {
+    if (user && email === user?.email) {
+      setIsUser(true);
+    } else {
+      setIsUser(false);
+    }
+  }, [user]);
+  const [isUser, setIsUser] = useState(false);
+  const [profileImg, setProfileImg] = useState<string | undefined>(undefined);
+  const [hover, setHover] = useState(false);
+  const handleUpload = () => {
+    inputRef.current?.click();
+  };
+  const handleDisplayFileDetails = async () => {
+    const img = await getBase64(inputRef.current?.files?.[0]!);
+    const res = await updateProfilePic(user.email, img.split(",")[1]);
+    setProfileImg(res.profile_pic);
+  };
+  const onHover = () => {
+    setHover(true);
+  };
+  const onLeave = () => {
+    setHover(false);
+  };
   return (
     <div
       style={{
@@ -27,17 +58,80 @@ const Profile = (props: Props) => {
         overflow: "hidden",
       }}
     >
-      <div style={{ display: "flex", flex: 1, width: "33.33vw" }}>
+      <div
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        style={{ width: "33.33vw" }}
+      >
         <img
           style={{
+            opacity: hover ? 0.5 : 1,
             objectFit: "cover",
             height: "calc(100vh - 60px)",
             width: "33.33vw",
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
+            transition: ".5s ease",
           }}
-          src="https://wallpapercave.com/wp/wp3098878.jpg"
+          src={profileImg || profilePic}
         ></img>
+        {isUser && (
+          <div
+            className={
+              hover
+                ? css({
+                    height: "calc(100vh - 60px)",
+                    width: "33.33vw",
+                    backgroundColor: "black",
+                    position: "absolute",
+                    top: 60,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    opacity: hover ? 0.5 : 0,
+                    transition: ".5s ease",
+                    borderTopRightRadius: 20,
+                    borderBottomRightRadius: 20,
+                  })
+                : ""
+            }
+          >
+            {
+              <div
+                className={css({
+                  display: "flex",
+                  height: "100%",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                })}
+              >
+                <input
+                  ref={inputRef}
+                  className="d-none"
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={() => {
+                    handleDisplayFileDetails();
+                  }}
+                />
+                <button
+                  onClick={handleUpload}
+                  className={css({
+                    background: "transparent",
+                    border: "none",
+                    fontSize: 20,
+                    color: "#ffffff",
+                  })}
+                >
+                  {uploadedFileName
+                    ? uploadedFileName
+                    : "Update Profile Picture"}
+                </button>
+              </div>
+            }
+          </div>
+        )}
       </div>
       <div style={{ display: "flex", flex: 3, flexDirection: "column" }}>
         <div
@@ -64,7 +158,7 @@ const Profile = (props: Props) => {
                 fontWeight: 800,
               }}
             >
-              Ed Sheeran
+              {name}
             </p>
           </div>
           <div

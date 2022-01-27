@@ -13,6 +13,7 @@ export const createEvent = async (
 ): Promise<Event> => {
   // console.log(document.cookie);
   const res = await axios(`${process.env.BASE_URL}api/event/create`, {
+    withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -79,6 +80,7 @@ export const deleteEvent = async (id: string): Promise<Event> => {
 };
 export const razorpay = async (id: string): Promise<Razorpay> => {
   const res = await axios(`${process.env.BASE_URL}razorpay`, {
+    withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -92,7 +94,7 @@ export const razorpay = async (id: string): Promise<Razorpay> => {
 };
 export const bookEvent = async (id: string, email: string): Promise<Event> => {
   const res = await axios(`${process.env.BASE_URL}api/event/book`, {
-    method: "GET",
+    method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

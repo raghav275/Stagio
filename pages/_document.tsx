@@ -2,6 +2,7 @@ import Document, { DocumentContext } from "next/document";
 import { ServerStyleSheets } from "@material-ui/styles";
 import { injectGlobal } from "@emotion/css";
 
+
 injectGlobal`@font-face {
     font-family: "Poppins";
     src: url("/fonts/Poppins/Poppins-Regular.ttf");

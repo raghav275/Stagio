@@ -2,6 +2,7 @@ export interface Event {
   title: string;
   description: string;
   date: Date;
+  users: string[];
   time: string;
   price: number;
   id: string;

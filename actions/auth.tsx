@@ -1,8 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { Login } from "@typings/auth";
+import { toast } from "react-toastify";
 
 export async function login(email: string, password: string): Promise<Login> {
   const res = await axios(`${process.env.BASE_URL}api/auth/login`, {
+    withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -14,6 +16,7 @@ export async function login(email: string, password: string): Promise<Login> {
 }
 
 export async function register(
+  name: string,
   username: string,
   email: string,
   password: string
@@ -24,7 +27,7 @@ export async function register(
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    data: { username: username, email: email, password: password },
+    data: { name, username, email, password },
   }).then((response) => response);
   // console.log(res);
   return res.data;
@@ -47,10 +50,9 @@ export async function reset(token: string): Promise<Login> {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      "Authorization" : "Bearer "
+      Authorization: "Bearer ",
     },
   }).then((response) => response);
   // console.log(res);
   return res.data;
 }
-

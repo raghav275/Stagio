@@ -1,5 +1,7 @@
 import { css } from "@emotion/css";
 import React, { Component, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 declare global {
   interface Window {
@@ -12,10 +14,15 @@ interface Props {
 let domain = "meet.jit.si";
 let api: any = {};
 const JitsiComponent = (props: Props) => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const { roomId } = props;
-  // const handleClose = () => {
-  //   console.log("handleClose");
-  // };
+  const [isFinished, setIsFinished] = useState(false);
+  const handleClose = () => {
+    // router.push("/");
+    api.dispose();
+  };
 
   // const handleParticipantLeft = async (participant: any) => {
   //   console.log("handleParticipantLeft", participant); // { id: "2baa184e" }
@@ -39,7 +46,7 @@ const JitsiComponent = (props: Props) => {
   const [room, setRoom] = useState({
     room: roomId,
     user: {
-      name: "Akash Verma",
+      name: user?.username,
     },
     isAudioMuted: false,
     isVideoMuted: false,
@@ -56,7 +63,12 @@ const JitsiComponent = (props: Props) => {
     const options = {
       roomName: room.room,
 
-      configOverwrite: { subject: "Online", prejoinPageEnabled: false },
+      configOverwrite: {
+        subject: "Online",
+        prejoinPageEnabled: false,
+        disableSimulcast: false,
+        enableClosePage: false,
+      },
       interfaceConfigOverwrite: {
         // overwrite interface properties
         TOOLBAR_BUTTONS: [
@@ -87,21 +99,25 @@ const JitsiComponent = (props: Props) => {
           "download",
           // 'help'
         ],
+        filmStripOnly: false,
+        CLOSE_PAGE_GUEST_HINT: false,
+        ENABLE_FEEDBACK_ANIMATION: false,
+        SHOW_CHROME_EXTENSION_BANNER: false,
       },
+
       parentNode: document.querySelector("#jitsi-iframe"),
       userInfo: {
-        displayName: room.user.name,
+        displayName: user?.username,
       },
     };
     api = new window.JitsiMeetExternalAPI(domain, options);
-    console.log(api);
-    // api.addEventListeners({
-    //   readyToClose: handleClose,
-    //   participantLeft: handleParticipantLeft,
-    //   participantJoined: handleParticipantJoined,
-    //   audioMuteStatusChanged: handleMuteStatus,
-    //   videoMuteStatusChanged: handleVideoStatus,
-    // });
+    api.addEventListeners({
+      readyToClose: handleClose,
+      // participantLeft: handleParticipantLeft,
+      // participantJoined: handleParticipantJoined,
+      // audioMuteStatusChanged: handleMuteStatus,
+      // videoMuteStatusChanged: handleVideoStatus,
+    });
     // api.execute()
   };
   return (
@@ -109,11 +125,14 @@ const JitsiComponent = (props: Props) => {
       className={css({
         display: "flex",
         width: "100%",
-        height: "calc(100vh-60px)",
+        height: "calc(100vh - 60px)",
       })}
     >
       <div
-        className={css({ width: "100%", height: "100%" })}
+        className={css({
+          width: "100%",
+          height: "100%",
+        })}
         id="jitsi-iframe"
       ></div>
     </div>

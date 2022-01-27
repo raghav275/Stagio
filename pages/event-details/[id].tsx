@@ -1,10 +1,10 @@
-import { getEvent, razorpay } from "@actions/event";
+import { bookEvent, getEvent, razorpay } from "@actions/event";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import { Event } from "@typings/event";
-import { format, parse } from "date-fns";
+import { format, parse, formatISO } from "date-fns";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
 
@@ -16,22 +16,42 @@ declare global {
 interface Props {
   event: Event;
 }
+function mergeDateandTime(date: string, time: string) {
+  return `${date.split("T")[0]}T${time.split("T")[1]}`;
+}
 const EventPage = (props: Props) => {
-  // console.log(props.event);
+  const router = useRouter();
   const { data: session, status } = useSession();
-  const user = session?.user
-  const { title, description, date, time, price, poster, banner ,id} = props.event;
-  const showRazorpay =async () => {
+  const user = session?.user;
+  const { title, description, date, time, price, poster, banner, id, users } =
+    props.event;
+  const [bought, setBought] = useState(false);
+  useEffect(() => {
+    if (user && users && users.includes(user.email)) {
+      setBought(true);
+    }
+  }, [user]);
+  const finalDate = mergeDateandTime(
+    formatISO(new Date(date)),
+    formatISO(parse(time, "HH:mm", new Date()))
+  );
+  const showRazorpay = async () => {
     const res = await razorpay(id);
     const options = {
+      readonly: {
+        email: 1,
+      },
+      notes: {
+        event_id: id,
+      },
       key: `${process.env.RZP_KEY}`,
-      amount:res.amount,
+      amount: res.amount,
       currency: "INR",
       name: "Stagio",
       description: `booking for ${title}`,
       image: "https://example.com/your_logo",
       order_id: res.id,
-      handler: function (response: {
+      handler: async function (response: {
         razorpay_payment_id: string;
         razorpay_order_id: string;
         razorpay_signature: string;
@@ -42,7 +62,7 @@ const EventPage = (props: Props) => {
       },
       prefill: {
         name: user.username,
-        email: user.email, 
+        email: user.email,
       },
       theme: {
         color: "#3399cc",
@@ -149,10 +169,18 @@ const EventPage = (props: Props) => {
               borderRadius: 20,
             }}
             onClick={() => {
-              showRazorpay();
+              bought
+                ? formatISO(new Date()) >= finalDate
+                  ? router.push(`/room/${id}`)
+                  : () => {}
+                : showRazorpay();
             }}
           >
-            Buy Now
+            {bought
+              ? formatISO(new Date()) >= finalDate
+                ? "Join Now"
+                : " Already Bought"
+              : "Buy Now"}
           </Button>
         </div>
       </div>
@@ -164,7 +192,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const event = await getEvent(params?.id as string);
   return {
     props: {
-      event: event.event,
+      event: event,
     },
   };
 };

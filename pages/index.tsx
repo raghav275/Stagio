@@ -224,7 +224,7 @@ function Home(props: Props) {
                     style={{ background: "transparent", padding: 30 }}
                   >
                     <div style={{ padding: 30 }}>
-                      <Circle />
+                      <Circle user={artist} />
                     </div>
                   </div>
                 </Link>

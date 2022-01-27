@@ -69,8 +69,8 @@ const CreateEvent = () => {
       time,
       price,
       session?.user.email,
-      poster[0].data_url!,
-      banner[0].data_url,
+      poster?.[0]?.data_url!,
+      banner?.[0]?.data_url
     );
   };
   return (

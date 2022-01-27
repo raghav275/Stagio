@@ -19,6 +19,7 @@
       "@typings/*": ["./typings/*"],
       "@components/*": ["./components/*"],
       "@app/*": ["./app/*"],
+      "@utils/*":["./utils/*"],
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/auth/[...nextAuth].js", "lib/mongodb.js"],

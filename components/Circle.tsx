@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { css, cx } from '@emotion/css'
+import { css, cx } from "@emotion/css";
+import { User } from "typings/profile";
+interface Props {
+  user: User;
+}
 
-const Circle = () => {
+//To change the name variable initialization after adding name in registration form and deleting mongoDB records
+const Circle = (props: Props) => {
+  const { name, profilePic } = props.user;
   return (
     <div
       style={{ display: "flex", alignItems: "center", flexDirection: "column" }}
@@ -18,7 +24,7 @@ const Circle = () => {
           width="180px"
           height="180px"
           style={{ objectFit: "cover" }}
-          src="https://dilliwaliblog.files.wordpress.com/2020/08/i0m27jp8_400x400.jpg"
+          src={profilePic}
         ></img>
       </div>
       <p
@@ -29,7 +35,7 @@ const Circle = () => {
           fontSize: 20,
         }}
       >
-        Anuv Jain
+        {name || ""}
       </p>
     </div>
   );
