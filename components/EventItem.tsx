@@ -19,7 +19,11 @@ const EventItem = (props: Props) => {
         borderBottom: "1px solid #5a5a5a",
       }}
     >
-      <div>
+      <div
+        className={css({
+          minWidth: 200,
+        })}
+      >
         <p
           style={{
             textAlign: "center",

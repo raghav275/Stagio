@@ -1,12 +1,13 @@
-import { bookEvent, getEvent, razorpay } from "@actions/event";
+import { bookEvent, getEvent, razorpay, setStatus } from "@actions/event";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import { Event } from "@typings/event";
+import { Event, EventStatus } from "@typings/event";
 import { format, parse, formatISO } from "date-fns";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 declare global {
   interface Window {
@@ -16,19 +17,38 @@ declare global {
 interface Props {
   event: Event;
 }
+
 function mergeDateandTime(date: string, time: string) {
   return `${date.split("T")[0]}T${time.split("T")[1]}`;
 }
 const EventPage = (props: Props) => {
   const router = useRouter();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const user = session?.user;
-  const { title, description, date, time, price, poster, banner, id, users } =
-    props.event;
+  const {
+    title,
+    description,
+    date,
+    time,
+    price,
+    poster,
+    banner,
+    id,
+    users,
+    owner,
+    status,
+  } = props.event;
   const [bought, setBought] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   useEffect(() => {
-    if (user && users && users.includes(user.email)) {
+    if (user && owner === user.email) {
+      setIsOwner(true);
+    } else if (user && users && users.includes(user.email)) {
       setBought(true);
+      setIsOwner(false);
+    } else {
+      setBought(false);
+      setIsOwner(false);
     }
   }, [user]);
   const finalDate = mergeDateandTime(
@@ -92,6 +112,21 @@ const EventPage = (props: Props) => {
     );
     rzp1.open();
   };
+  const startEvent = async () => {
+    const res = await setStatus(id, EventStatus.Started);
+    router.push(`/room/${id}`);
+  };
+  const endEvent = async () => {
+    const res = await setStatus(id, EventStatus.Ended);
+  };
+  const buyTicket = () => {
+    if (!session?.user) {
+      toast.dark("Please Login To Buy Ticket");
+    } else {
+      showRazorpay();
+    }
+  };
+  const cancelBooking = () => {};
   return (
     <div
       style={{
@@ -169,19 +204,39 @@ const EventPage = (props: Props) => {
               borderRadius: 20,
             }}
             onClick={() => {
-              bought
-                ? formatISO(new Date()) >= finalDate
-                  ? router.push(`/room/${id}`)
-                  : () => {}
-                : showRazorpay();
+              isOwner || status === EventStatus.Started
+                ? startEvent()
+                : buyTicket();
             }}
           >
-            {bought
-              ? formatISO(new Date()) >= finalDate
-                ? "Join Now"
-                : " Already Bought"
-              : "Buy Now"}
+            {status !== EventStatus.Ended
+              ? isOwner
+                ? "Start Now"
+                : bought
+                ? status === EventStatus.Started
+                  ? "Join Now"
+                  : "Already Bought"
+                : "Buy Now"
+              : "Event Ended"}
           </Button>
+          {isOwner && status !== EventStatus.Ended && (
+            <Button
+              onClick={() => {
+                endEvent();
+              }}
+            >
+              End Event
+            </Button>
+          )}
+          {bought && status === EventStatus.Idle && (
+            <Button
+              onClick={() => {
+                cancelBooking();
+              }}
+            >
+              Cancel Booking
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -189,7 +244,9 @@ const EventPage = (props: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const event = await getEvent(params?.id as string);
+  const id = params?.id;
+  const res = await getEvent(id as string);
+  const event = res?.event;
   return {
     props: {
       event: event,

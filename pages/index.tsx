@@ -218,7 +218,7 @@ function Home(props: Props) {
           <Slider {...artistSettings}>
             {props.artists.map((artist, id) => {
               return (
-                <Link href={`/profile/${artist.username}`}>
+                <Link key={id} href={`/profile/${artist.username}`}>
                   <div
                     key={id}
                     style={{ background: "transparent", padding: 30 }}

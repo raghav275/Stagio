@@ -18,6 +18,8 @@ const Card = (props: Props) => {
   useEffect(() => {
     if (user && users && users.includes(user.email)) {
       setBought(true);
+    } else {
+      setBought(false);
     }
   }, [user]);
   function mergeDateandTime(date: string, time: string) {

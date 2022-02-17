@@ -10,6 +10,7 @@ export interface Event {
   url: string;
   poster: string;
   banner?: string;
+  status: number;
 }
 export interface Razorpay {
   amount: number;
@@ -24,4 +25,9 @@ export interface Razorpay {
   offer_id: number | null;
   receipt: string;
   status: string;
+}
+export enum EventStatus {
+  Idle = 0,
+  Started = 1,
+  Ended = 2,
 }

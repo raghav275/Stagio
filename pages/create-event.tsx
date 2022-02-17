@@ -1,17 +1,14 @@
-import Navbar from "@components/Navbar";
-import { css, cx } from "@emotion/css";
-import { makeStyles, TextField } from "@material-ui/core";
-import styles from "../styles/Navbar.module.css";
-import Button from "react-bootstrap/Button";
-import { Formik, FormikValues } from "formik";
-import React from "react";
-import ImageUploading, { ImageType } from "react-images-uploading";
 import { createEvent } from "@actions/event";
 import { useAppSelector } from "@app/hooks";
+import { css, cx } from "@emotion/css";
+import { makeStyles, TextField } from "@material-ui/core";
+import { Formik, FormikValues } from "formik";
 import { useSession } from "next-auth/react";
-import { NextPageContext } from "next";
-import { parseCookies } from "utils/parseCookie";
-import axios from "axios";
+import React from "react";
+import Button from "react-bootstrap/Button";
+import ImageUploading, { ImageType } from "react-images-uploading";
+import { toast } from "react-toastify";
+import styles from "../styles/Navbar.module.css";
 
 const useStyles = makeStyles({
   underline: {
@@ -27,13 +24,18 @@ const useStyles = makeStyles({
     fontSize: 40,
   },
 });
-
+const errorStyle = css({
+  fontSize: 14,
+  color: "#ff3333",
+});
 const CreateEvent = () => {
   const userState = useAppSelector((state) => state.user);
   // console.log(userState);
   const classes = useStyles();
-  const [poster, setPoster] = React.useState<ImageType[]>([]);
-  const [banner, setBanner] = React.useState<ImageType[]>([]);
+  const [formSubmittedOnce, setFormSubmittedOnce] =
+    React.useState<boolean>(false);
+  // const [poster, setPoster] = React.useState<ImageType[]>([]);
+  // const [banner, setBanner] = React.useState<ImageType[]>([]);
   const maxNumber = 69;
   const onChange = (
     imageList: ImageType[],
@@ -57,21 +59,63 @@ const CreateEvent = () => {
     flexDirection: "column",
   });
   const smallHeading = css({
+    marginTop: 20,
     color: "#d94b58",
   });
   const { data: session, status } = useSession();
   const submitEvent = async (val: FormikValues) => {
-    const { title, description, date, time, price } = val;
-    const res = await createEvent(
-      title,
-      description,
-      date,
-      time,
-      price,
-      session?.user.email,
-      poster?.[0]?.data_url!,
-      banner?.[0]?.data_url
-    );
+    const { title, description, date, time, price, poster, banner } = val;
+    let posterBase64 = poster[0] && poster[0].data_url.split(",")[1];
+    let bannerBase64 = banner[0] && banner[0].data_url.split(",")[1];
+    try {
+      const res = await createEvent(
+        title,
+        description,
+        date,
+        time,
+        price,
+        session?.user.email,
+        posterBase64,
+        bannerBase64
+      );
+    } catch (e) {
+      const err = e?.response?.data?.message;
+      if (e?.response?.status === 401) {
+        toast.dark("Please Login First");
+      }
+      toast.dark(err);
+    }
+  };
+  interface ErrorForm {
+    title?: string;
+    description?: string;
+    price?: string;
+    date?: string;
+    time?: string;
+    poster?: string;
+  }
+  const validateForm = (val: FormikValues) => {
+    let errors: ErrorForm = {};
+    const { title, description, date, time, price, poster } = val;
+    if (title.length === 0) {
+      errors.title = "Enter title";
+    }
+    if (description.length === 0) {
+      errors.description = "Enter description";
+    }
+    if (!date) {
+      errors.date = "Select Date";
+    }
+    if (price < 0) {
+      errors.price = "Select a positive number";
+    }
+    if (!time) {
+      errors.time = "Select Time";
+    }
+    if (!poster) {
+      errors.poster = "Upload Poster Image";
+    }
+    return errors;
   };
   return (
     <>
@@ -89,6 +133,7 @@ const CreateEvent = () => {
             alignSelf: "center",
             fontWeight: 500,
             color: "#ffffff",
+            marginTop: 20,
           })}
         >
           Create Your <span style={{ color: "#d94b58" }}>Live</span> Show
@@ -97,13 +142,17 @@ const CreateEvent = () => {
           initialValues={{
             title: "",
             description: "",
-            date: new Date(),
-            time: new Date(),
-            price: null,
+            date: undefined,
+            time: undefined,
+            price: 0,
+            poster: [],
+            banner: [],
           }}
           onSubmit={submitEvent}
+          validateOnChange={formSubmittedOnce}
+          validate={validateForm}
         >
-          {({ values, setFieldValue, submitForm }) => {
+          {({ values, setFieldValue, submitForm, errors }) => {
             return (
               <div
                 className={cx(
@@ -134,7 +183,6 @@ const CreateEvent = () => {
                       <TextField
                         placeholder="Title"
                         onChange={(e) => {
-                          // console.log(e.target.value);
                           setFieldValue("title", e.target.value);
                         }}
                         InputProps={{
@@ -143,6 +191,7 @@ const CreateEvent = () => {
                             root: classes.root,
                           },
                         }}
+                        error={!!errors.title}
                       />
                     </div>
                     <div>
@@ -159,6 +208,7 @@ const CreateEvent = () => {
                             root: classes.root,
                           },
                         }}
+                        error={!!errors.description}
                       />
                     </div>
                     <div>
@@ -176,6 +226,7 @@ const CreateEvent = () => {
                             root: classes.root,
                           },
                         }}
+                        error={!!errors.price}
                       />
                     </div>
                     <div>
@@ -193,6 +244,7 @@ const CreateEvent = () => {
                             root: classes.root,
                           },
                         }}
+                        error={!!errors.date}
                       />
                     </div>
                     <div>
@@ -210,7 +262,11 @@ const CreateEvent = () => {
                             root: classes.root,
                           },
                         }}
+                        error={!!errors.time}
                       />
+                      {errors.time && (
+                        <div className={errorStyle}>{errors.time}</div>
+                      )}
                     </div>
                   </div>
                   <div
@@ -224,9 +280,9 @@ const CreateEvent = () => {
                     <div className={uploadStyle}>
                       <div className={smallHeading}>Upload Poster Image</div>
                       <ImageUploading
-                        value={poster}
+                        value={values.poster}
                         onChange={(e) => {
-                          onChange(e, setPoster);
+                          setFieldValue("poster", e);
                         }}
                         maxNumber={maxNumber}
                         dataURLKey="data_url"
@@ -285,9 +341,9 @@ const CreateEvent = () => {
                     <div className={cx(uploadStyle, css({ marginTop: 50 }))}>
                       <div className={smallHeading}>Upload Banner Image</div>
                       <ImageUploading
-                        value={banner}
+                        value={values.banner}
                         onChange={(e) => {
-                          onChange(e, setBanner);
+                          setFieldValue("banner", e);
                         }}
                         maxNumber={maxNumber}
                         dataURLKey="data_url"
@@ -358,6 +414,7 @@ const CreateEvent = () => {
                       fontSize: 14,
                     }}
                     onClick={() => {
+                      setFormSubmittedOnce(true);
                       submitForm();
                     }}
                     variant="outline-primary"

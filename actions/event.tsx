@@ -1,6 +1,6 @@
 import { Event, Razorpay } from "@typings/event";
 import axios from "axios";
-
+axios.defaults.withCredentials = true;
 export const createEvent = async (
   title: string,
   description: string,
@@ -11,12 +11,12 @@ export const createEvent = async (
   poster: string,
   banner?: string
 ): Promise<Event> => {
-  // console.log(document.cookie);
   const res = await axios(`${process.env.BASE_URL}api/event/create`, {
     withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
+      "Access-Control-Allow-Credentials": "true",
     },
     data: {
       title,
@@ -101,6 +101,20 @@ export const bookEvent = async (id: string, email: string): Promise<Event> => {
     },
     data: {
       id,
+    },
+  });
+  return res.data;
+};
+export const setStatus = async (id: string, status: number) => {
+  const res = await axios(`${process.env.BASE_URL}api/event/setstatus`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: {
+      id,
+      status,
     },
   });
   return res.data;

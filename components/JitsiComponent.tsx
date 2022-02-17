@@ -20,8 +20,7 @@ const JitsiComponent = (props: Props) => {
   const { roomId } = props;
   const [isFinished, setIsFinished] = useState(false);
   const handleClose = () => {
-    // router.push("/");
-    api.dispose();
+    router.push(`/event-details/${roomId}`);
   };
 
   // const handleParticipantLeft = async (participant: any) => {
