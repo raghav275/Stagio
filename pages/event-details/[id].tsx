@@ -144,6 +144,7 @@ const EventPage = (props: Props) => {
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
+        backgroundPosition: "center"
       }}
     >
       <div
