@@ -7,7 +7,10 @@ import { Event, EventStatus } from "@typings/event";
 import { format, parse, formatISO } from "date-fns";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 import { toast } from "react-toastify";
+import { css, cx } from "@emotion/css";
+import Link from "next/link";
 
 declare global {
   interface Window {
@@ -17,7 +20,11 @@ declare global {
 interface Props {
   event: Event;
 }
-
+const buttonStyle = css({
+  border: "none",
+  backgroundColor: "#d94b58",
+  borderRadius: 20,
+});
 function mergeDateandTime(date: string, time: string) {
   return `${date.split("T")[0]}T${time.split("T")[1]}`;
 }
@@ -133,7 +140,7 @@ const EventPage = (props: Props) => {
         display: "flex",
         width: "100%",
         height: "calc(100vh - 60px)",
-        backgroundImage: `url(${banner})`,
+        backgroundImage: banner && `url(${banner})`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -156,6 +163,30 @@ const EventPage = (props: Props) => {
           paddingLeft: 20,
         }}
       >
+        {isOwner && (
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              padding: 10,
+            }}
+          >
+            <Link href={{ pathname: "/create-event", query: { id: id } }}>
+              <p
+                className={css({
+                  color: "#d94b58",
+                  fontSize: 15,
+                  cursor: "pointer",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                })}
+              >
+                Edit Event
+              </p>
+            </Link>
+          </div>
+        )}
         <div
           style={{
             display: "flex",
@@ -192,20 +223,22 @@ const EventPage = (props: Props) => {
             alignItems: "center",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", fontSize: 20 }}>
-            <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
-              &#8377; {price}
-            </p>
-          </div>
+          {!bought && (
+            <div
+              style={{ display: "flex", alignItems: "center", fontSize: 20 }}
+            >
+              <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
+                &#8377; {price}
+              </p>
+            </div>
+          )}
           <Button
-            style={{
-              border: "none",
-              backgroundColor: "#d94b58",
-              borderRadius: 20,
-            }}
+            className={buttonStyle}
             onClick={() => {
-              isOwner || status === EventStatus.Started
+              isOwner || (bought && status === EventStatus.Started)
                 ? startEvent()
+                : bought && status === EventStatus.Idle
+                ? {}
                 : buyTicket();
             }}
           >
@@ -221,6 +254,10 @@ const EventPage = (props: Props) => {
           </Button>
           {isOwner && status !== EventStatus.Ended && (
             <Button
+              className={cx(
+                buttonStyle,
+                css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
+              )}
               onClick={() => {
                 endEvent();
               }}
@@ -230,6 +267,10 @@ const EventPage = (props: Props) => {
           )}
           {bought && status === EventStatus.Idle && (
             <Button
+              className={cx(
+                buttonStyle,
+                css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
+              )}
               onClick={() => {
                 cancelBooking();
               }}
@@ -244,12 +285,10 @@ const EventPage = (props: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const id = params?.id;
-  const res = await getEvent(id as string);
-  const event = res?.event;
+  const res = await getEvent(params?.id as string);
   return {
     props: {
-      event: event,
+      event: res.event,
     },
   };
 };

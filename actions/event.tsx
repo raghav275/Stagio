@@ -9,11 +9,12 @@ export const createEvent = async (
   price: number,
   owner: string,
   poster: string,
-  banner?: string
+  banner?: string,
+  event_id?: string
 ): Promise<Event> => {
   const res = await axios(`${process.env.BASE_URL}api/event/create`, {
     withCredentials: true,
-    method: "POST",
+    method: event_id ? "PATCH" : "POST",
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
@@ -27,6 +28,7 @@ export const createEvent = async (
       owner,
       poster,
       banner,
+      event_id,
     },
   });
   return res.data;

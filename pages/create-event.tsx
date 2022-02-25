@@ -1,10 +1,14 @@
-import { createEvent } from "@actions/event";
+import { createEvent, getEvent } from "@actions/event";
 import { useAppSelector } from "@app/hooks";
 import { css, cx } from "@emotion/css";
 import { makeStyles, TextField } from "@material-ui/core";
+import { Event } from "@typings/event";
+import format from "date-fns/format";
 import { Formik, FormikValues } from "formik";
+import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
-import React from "react";
+import Router from "next/router";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import ImageUploading, { ImageType } from "react-images-uploading";
 import { toast } from "react-toastify";
@@ -28,24 +32,20 @@ const errorStyle = css({
   fontSize: 14,
   color: "#ff3333",
 });
-const CreateEvent = () => {
+interface Props {
+  event: Event;
+}
+const CreateEvent = (props: Props) => {
+  const [eventState, setEventState] = useState(props.event);
+  useEffect(() => {
+    setEventState(props.event || {});
+  }, [props]);
   const userState = useAppSelector((state) => state.user);
-  // console.log(userState);
   const classes = useStyles();
   const [formSubmittedOnce, setFormSubmittedOnce] =
     React.useState<boolean>(false);
-  // const [poster, setPoster] = React.useState<ImageType[]>([]);
-  // const [banner, setBanner] = React.useState<ImageType[]>([]);
   const maxNumber = 69;
-  const onChange = (
-    imageList: ImageType[],
-    state: React.Dispatch<React.SetStateAction<ImageType[]>>,
-    addUpdateIndex?: number[]
-  ) => {
-    // data for submit
-    // console.log(imageList, addUpdateIndex);
-    state(imageList);
-  };
+
   const buttonStyle = {
     borderRadius: "50px",
     fontFamily: "Poppins-Medium",
@@ -117,6 +117,8 @@ const CreateEvent = () => {
     }
     return errors;
   };
+  const { title, description, price, date, time, id, poster, banner } =
+    eventState || {};
   return (
     <>
       <div
@@ -139,14 +141,15 @@ const CreateEvent = () => {
           Create Your <span style={{ color: "#d94b58" }}>Live</span> Show
         </div>
         <Formik
+          enableReinitialize
           initialValues={{
-            title: "",
-            description: "",
-            date: undefined,
-            time: undefined,
-            price: 0,
-            poster: [],
-            banner: [],
+            title: title || "",
+            description: description || "",
+            date: (date && date.split("T")[0]) || undefined,
+            time: time || undefined,
+            price: price || 0,
+            poster: [{ data_url: poster }] || [],
+            banner: [{ data_url: banner }] || [],
           }}
           onSubmit={submitEvent}
           validateOnChange={formSubmittedOnce}
@@ -181,6 +184,7 @@ const CreateEvent = () => {
                     <div>
                       <div className={smallHeading}>Title</div>
                       <TextField
+                        value={values.title}
                         placeholder="Title"
                         onChange={(e) => {
                           setFieldValue("title", e.target.value);
@@ -197,6 +201,7 @@ const CreateEvent = () => {
                     <div>
                       <div className={smallHeading}>Description</div>
                       <TextField
+                        value={values.description}
                         multiline
                         placeholder="Description"
                         onChange={(e) => {
@@ -232,11 +237,13 @@ const CreateEvent = () => {
                     <div>
                       <div className={smallHeading}>Date</div>
                       <TextField
+                        key={values.date}
                         type="date"
                         value={values.date}
                         placeholder="Date"
                         onChange={(e) => {
                           setFieldValue("date", e.target.value);
+                          console.log(e.target.value);
                         }}
                         InputProps={{
                           classes: {
@@ -250,6 +257,7 @@ const CreateEvent = () => {
                     <div>
                       <div className={smallHeading}>Time</div>
                       <TextField
+                        key={values.time}
                         type="time"
                         value={values.time}
                         placeholder="Time"
@@ -430,5 +438,22 @@ const CreateEvent = () => {
     </>
   );
 };
-
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (query.id) {
+    let id = query.id;
+    console.log(id);
+    let res = await getEvent(id as string);
+    return {
+      props: {
+        event: res.event,
+      },
+    };
+  } else {
+    return {
+      props: {
+        event: null,
+      },
+    };
+  }
+};
 export default CreateEvent;

@@ -7,7 +7,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-const nextAuthOptions = (req:NextApiRequest, res:NextApiResponse) => {
+const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
   return {
     providers: [
       CredentialsProvider({
@@ -21,10 +21,13 @@ const nextAuthOptions = (req:NextApiRequest, res:NextApiResponse) => {
           req
         ): Promise<Omit<User, "id"> | { id?: string | undefined } | null> {
           // Add logic here to look up the user from the credentials supplied
-          const response = await login(credentials?.email!, credentials?.password!);
-          const cookies = response.headers['set-cookie']
+          const response = await login(
+            credentials?.email!,
+            credentials?.password!
+          );
+          const cookies = response.headers["set-cookie"];
 
-          res.setHeader('Set-Cookie', cookies)
+          res.setHeader("Set-Cookie", cookies);
           if (response) {
             var user = { token: response.data.token, data: response.data.user };
             return user;
@@ -53,6 +56,6 @@ const nextAuthOptions = (req:NextApiRequest, res:NextApiResponse) => {
     },
   };
 };
-export default (req:NextApiRequest, res:NextApiResponse) => {
+export default (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res));
 };

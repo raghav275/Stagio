@@ -185,6 +185,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .btn-primary:hover {
   background-color: #d94b58 !important;
 }
-button:focus {
+.btn-primary:focus {
+  background-color: #d94b58 !important;
   box-shadow: none !important;
 }
