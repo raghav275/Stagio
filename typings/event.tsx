@@ -31,3 +31,9 @@ export enum EventStatus {
   Started = 1,
   Ended = 2,
 }
+
+export enum BookingStatus {
+  None = 0,
+  Bought = 1,
+  Cancelled = 2,
+}

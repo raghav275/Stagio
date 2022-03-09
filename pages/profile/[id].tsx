@@ -15,22 +15,17 @@ import getBase64 from "@utils/getBase64";
 
 interface Props {
   profile: User;
+  isSelf: boolean;
 }
 
 const Profile = (props: Props) => {
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { username, email, events, profilePic, name } = props.profile;
+  const { username, email, events_bought, events_created, profilePic, name } =
+    props.profile;
   const { data: session, status } = useSession();
   const user = session?.user;
-  useEffect(() => {
-    if (user && email === user?.email) {
-      setIsUser(true);
-    } else {
-      setIsUser(false);
-    }
-  }, [user]);
-  const [isUser, setIsUser] = useState(false);
+  const [isUser, setIsUser] = useState(props.isSelf);
   const [profileImg, setProfileImg] = useState<string | undefined>(undefined);
   const [hover, setHover] = useState(false);
   const handleUpload = () => {
@@ -47,6 +42,7 @@ const Profile = (props: Props) => {
   const onLeave = () => {
     setHover(false);
   };
+  const { isSelf } = props;
   return (
     <div
       style={{
@@ -133,7 +129,15 @@ const Profile = (props: Props) => {
           </div>
         )}
       </div>
-      <div style={{ display: "flex", flex: 3, flexDirection: "column" }}>
+      <div
+        style={{
+          display: "flex",
+          flex: 3,
+          flexDirection: "column",
+          overflow: "auto",
+          height: "100%",
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -161,7 +165,7 @@ const Profile = (props: Props) => {
               {name}
             </p>
           </div>
-          <div
+          {/* <div
             style={{
               display: "flex",
               flexDirection: "row",
@@ -191,9 +195,9 @@ const Profile = (props: Props) => {
                 color: "#5a5a5a",
               }}
             />
-          </div>
+          </div> */}
         </div>
-        <div style={{ margin: 20, paddingLeft: 10 }}>
+        {/* <div style={{ margin: 20, paddingLeft: 10 }}>
           <Button
             style={{
               border: "none",
@@ -203,7 +207,7 @@ const Profile = (props: Props) => {
           >
             Follow to stay Updated
           </Button>
-        </div>
+        </div> */}
         <div
           style={{
             display: "flex",
@@ -225,20 +229,69 @@ const Profile = (props: Props) => {
             Upcoming Live Shows
           </p>
         </div>
-        <div style={{ alignSelf: "center", width: "90%", overflow: "auto" }}>
-          {events.map((event: Event, i: number) => {
+        <div
+          style={{
+            alignSelf: "center",
+            width: "90%",
+            overflow: "auto",
+            minHeight: "400px",
+          }}
+        >
+          {events_created.map((event: Event, i: number) => {
             return <EventItem key={i} event={event} />;
           })}
         </div>
+        {isSelf && (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                margin: 20,
+                paddingLeft: 20,
+                width: "100%",
+              }}
+            >
+              <p
+                style={{
+                  borderBottom: "7px solid #d94b58",
+                  color: "#ffffff",
+                  marginBottom: 0,
+                  fontSize: 40,
+                }}
+              >
+                Live Shows Bought
+              </p>
+            </div>
+            <div
+              style={{
+                alignSelf: "center",
+                width: "90%",
+                overflow: "auto",
+                minHeight: "400px",
+              }}
+            >
+              {events_bought.map((event: Event, i: number) => {
+                return <EventItem key={i} event={event} />;
+              })}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const res = await getProfile(params?.id as string);
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  params,
+}) => {
+  let isSelf = query && query.my ? true : false;
+  const res = await getProfile(isSelf, params?.id as string);
   return {
     props: {
       profile: res.user,
+      isSelf: isSelf,
     },
   };
 };

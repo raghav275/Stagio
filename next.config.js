@@ -14,5 +14,6 @@ module.exports = {
   env: {
     BASE_URL: process.env.BASE_URL,
     RZP_KEY: process.env.RZP_KEY,
+    NEXAUTH_SECRET:process.env.NEXAUTH_SECRET
   },
 };

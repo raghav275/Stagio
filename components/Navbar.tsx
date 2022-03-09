@@ -95,7 +95,12 @@ const Navbar = () => {
               <Dropdown.Menu>
                 <Dropdown.Item
                   onClick={() => {
-                    router.push(`/profile/${session.user.username}`);
+                    router.push({
+                      pathname: `/profile/${session.user.username}`,
+                      query: {
+                        my: true,
+                      },
+                    });
                   }}
                   className={css({ color: "#d94b58" })}
                 >

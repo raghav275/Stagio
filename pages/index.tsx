@@ -57,10 +57,6 @@ function Home(props: Props) {
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="First slide"
             />
-            <Carousel.Caption>
-              <h3>First slide label</h3>
-              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-            </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item
             style={{
@@ -76,10 +72,6 @@ function Home(props: Props) {
               alt="Second slide"
               height="800px"
             />
-            <Carousel.Caption>
-              <h3>Second slide label</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item
             style={{
@@ -95,12 +87,6 @@ function Home(props: Props) {
               alt="Third slide"
               height="800px"
             />
-            <Carousel.Caption>
-              <h3>Third slide label</h3>
-              <p>
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-              </p>
-            </Carousel.Caption>
           </Carousel.Item>
         </Carousel>
       </div>
@@ -290,7 +276,7 @@ function Home(props: Props) {
 }
 Home.getInitialProps = async (ctx: NextPageContext) => {
   const { event } = await getEvent();
-  const { user } = await getProfile();
+  const { user } = await getProfile(false);
   return {
     events: event,
     artists: user,

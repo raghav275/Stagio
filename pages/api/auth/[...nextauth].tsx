@@ -1,9 +1,15 @@
-import NextAuth, { NextAuthOptions, Session, User } from "next-auth";
+import NextAuth, {
+  NextAuthOptions,
+  Session,
+  SessionStrategy,
+  User,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { login } from "@actions/auth";
 import { toast } from "react-toastify";
 import { JWT } from "next-auth/jwt";
 import { NextApiRequest, NextApiResponse } from "next";
+import { SessionToken } from "next-auth/core/lib/cookie";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -37,20 +43,25 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
         },
       }),
     ],
-    secret: "/7VjDysz/ziDMXchMFHODM9X/xBfnCnpu5IX6aFLO1w=",
+    refetchInterval: 1 * 24 * 60 * 60,
+    secret: process.env.NEXTAUTH_SECRET,
     debug: true,
     session: {
+      strategy: "jwt" as SessionStrategy,
+      maxAge: 3 * 24 * 60 * 60,
+    },
+    jwt: {
       maxAge: 3 * 24 * 60 * 60,
     },
     callbacks: {
       jwt: async ({ token, user }: { token: JWT; user?: User }) => {
-        user && (token.token = user.token);
+        user && (token.accessToken = user.token);
         user && (token.user = user.data);
         return token;
       },
       session: async ({ session, token }: { session: Session; token: JWT }) => {
         session.user = token.user;
-        session.token = token.token;
+        session.accessToken = token.accessToken;
         return session;
       },
     },

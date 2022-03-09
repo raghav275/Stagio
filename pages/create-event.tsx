@@ -7,6 +7,7 @@ import format from "date-fns/format";
 import { Formik, FormikValues } from "formik";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
+import router from "next/router";
 import Router from "next/router";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
@@ -63,10 +64,11 @@ const CreateEvent = (props: Props) => {
     color: "#d94b58",
   });
   const { data: session, status } = useSession();
+  const [url, setUrl] = useState<string>();
   const submitEvent = async (val: FormikValues) => {
     const { title, description, date, time, price, poster, banner } = val;
     let posterBase64 = poster[0] && poster[0].data_url.split(",")[1];
-    let bannerBase64 = banner[0] && banner[0].data_url.split(",")[1];
+    let bannerBase64 = banner[0] && banner[0]?.data_url?.split(",")[1];
     try {
       const res = await createEvent(
         title,
@@ -78,6 +80,8 @@ const CreateEvent = (props: Props) => {
         posterBase64,
         bannerBase64
       );
+      toast.dark("Event created successfully");
+      setTimeout(() => router.push(`/event-details/${res.event.id}`), 500);
     } catch (e) {
       const err = e?.response?.data?.message;
       if (e?.response?.status === 401) {
@@ -112,8 +116,8 @@ const CreateEvent = (props: Props) => {
     if (!time) {
       errors.time = "Select Time";
     }
-    if (!poster) {
-      errors.poster = "Upload Poster Image";
+    if (!poster || !poster[0].data_url) {
+      errors.poster = "Please Upload Poster Image";
     }
     return errors;
   };
@@ -182,7 +186,7 @@ const CreateEvent = (props: Props) => {
                     }}
                   >
                     <div>
-                      <div className={smallHeading}>Title</div>
+                      <div className={smallHeading}>Title*</div>
                       <TextField
                         value={values.title}
                         placeholder="Title"
@@ -197,9 +201,12 @@ const CreateEvent = (props: Props) => {
                         }}
                         error={!!errors.title}
                       />
+                      {errors.title && (
+                        <div className={errorStyle}>{errors.title}</div>
+                      )}
                     </div>
                     <div>
-                      <div className={smallHeading}>Description</div>
+                      <div className={smallHeading}>Description*</div>
                       <TextField
                         value={values.description}
                         multiline
@@ -215,9 +222,12 @@ const CreateEvent = (props: Props) => {
                         }}
                         error={!!errors.description}
                       />
+                      {errors.description && (
+                        <div className={errorStyle}>{errors.description}</div>
+                      )}
                     </div>
                     <div>
-                      <div className={smallHeading}>Price</div>
+                      <div className={smallHeading}>Price*</div>
                       <TextField
                         type="number"
                         value={values.price}
@@ -233,9 +243,12 @@ const CreateEvent = (props: Props) => {
                         }}
                         error={!!errors.price}
                       />
+                      {errors.price && (
+                        <div className={errorStyle}>{errors.price}</div>
+                      )}
                     </div>
                     <div>
-                      <div className={smallHeading}>Date</div>
+                      <div className={smallHeading}>Date*</div>
                       <TextField
                         key={values.date}
                         type="date"
@@ -243,7 +256,6 @@ const CreateEvent = (props: Props) => {
                         placeholder="Date"
                         onChange={(e) => {
                           setFieldValue("date", e.target.value);
-                          console.log(e.target.value);
                         }}
                         InputProps={{
                           classes: {
@@ -253,9 +265,12 @@ const CreateEvent = (props: Props) => {
                         }}
                         error={!!errors.date}
                       />
+                      {errors.date && (
+                        <div className={errorStyle}>{errors.date}</div>
+                      )}
                     </div>
                     <div>
-                      <div className={smallHeading}>Time</div>
+                      <div className={smallHeading}>Time*</div>
                       <TextField
                         key={values.time}
                         type="time"
@@ -286,7 +301,7 @@ const CreateEvent = (props: Props) => {
                     }}
                   >
                     <div className={uploadStyle}>
-                      <div className={smallHeading}>Upload Poster Image</div>
+                      <div className={smallHeading}>Upload Poster Image*</div>
                       <ImageUploading
                         value={values.poster}
                         onChange={(e) => {
@@ -346,6 +361,13 @@ const CreateEvent = (props: Props) => {
                         )}
                       </ImageUploading>
                     </div>
+                    {errors.poster && (
+                      <div
+                        className={cx(errorStyle, css({ textAlign: "center" }))}
+                      >
+                        {errors.poster}
+                      </div>
+                    )}
                     <div className={cx(uploadStyle, css({ marginTop: 50 }))}>
                       <div className={smallHeading}>Upload Banner Image</div>
                       <ImageUploading

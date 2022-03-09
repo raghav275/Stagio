@@ -11,7 +11,7 @@ export const createEvent = async (
   poster: string,
   banner?: string,
   event_id?: string
-): Promise<Event> => {
+): Promise<{ success: string; event: Event }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/create`, {
     withCredentials: true,
     method: event_id ? "PATCH" : "POST",
@@ -51,17 +51,16 @@ export const getEvent = async (
 };
 
 export const checkEvent = async (
-  email: string,
-  url: string
-): Promise<Event> => {
+  url: string,
+  cookies: string
+): Promise<{ success: string; messsage: string }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/check/` + url, {
+    withCredentials: true,
     method: "GET",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    data: {
-      email,
+      "Access-Control-Allow-Credentials": "true",
+      Cookie: cookies,
     },
   });
   return res.data;
@@ -69,6 +68,7 @@ export const checkEvent = async (
 
 export const deleteEvent = async (id: string): Promise<Event> => {
   const res = await axios(`${process.env.BASE_URL}api/event/delete`, {
+    withCredentials: true,
     method: "DELETE",
     headers: {
       Accept: "application/json",
@@ -96,6 +96,7 @@ export const razorpay = async (id: string): Promise<Razorpay> => {
 };
 export const bookEvent = async (id: string, email: string): Promise<Event> => {
   const res = await axios(`${process.env.BASE_URL}api/event/book`, {
+    withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -109,6 +110,7 @@ export const bookEvent = async (id: string, email: string): Promise<Event> => {
 };
 export const setStatus = async (id: string, status: number) => {
   const res = await axios(`${process.env.BASE_URL}api/event/setstatus`, {
+    withCredentials: true,
     method: "PATCH",
     headers: {
       Accept: "application/json",
@@ -117,6 +119,37 @@ export const setStatus = async (id: string, status: number) => {
     data: {
       id,
       status,
+    },
+  });
+  return res.data;
+};
+
+export async function bookingStatus(
+  id: string,
+  email: string
+): Promise<{ success: string; status: number }> {
+  const data = { id: id, email: email };
+  const res = await axios(`${process.env.BASE_URL}api/event/bookingstatus`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    params: data,
+  });
+  return res.data;
+}
+
+export const cancel = async (id: string, email: string) => {
+  const res = await axios(`${process.env.BASE_URL}api/event/cancelbooking`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: {
+      id,
+      email,
     },
   });
   return res.data;

@@ -3,6 +3,7 @@ import { Login } from "@typings/auth";
 import { User } from "@typings/profile";
 
 export async function getProfile(
+  isSelf: boolean,
   username?: string
 ): Promise<{ sucess: string; user: User | User[] }> {
   const res = await axios(`${process.env.BASE_URL}api/profile/getprofile`, {
@@ -11,7 +12,7 @@ export async function getProfile(
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    data: { username },
+    data: { username, isSelf },
   }).then((response) => response);
   //   console.log(res);
   return res.data;

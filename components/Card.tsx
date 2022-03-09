@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import styles from "../styles/Card.module.css";
 import Link from "next/link";
 import { css } from "@emotion/css";
-import { Event } from "@typings/event";
+import { BookingStatus, Event } from "@typings/event";
 import { useSession } from "next-auth/react";
 import { formatISO, parse } from "date-fns";
+import { bookingStatus } from "@actions/event";
 
 interface Props {
   event: Event;
@@ -12,15 +13,35 @@ interface Props {
 const Card = (props: Props) => {
   const { data: session, status } = useSession();
   const user = session?.user;
-  const { title, description, date, time, price, id, poster, banner, users } =
-    props.event;
-  const [bought, setBought] = useState(false);
+  const {
+    title,
+    description,
+    owner,
+    date,
+    time,
+    price,
+    id,
+    poster,
+    banner,
+    users,
+  } = props.event;
+  const [bookingStat, setBookingStat] = useState(0);
+  const [isOwner, setIsOwner] = useState(false);
   useEffect(() => {
-    if (user && users && users.includes(user.email)) {
-      setBought(true);
+    if (user && owner === user.email) {
+      setIsOwner(true);
     } else {
-      setBought(false);
+      setIsOwner(false);
     }
+  }, [user]);
+  const bookingStatusFunc = async () => {
+    console.log(id);
+    console.log(user?.email);
+    const statusRes = await bookingStatus(id, user?.email);
+    setBookingStat(statusRes.status);
+  };
+  useEffect(() => {
+    bookingStatusFunc();
   }, [user]);
   function mergeDateandTime(date: string, time: string) {
     return `${date.split("T")[0]}T${time.split("T")[1]}`;
@@ -38,7 +59,9 @@ const Card = (props: Props) => {
           {description}
         </p>
         <Link href={`/event-details/${id}`}>
-          <button>{bought ? "Already Bought" : "Buy Ticket"}</button>
+          <button>
+            {isOwner ? "View Show" : bookingStat===BookingStatus.Bought ? "Already Bought" : "Buy Ticket"}
+          </button>
         </Link>
       </div>
     </div>

@@ -1,9 +1,16 @@
-import { bookEvent, getEvent, razorpay, setStatus } from "@actions/event";
+import {
+  bookEvent,
+  bookingStatus,
+  getEvent,
+  razorpay,
+  setStatus,
+  cancel,
+} from "@actions/event";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import { Event, EventStatus } from "@typings/event";
+import { Event, EventStatus, BookingStatus } from "@typings/event";
 import { format, parse, formatISO } from "date-fns";
 import { GetServerSideProps } from "next";
 import { useSession } from "next-auth/react";
@@ -11,7 +18,9 @@ import { getToken } from "next-auth/jwt";
 import { toast } from "react-toastify";
 import { css, cx } from "@emotion/css";
 import Link from "next/link";
-
+import Modal from "react-bootstrap/Modal";
+import InfoIcon from "@material-ui/icons/Info";
+import ToolTip from "@material-ui/core/Tooltip";
 declare global {
   interface Window {
     Razorpay: any;
@@ -45,18 +54,24 @@ const EventPage = (props: Props) => {
     owner,
     status,
   } = props.event;
-  const [bought, setBought] = useState(false);
+  const [bookingStat, setBookingStat] = useState(0);
   const [isOwner, setIsOwner] = useState(false);
+  const [isBuyOpen, setBuyOpen] = useState(false);
+  const [isEndOpen, setEndOpen] = useState(false);
+  const [isCancelOpen, setCancelOpen] = useState(false);
   useEffect(() => {
     if (user && owner === user.email) {
       setIsOwner(true);
-    } else if (user && users && users.includes(user.email)) {
-      setBought(true);
-      setIsOwner(false);
     } else {
-      setBought(false);
       setIsOwner(false);
     }
+  }, [user]);
+  const bookingStatusFunc = async () => {
+    const statusRes = await bookingStatus(id, user?.email);
+    setBookingStat(statusRes.status);
+  };
+  useEffect(() => {
+    bookingStatusFunc();
   }, [user]);
   const finalDate = mergeDateandTime(
     formatISO(new Date(date)),
@@ -76,16 +91,19 @@ const EventPage = (props: Props) => {
       currency: "INR",
       name: "Stagio",
       description: `booking for ${title}`,
-      image: "https://example.com/your_logo",
+      image:
+        "https://ik.imagekit.io/stagiotest/default_6StvZx4Cp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1645810321356",
       order_id: res.id,
       handler: async function (response: {
         razorpay_payment_id: string;
         razorpay_order_id: string;
         razorpay_signature: string;
       }) {
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+        setBuyOpen(false);
+        toast.dark("Transaction Successful");
+        setTimeout(() => {
+          router.reload();
+        }, 5000);
       },
       prefill: {
         name: user.username,
@@ -100,12 +118,12 @@ const EventPage = (props: Props) => {
       "payment.failed",
       function (response: {
         error: {
-          code: any;
-          description: any;
-          source: any;
-          step: any;
-          reason: any;
-          metadata: { order_id: any; payment_id: any };
+          code: string;
+          description: string;
+          source: string;
+          step: string;
+          reason: string;
+          metadata: { order_id: string; payment_id: string };
         };
       }) {
         alert(response.error.code);
@@ -133,7 +151,16 @@ const EventPage = (props: Props) => {
       showRazorpay();
     }
   };
-  const cancelBooking = () => {};
+  const cancelBooking = async () => {
+    try {
+      const res = await cancel(id, user?.email);
+      toast.dark("Booking cancelled");
+    } catch (e) {
+      toast.dark(e?.response?.data?.message);
+    } finally {
+      setCancelOpen(false);
+    }
+  };
   return (
     <div
       style={{
@@ -144,7 +171,7 @@ const EventPage = (props: Props) => {
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        backgroundPosition: "center"
+        backgroundPosition: "center",
       }}
     >
       <div
@@ -224,7 +251,7 @@ const EventPage = (props: Props) => {
             alignItems: "center",
           }}
         >
-          {!bought && (
+          {bookingStat === BookingStatus.None && (
             <div
               style={{ display: "flex", alignItems: "center", fontSize: 20 }}
             >
@@ -236,17 +263,22 @@ const EventPage = (props: Props) => {
           <Button
             className={buttonStyle}
             onClick={() => {
-              isOwner || (bought && status === EventStatus.Started)
+              isOwner ||
+              (bookingStat === BookingStatus.Bought &&
+                status === EventStatus.Started)
                 ? startEvent()
-                : bought && status === EventStatus.Idle
-                ? {}
-                : buyTicket();
+                : bookingStat === BookingStatus.Bought &&
+                  status === EventStatus.Idle
+                ? toast.dark("Event has not yet started")
+                : bookingStat !== BookingStatus.Cancelled
+                ? setBuyOpen(true)
+                : toast.dark("You've cancelled your booking earlier");
             }}
           >
             {status !== EventStatus.Ended
               ? isOwner
                 ? "Start Now"
-                : bought
+                : bookingStat === BookingStatus.Bought
                 ? status === EventStatus.Started
                   ? "Join Now"
                   : "Already Bought"
@@ -260,20 +292,26 @@ const EventPage = (props: Props) => {
                 css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
               )}
               onClick={() => {
-                endEvent();
+                setEndOpen(true);
               }}
             >
               End Event
             </Button>
           )}
-          {bought && status === EventStatus.Idle && (
+          {bookingStat === BookingStatus.Bought && status === EventStatus.Idle && (
             <Button
               className={cx(
                 buttonStyle,
-                css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
+                css({
+                  backgroundColor: "#5a5a5a",
+                  marginLeft: 10,
+                  "&:focus": {
+                    backgroundColor: "#5a5a5a !important",
+                  },
+                })
               )}
               onClick={() => {
-                cancelBooking();
+                setCancelOpen(true);
               }}
             >
               Cancel Booking
@@ -281,12 +319,260 @@ const EventPage = (props: Props) => {
           )}
         </div>
       </div>
+      <div
+        className={css({
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 100,
+        })}
+      >
+        <img
+          style={{
+            objectFit: "cover",
+            width: "30vw",
+            height: "70vh",
+            borderRadius: 20,
+            boxShadow: "rgb(0 0 0 / 50%) 0px 0px 18px 20px",
+          }}
+          src={poster}
+        ></img>
+      </div>
+      <Modal
+        show={isBuyOpen}
+        onHide={() => setBuyOpen(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        dialogClassName={css({
+          width: "35%",
+        })}
+        contentClassName={css({
+          backgroundColor: "#ffffff",
+          borderRadius: 20,
+        })}
+      >
+        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+          <Modal.Title
+            style={{ color: "#000000", marginLeft: 10 }}
+            id="contained-modal-title-vcenter"
+          >
+            Buy Ticket
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className={css({ display: "flex", flexDirection: "row" })}>
+            <img
+              className={css({
+                width: "50%",
+                margin: 20,
+                borderRadius: "22px",
+              })}
+              src={poster}
+            ></img>
+            <div
+              className={css({
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                color: "#000000",
+                margin: 20,
+              })}
+            >
+              <h3>Summary:</h3>
+              <p className={css({ fontSize: 20, marginBottom: 3 })}>
+                Sub Total: &nbsp;
+                <span className={css({ color: "#d94b58" })}>
+                  &#8377;{price}
+                </span>
+              </p>
+              <p className={css({ fontSize: 12 })}>
+                Booking Fee{" "}
+                <ToolTip
+                  title={
+                    <>
+                      <div>Base Fee : {price * 0.1}</div>
+                      <div>GST (18%) : {price * 0.018}</div>
+                    </>
+                  }
+                  arrow
+                >
+                  <InfoIcon
+                    style={{
+                      fontSize: 18,
+                    }}
+                  />
+                </ToolTip>
+                : &nbsp;
+                <span className={css({ color: "#d94b58" })}>
+                  &#8377;{price * 0.1}
+                </span>
+              </p>
+              <div
+                className={css({
+                  border: "1px solid #000000",
+                  marginBottom: 5,
+                })}
+              ></div>
+              <h3>
+                <span className={css({ color: "#d94b58" })}>Total: </span>
+                <span className={css({ color: "#5a5a5a" })}>
+                  &#8377;{(price * 1.118).toFixed(2)}
+                </span>
+              </h3>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
+          <div style={{ marginLeft: 10 }}>
+            <p
+              style={{
+                color: "#000000",
+                cursor: "pointer",
+                marginTop: 15,
+                paddingLeft: 10,
+                fontSize: 15,
+              }}
+              onClick={() => {
+                setBuyOpen(false);
+              }}
+            >
+              Cancel
+            </p>
+          </div>
+          <Button
+            style={{
+              border: "none",
+              backgroundColor: "#d94b58",
+              borderRadius: 20,
+            }}
+            onClick={() => buyTicket()}
+          >
+            Buy Now
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={isEndOpen}
+        onHide={() => setEndOpen(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        dialogClassName={css({
+          width: "35%",
+        })}
+        contentClassName={css({
+          backgroundColor: "#ffffff",
+          borderRadius: 20,
+        })}
+      >
+        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+          <Modal.Title
+            style={{ color: "#000000", marginLeft: 10 }}
+            id="contained-modal-title-vcenter"
+          >
+            End Event
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            Do you want to end the event now? You will not be able to start it
+            again.
+          </div>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
+          <div style={{ marginLeft: 10 }}>
+            <p
+              style={{
+                color: "#000000",
+                cursor: "pointer",
+                marginTop: 15,
+                paddingLeft: 10,
+                fontSize: 15,
+              }}
+              onClick={() => {
+                setEndOpen(false);
+              }}
+            >
+              Cancel
+            </p>
+          </div>
+          <Button
+            style={{
+              border: "none",
+              backgroundColor: "#d94b58",
+              borderRadius: 20,
+            }}
+            onClick={() => endEvent()}
+          >
+            Proceed
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={isCancelOpen}
+        onHide={() => setCancelOpen(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        dialogClassName={css({
+          width: "35%",
+        })}
+        contentClassName={css({
+          backgroundColor: "#ffffff",
+          borderRadius: 20,
+        })}
+      >
+        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+          <Modal.Title
+            style={{ color: "#000000", marginLeft: 10 }}
+            id="contained-modal-title-vcenter"
+          >
+            Cancellation
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            Are you sure you want to cancel your booking? You won't be able to
+            buy this event again
+          </div>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
+          <div style={{ marginLeft: 10 }}>
+            <p
+              style={{
+                color: "#000000",
+                cursor: "pointer",
+                marginTop: 15,
+                paddingLeft: 10,
+                fontSize: 15,
+              }}
+              onClick={() => {
+                setCancelOpen(false);
+              }}
+            >
+              Cancel
+            </p>
+          </div>
+          <Button
+            style={{
+              border: "none",
+              backgroundColor: "#d94b58",
+              borderRadius: 20,
+            }}
+            onClick={() => cancelBooking()}
+          >
+            Proceed
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const res = await getEvent(params?.id as string);
+  const id = params?.id;
+  const res = await getEvent(id as string);
   return {
     props: {
       event: res.event,
