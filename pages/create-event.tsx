@@ -250,7 +250,7 @@ const CreateEvent = (props: Props) => {
                     <div>
                       <div className={smallHeading}>Date*</div>
                       <TextField
-                        key={values.date}
+                        key={"2"}
                         type="date"
                         value={values.date}
                         placeholder="Date"
@@ -272,7 +272,7 @@ const CreateEvent = (props: Props) => {
                     <div>
                       <div className={smallHeading}>Time*</div>
                       <TextField
-                        key={values.time}
+                        key={"1"}
                         type="time"
                         value={values.time}
                         placeholder="Time"

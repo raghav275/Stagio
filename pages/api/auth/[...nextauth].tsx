@@ -32,7 +32,6 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
             credentials?.password!
           );
           const cookies = response.headers["set-cookie"];
-
           res.setHeader("Set-Cookie", cookies);
           if (response) {
             var user = { token: response.data.token, data: response.data.user };
