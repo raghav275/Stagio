@@ -52,7 +52,7 @@ const JitsiComponent = (props: Props) => {
   });
   useEffect(() => {
     if (window.JitsiMeetExternalAPI) {
-      console.log(roomId);
+      
       startMeet();
     } else {
       alert("JitsiMeetExternalAPI not loaded");

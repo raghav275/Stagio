@@ -35,8 +35,6 @@ const Card = (props: Props) => {
     }
   }, [user]);
   const bookingStatusFunc = async () => {
-    console.log(id);
-    console.log(user?.email);
     const statusRes = await bookingStatus(id, user?.email);
     setBookingStat(statusRes.status);
   };

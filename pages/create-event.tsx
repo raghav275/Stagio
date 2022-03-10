@@ -35,6 +35,7 @@ const errorStyle = css({
 });
 interface Props {
   event: Event;
+  id: string;
 }
 const CreateEvent = (props: Props) => {
   const [eventState, setEventState] = useState(props.event);
@@ -67,8 +68,16 @@ const CreateEvent = (props: Props) => {
   const [url, setUrl] = useState<string>();
   const submitEvent = async (val: FormikValues) => {
     const { title, description, date, time, price, poster, banner } = val;
-    let posterBase64 = poster[0] && poster[0].data_url.split(",")[1];
-    let bannerBase64 = banner[0] && banner[0]?.data_url?.split(",")[1];
+    let posterBase64 =
+      poster[0] &&
+      (poster[0].data_url.includes(",")
+        ? poster[0].data_url.split(",")[1]
+        : poster[0].data_url);
+    let bannerBase64 =
+      banner[0] &&
+      (banner[0]?.data_url?.includes(",")
+        ? banner[0]?.data_url?.split(",")[1]
+        : banner[0]?.data_url);
     try {
       const res = await createEvent(
         title,
@@ -110,7 +119,8 @@ const CreateEvent = (props: Props) => {
     if (!date) {
       errors.date = "Select Date";
     }
-    if (price < 0) {
+    console.log(price);
+    if (!price || price < 0) {
       errors.price = "Select a positive number";
     }
     if (!time) {
@@ -123,6 +133,7 @@ const CreateEvent = (props: Props) => {
   };
   const { title, description, price, date, time, id, poster, banner } =
     eventState || {};
+  const key = date ? "1" : "2";
   return (
     <>
       <div
@@ -150,7 +161,7 @@ const CreateEvent = (props: Props) => {
             title: title || "",
             description: description || "",
             date: (date && date.split("T")[0]) || undefined,
-            time: time || undefined,
+            time: props.id ? time : null,
             price: price || 0,
             poster: [{ data_url: poster }] || [],
             banner: [{ data_url: banner }] || [],
@@ -240,6 +251,7 @@ const CreateEvent = (props: Props) => {
                             underline: classes.underline,
                             root: classes.root,
                           },
+                          inputProps: { min: 0 },
                         }}
                         error={!!errors.price}
                       />
@@ -250,7 +262,7 @@ const CreateEvent = (props: Props) => {
                     <div>
                       <div className={smallHeading}>Date*</div>
                       <TextField
-                        key={"2"}
+                        key={values.poster?.[0]?.data_url}
                         type="date"
                         value={values.date}
                         placeholder="Date"
@@ -272,7 +284,7 @@ const CreateEvent = (props: Props) => {
                     <div>
                       <div className={smallHeading}>Time*</div>
                       <TextField
-                        key={"1"}
+                        key={values.poster?.[0]?.data_url}
                         type="time"
                         value={values.time}
                         placeholder="Time"
@@ -463,17 +475,18 @@ const CreateEvent = (props: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (query.id) {
     let id = query.id;
-    console.log(id);
     let res = await getEvent(id as string);
     return {
       props: {
         event: res.event,
+        id: id,
       },
     };
   } else {
     return {
       props: {
         event: null,
+        id: null,
       },
     };
   }

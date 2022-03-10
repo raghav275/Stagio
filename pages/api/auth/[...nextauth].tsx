@@ -34,7 +34,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
           const cookies = response.headers["set-cookie"];
           res.setHeader("Set-Cookie", cookies);
           if (response) {
-            var user = { token: response.data.token, data: response.data.user };
+            var user = { ...response.data.user };
             return user;
           } else {
             return null;
@@ -54,13 +54,13 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
     },
     callbacks: {
       jwt: async ({ token, user }: { token: JWT; user?: User }) => {
-        user && (token.accessToken = user.token);
         user && (token.user = user.data);
         return token;
       },
       session: async ({ session, token }: { session: Session; token: JWT }) => {
         session.user = token.user;
-        session.accessToken = token.accessToken;
+        session.token = token.token;
+        
         return session;
       },
     },
