@@ -391,8 +391,8 @@ const EventPage = (props: Props) => {
                 <ToolTip
                   title={
                     <>
-                      <div>Base Fee : {price * 0.1}</div>
-                      <div>GST (18%) : {price * 0.018}</div>
+                      <div>Base Fee : {(price * 0.1).toFixed(2)}</div>
+                      <div>GST (18%) : {(price * 0.018).toFixed(2)}</div>
                     </>
                   }
                   arrow
@@ -405,7 +405,7 @@ const EventPage = (props: Props) => {
                 </ToolTip>
                 : &nbsp;
                 <span className={css({ color: "#d94b58" })}>
-                  &#8377;{price * 0.1}
+                  &#8377;{(price * 0.118).toFixed(2)}
                 </span>
               </p>
               <div
