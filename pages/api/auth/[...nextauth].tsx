@@ -54,13 +54,18 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
     },
     callbacks: {
       jwt: async ({ token, user }: { token: JWT; user?: User }) => {
-        user && (token.user = user.data);
+        user &&
+          (token.user = {
+            username: user.username,
+            email: user.email,
+            image: user.image,
+          });
         return token;
       },
       session: async ({ session, token }: { session: Session; token: JWT }) => {
         session.user = token.user;
         session.token = token.token;
-        
+
         return session;
       },
     },
