@@ -572,6 +572,7 @@ const EventPage = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await getEvent(params?.id as string);
+  
   return {
     props: {
       event: res.event,
