@@ -18,6 +18,8 @@ export const createEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Headers": "Content-Type, Accept",
+      "Access-Control-Allow-Origin":`${process.env.BASE_URL}`,
     },
     data: {
       title,
@@ -38,6 +40,7 @@ export const getEvent = async (
   id?: string
 ): Promise<{ success: string; event: Event | Event[] }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/get`, {
+    withCredentials:true,
     method: "GET",
     headers: {
       Accept: "application/json",
