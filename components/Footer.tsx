@@ -4,7 +4,7 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import Modal from "react-bootstrap/Modal";
 import { useStore } from "react-redux";
-import PrivacyPolicy from "./privacyPolicy";
+import PrivacyPolicy from "./PrivacyPolicy";
 import TermsConditions from "./TermsConditions";
 import { css } from "@emotion/css";
 
