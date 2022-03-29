@@ -26,12 +26,6 @@ const Navbar = () => {
     setSelected(str);
   };
   const { data: session, status } = useSession();
-  const func = async () => {
-    const res = await axios(`${process.env.BASE_URL}api/private`, {
-      withCredentials: true,
-      method: "GET",
-    });
-  };
   return (
     <div style={mainStyle}>
       <Link href={"/"}>
@@ -59,11 +53,6 @@ const Navbar = () => {
           right: 40,
         }}
       >
-        <button
-          onClick={() => {
-            func();
-          }}
-        ></button>
         <Link href={"/create-event"}>
           <div
             style={{
