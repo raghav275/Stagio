@@ -5,7 +5,7 @@ axios.defaults.withCredentials = true;
 export const login = async (
   email: string,
   password: string
-):Promise<AxiosResponse<Login>> =>  {
+): Promise<AxiosResponse<Login>> => {
   const res = await axios(`${process.env.BASE_URL}api/auth/login`, {
     withCredentials: true,
     method: "POST",

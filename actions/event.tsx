@@ -1,6 +1,6 @@
 import { Event, Razorpay } from "@typings/event";
 import axios from "axios";
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 export const createEvent = async (
   title: string,
   description: string,
@@ -18,8 +18,6 @@ export const createEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
-      "Access-Control-Allow-Headers": "Content-Type, Accept",
-      "Access-Control-Allow-Origin":`${process.env.BASE_URL}`,
     },
     data: {
       title,

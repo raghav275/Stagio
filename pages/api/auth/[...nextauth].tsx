@@ -1,15 +1,12 @@
+import { login } from "@actions/auth";
+import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth, {
-  NextAuthOptions,
   Session,
   SessionStrategy,
-  User,
+  User
 } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { login } from "@actions/auth";
-import { toast } from "react-toastify";
 import { JWT } from "next-auth/jwt";
-import { NextApiRequest, NextApiResponse } from "next";
-import { SessionToken } from "next-auth/core/lib/cookie";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -23,17 +20,13 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
           password: { label: "Password", type: "password" },
         },
         async authorize(
-          credentials: Record<"email" | "password", string> | undefined,
-          req
+          credentials: Record<"email" | "password", string> | undefined
         ): Promise<Omit<User, "id"> | { id?: string | undefined } | null> {
           // Add logic here to look up the user from the credentials supplied
           const response = await login(
             credentials?.email!,
             credentials?.password!
           );
-          const cookies = response.headers["set-cookie"];
-          console.log(cookies);
-          res.setHeader("Set-Cookie", cookies);
           if (response) {
             var user = { ...response.data.user };
             return user;
