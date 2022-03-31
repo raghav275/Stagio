@@ -27,6 +27,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
             credentials?.email!,
             credentials?.password!
           );
+          res.setHeader("Set-Cookie",response.headers['set-cookie']);
           if (response) {
             var user = { ...response.data.user };
             return user;
