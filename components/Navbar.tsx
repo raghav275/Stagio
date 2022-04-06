@@ -13,6 +13,7 @@ const mainStyle = {
   height: "60px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "space-between",
 };
 const Navbar = () => {
   const router = useRouter();
@@ -56,7 +57,7 @@ const Navbar = () => {
         <Link href={"/create-event"}>
           <div
             style={{
-              fontSize: 15,
+              fontSize: "0.9em",
               fontFamily: "Poppins",
               fontWeight: 700,
               margin: 0,

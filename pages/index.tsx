@@ -31,6 +31,23 @@ function Home(props: Props) {
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1028,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
   var artistSettings = {
     dots: true,
@@ -38,54 +55,82 @@ function Home(props: Props) {
     speed: 500,
     slidesToShow: 6,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1028,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
   return (
     <div className={mainStyle}>
-      <div style={{ position: "relative" }}>
+      <div
+        className={css({ width: "100%", height: "auto" })}
+        style={{ position: "relative" }}
+      >
         <Carousel>
           <Carousel.Item
             style={{
+              maxHeight: "700px",
               overflow: "hidden",
-              height: "700px",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
             }}
           >
             <img
-              className="d-block w-100"
-              height="800px"
+              width="100%"
+              height="auto"
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="First slide"
             />
           </Carousel.Item>
           <Carousel.Item
             style={{
+              maxHeight: "700px",
               overflow: "hidden",
-              height: "700px",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
             }}
           >
             <img
-              className="d-block w-100"
+              width="100%"
+              height="auto"
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="Second slide"
-              height="800px"
             />
           </Carousel.Item>
           <Carousel.Item
             style={{
+              maxHeight: "700px",
               overflow: "hidden",
-              height: "700px",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
             }}
           >
             <img
-              className="d-block w-100"
+              width="100%"
+              height="auto"
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="Third slide"
-              height="800px"
             />
           </Carousel.Item>
         </Carousel>
@@ -108,17 +153,17 @@ function Home(props: Props) {
         >
           <h3
             style={{
-              marginLeft: 65,
+              marginLeft: "4vw",
               fontFamily: "Poppins",
               color: "#d94b58",
-              fontSize: 40,
+              fontSize: "2.4em",
             }}
           >
             Live Shows
           </h3>
         </div>
         <div
-          style={{ border: "4px solid white", width: 140, marginLeft: 65 }}
+          style={{ border: "4px solid white", width: 140, marginLeft: "4vw" }}
         ></div>
         <div
           style={{
@@ -144,32 +189,51 @@ function Home(props: Props) {
       <div
         style={{
           width: "92%",
-          height: "500px",
+          height: "auto",
           background: "url(/banner1.png)",
+          backgroundSize: "100% auto",
+          backgroundRepeat: "no-repeat",
           alignSelf: "center",
           marginTop: 40,
+          overflow: "hidden",
+          display: "flex",
         }}
       >
         <div
           style={{
-            position: "relative",
-            top: 0,
-            left: 0,
+            backgroundColor: "black",
+            backgroundSize: "100% auto",
+            opacity: 0.6,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
             width: "100%",
             height: "100%",
-            backgroundColor: "black",
-            opacity: 0.6,
-            padding: 50,
-            paddingTop: 100,
           }}
         >
-          <p style={{ fontSize: 100, color: "white", lineHeight: 1 }}>
-            Bringing the stage <br />
-            to your screens
-          </p>
-          <p style={{ fontSize: 50, color: "#d94b58" }}>
-            Grab your front seat now.
-          </p>
+          <div
+            className={css({
+              padding: 40,
+              textAlign: "left",
+            })}
+          >
+            <p
+              style={{
+                fontSize: "7vw",
+                color: "white",
+                lineHeight: 1,
+                marginBottom: 0,
+              }}
+            >
+              Bringing the stage <br />
+              to your screens
+            </p>
+            <p style={{ fontSize: "4vw", color: "#d94b58", marginBottom: 0 }}>
+              Grab your front seat now.
+            </p>
+          </div>
         </div>
       </div>
       <div
@@ -182,16 +246,16 @@ function Home(props: Props) {
       >
         <h3
           style={{
-            marginLeft: 65,
+            marginLeft: "4vw",
             fontFamily: "Poppins",
             color: "#d94b58",
-            fontSize: 40,
+            fontSize: "2.4em",
           }}
         >
           Artists
         </h3>
         <div
-          style={{ border: "4px solid white", width: 100, marginLeft: 65 }}
+          style={{ border: "4px solid white", width: 100, marginLeft: "4vw" }}
         ></div>
         <div
           style={{
@@ -219,57 +283,6 @@ function Home(props: Props) {
           </Slider>
         </div>
       </div>
-      {/* <div
-          style={{
-            display: "flex",
-            margin: "10px",
-            padding: 20,
-            flexDirection: "column",
-            alignItems: "center",
-            color: "#d94b58",
-          }}
-        >
-          <h1>About Us</h1>
-          <div style={{ border: "4px solid white", width: 140 }}></div>
-          <div
-            style={{
-              alignSelf: "flex-start",
-              marginTop: 40,
-              fontSize: 40,
-              fontWeight: 800,
-              width: "100%",
-            }}
-          >
-            <div>
-              <div
-                style={{
-                  color: "#ffffff",
-                  position: "relative",
-                  top: 80,
-                  zIndex: 12,
-                  left: 90,
-                }}
-              >
-                <p>
-                  Lorem ipsum dolor sit amet,
-                  <br /> efficitur eleifend. Fusce interdum <br />
-                  mollis velit fringilla facilisis.
-                  <br /> Lorem ipsum dolor sit amet,
-                  <br /> efficitur eleifend. Fusce interdum <br />
-                  mollis velit fringilla facilisis.{" "}
-                </p>
-              </div>
-              <div
-                style={{ position: "relative", top: -390, textAlign: "right" }}
-              >
-                <img
-                  style={{ borderRadius: 30 }}
-                  src="https://images.unsplash.com/photo-1501612780327-45045538702b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8Y29uY2VydHxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
-                ></img>
-              </div>
-            </div>
-          </div>
-        </div> */}
       <Footer />
     </div>
   );

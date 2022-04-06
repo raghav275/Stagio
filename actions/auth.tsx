@@ -44,18 +44,16 @@ export async function forgot(email: string): Promise<Login> {
     },
     data: { email: email },
   }).then((response) => response);
-  // console.log(res);
   return res.data;
 }
-export async function reset(token: string): Promise<Login> {
+export async function reset(token: string, password: string): Promise<Login> {
   const res = await axios(`${process.env.BASE_URL}api/auth/reset/` + token, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer ",
     },
+    data: { password },
   }).then((response) => response);
-  // console.log(res);
   return res.data;
 }

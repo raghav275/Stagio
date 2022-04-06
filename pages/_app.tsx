@@ -20,9 +20,6 @@ export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  useEffect(() => {
-    // console.log("here");
-  }, []);
   return (
     <Provider store={store}>
       <CookiesProvider>

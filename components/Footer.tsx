@@ -13,69 +13,89 @@ const Footer = () => {
   const [flag, setFlag] = useState(0);
   return (
     <div
+      className="footer"
       style={{
         display: "flex",
+        flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
-        padding: 30,
-        paddingTop: 60,
-        paddingBottom: 60,
-        marginLeft: 65,
-        marginRight: 65,
-        marginTop: 30,
+        padding: "60px 30px",
+        margin: "30px 65px 0px",
         alignItems: "center",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <p
-          style={{
-            fontSize: 50,
-            fontFamily: "Poppins",
-            fontWeight: 700,
-            margin: 0,
-            color: "#5a5a5a",
-          }}
+      <div>
+        <div
+          className={css({
+            margin: 10,
+            marginBottom: 30,
+          })}
         >
-          Sta<span style={{ color: "#d94b58" }}>gio</span>
-        </p>
+          <p
+            style={{
+              fontSize: 50,
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              margin: 0,
+              color: "#5a5a5a",
+            }}
+          >
+            Sta<span style={{ color: "#d94b58" }}>gio</span>
+          </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <InstagramIcon style={{ color: "#5a5a5a" }} />
+            <FacebookIcon style={{ color: "#5a5a5a" }} />
+            <TwitterIcon style={{ color: "#5a5a5a" }} />
+          </div>
+        </div>
+      </div>
+      <div
+        className={css({
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        })}
+      >
         <div
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "center",
+            color: "#ffffff",
+            margin: "auto",
+            flexWrap: "wrap",
+            alignItems: "center",
           }}
         >
-          <InstagramIcon style={{ color: "#5a5a5a" }} />
-          <FacebookIcon style={{ color: "#5a5a5a" }} />
-          <TwitterIcon style={{ color: "#5a5a5a" }} />
+          <p
+            onClick={() => {
+              setOpen(true);
+              setFlag(1);
+            }}
+            className={css({ width: "max-content", margin: 10 })}
+          >
+            Privacy Policy
+          </p>
+          <p
+            className={css({
+              width: "max-content",
+              margin: 10,
+              wordWrap: "break-word",
+            })}
+            onClick={() => {
+              setOpen(true);
+              setFlag(2);
+            }}
+          >
+            Terms and Conditions
+          </p>
         </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          color: "#ffffff",
-          width: "30%",
-        }}
-      >
-        <p
-          onClick={() => {
-            setOpen(true);
-            setFlag(1);
-          }}
-        >
-          Privacy Policy
-        </p>
-        <p
-          onClick={() => {
-            setOpen(true);
-            setFlag(2);
-          }}
-        >
-          Terms and Conditions
-        </p>
-        <p>FAQs</p>
       </div>
       <Modal
         show={isOpen}
