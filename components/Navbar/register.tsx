@@ -68,13 +68,13 @@ const Register = (props: Props) => {
             fontFamily: "Poppins-Medium",
             borderColor: "#d94b58",
             color: "#ffffff",
-            marginRight: 20,
+            marginRight: 10,
             fontSize: 14,
           }}
           onClick={handleOpen}
           variant="outline-primary"
         >
-          Register
+          Sign up
         </Button>
       )}
       <Modal

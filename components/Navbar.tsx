@@ -14,6 +14,7 @@ const mainStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  padding: "0px 20px",
 };
 const Navbar = () => {
   const router = useRouter();
@@ -29,29 +30,24 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   return (
     <div style={mainStyle}>
-      <Link href={"/"}>
-        <div style={{ position: "absolute", left: 40, cursor: "pointer" }}>
-          <p
-            style={{
-              fontSize: 20,
-              fontFamily: "Poppins",
-              fontWeight: 700,
-              margin: 0,
-              color: "#5a5a5a",
-            }}
-          >
-            Sta<span style={{ color: "#d94b58" }}>gio</span>
-          </p>
-        </div>
-      </Link>
+      <div style={{ cursor: "pointer" }}>
+        <p
+          style={{
+            fontSize: 20,
+            fontFamily: "Poppins",
+            fontWeight: 700,
+            margin: 0,
+            color: "#5a5a5a",
+          }}
+        >
+          Sta<span style={{ color: "#d94b58" }}>gio</span>
+        </p>
+      </div>
       <div
         style={{
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
-          position: "absolute",
-          float: "right",
-          right: 40,
         }}
       >
         <Link href={"/create-event"}>
@@ -61,7 +57,7 @@ const Navbar = () => {
               fontFamily: "Poppins",
               fontWeight: 700,
               margin: 0,
-              marginRight: 20,
+              marginRight: 10,
               color: "#ffffff",
               borderBottom: "1px solid #d94b58",
               cursor: "pointer",

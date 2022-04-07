@@ -344,9 +344,6 @@ const EventPage = (props: Props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        dialogClassName={css({
-          width: "35%",
-        })}
         contentClassName={css({
           backgroundColor: "#ffffff",
           borderRadius: 20,
@@ -458,9 +455,6 @@ const EventPage = (props: Props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        dialogClassName={css({
-          width: "35%",
-        })}
         contentClassName={css({
           backgroundColor: "#ffffff",
           borderRadius: 20,
@@ -515,9 +509,6 @@ const EventPage = (props: Props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        dialogClassName={css({
-          width: "35%",
-        })}
         contentClassName={css({
           backgroundColor: "#ffffff",
           borderRadius: 20,
@@ -572,7 +563,7 @@ const EventPage = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await getEvent(params?.id as string);
-  
+
   return {
     props: {
       event: res.event,
