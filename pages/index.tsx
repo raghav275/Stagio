@@ -156,14 +156,18 @@ function Home(props: Props) {
               marginLeft: "4vw",
               fontFamily: "Poppins",
               color: "#d94b58",
-              fontSize: "2.4em",
+              fontSize: "3.5vmax",
             }}
           >
             Live Shows
           </h3>
         </div>
         <div
-          style={{ border: "4px solid white", width: 140, marginLeft: "4vw" }}
+          style={{
+            border: "4px solid white",
+            width: "14.5vmax",
+            marginLeft: "4vw",
+          }}
         ></div>
         <div
           style={{
@@ -249,13 +253,17 @@ function Home(props: Props) {
             marginLeft: "4vw",
             fontFamily: "Poppins",
             color: "#d94b58",
-            fontSize: "2.4em",
+            fontSize: "3.5vmax",
           }}
         >
           Artists
         </h3>
         <div
-          style={{ border: "4px solid white", width: 100, marginLeft: "4vw" }}
+          style={{
+            border: "4px solid white",
+            width: "8.5vmax",
+            marginLeft: "4vw",
+          }}
         ></div>
         <div
           style={{

@@ -103,9 +103,7 @@ const Footer = () => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        dialogClassName={css({
-          width: "50%",
-        })}
+        dialogClassName={css({})}
         contentClassName={css({
           backgroundColor: "#ffffff",
           borderRadius: 20,

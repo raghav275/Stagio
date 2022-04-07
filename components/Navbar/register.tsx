@@ -83,9 +83,6 @@ const Register = (props: Props) => {
         size="lg"
         aria-labelledby="container-modal-title-vcenter"
         centered
-        dialogClassName={css({
-          width: "30%",
-        })}
         contentClassName={css({
           backgroundColor: "#181818",
         })}

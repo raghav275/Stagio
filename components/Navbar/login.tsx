@@ -82,9 +82,6 @@ const Login = (props: Props) => {
           size="lg"
           aria-labelledby="contained-modal-title-vcenter"
           centered
-          dialogClassName={css({
-            width: "30%",
-          })}
           contentClassName={css({
             backgroundColor: "#181818",
           })}
