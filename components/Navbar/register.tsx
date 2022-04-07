@@ -68,7 +68,7 @@ const Register = (props: Props) => {
             fontFamily: "Poppins-Medium",
             borderColor: "#d94b58",
             color: "#ffffff",
-            marginRight: 10,
+
             fontSize: 14,
           }}
           onClick={handleOpen}
