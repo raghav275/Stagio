@@ -166,15 +166,20 @@ const EventPage = (props: Props) => {
       style={{
         display: "flex",
         width: "100%",
-        height: "calc(100vh - 60px)",
-        backgroundImage: banner && `url(${banner})`,
+        backgroundImage: banner && `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        flexWrap: "wrap-reverse",
+        overflowY: "scroll",
+        alignItems: "center",
+        minHeight: "calc(100vh - 60px)",
+        justifyContent: "center",
+        padding:30
       }}
     >
-      <div
+      {/* <div
         style={{
           width: "100%",
           backgroundColor: "#000000",
@@ -182,13 +187,11 @@ const EventPage = (props: Props) => {
             "linear-gradient(to right, rgba(0, 0, 0, 0.7) 50%, transparent 100%)",
           padding: 100,
         }}
-      ></div>
+      ></div> */}
       <div
         style={{
-          position: "absolute",
-          zIndex: 2,
-          top: "20vh",
           paddingLeft: 20,
+          margin: "auto",
         }}
       >
         {isOwner && (
@@ -325,13 +328,14 @@ const EventPage = (props: Props) => {
           alignItems: "center",
           justifyContent: "center",
           padding: 100,
+          margin: "auto",
         })}
       >
         <img
           style={{
             objectFit: "cover",
-            width: "30vw",
-            height: "70vh",
+            width: "280px",
+            height: "360px",
             borderRadius: 20,
             boxShadow: "rgb(0 0 0 / 50%) 0px 0px 18px 20px",
           }}

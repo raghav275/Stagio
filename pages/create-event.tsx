@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
   root: {
     color: "#ffffff",
-    fontSize: 40,
+    fontSize: "3.5vmax",
   },
 });
 const errorStyle = css({
@@ -146,7 +146,7 @@ const CreateEvent = (props: Props) => {
       >
         <div
           className={css({
-            fontSize: 40,
+            fontSize: "3.5vmax",
             alignSelf: "center",
             fontWeight: 500,
             color: "#ffffff",
@@ -155,319 +155,326 @@ const CreateEvent = (props: Props) => {
         >
           Create Your <span style={{ color: "#d94b58" }}>Live</span> Show
         </div>
-        <Formik
-          enableReinitialize
-          initialValues={{
-            title: title || "",
-            description: description || "",
-            date: (date && date.split("T")[0]) || undefined,
-            time: props.id ? time : null,
-            price: price || 0,
-            poster: [{ data_url: poster }] || [],
-            banner: [{ data_url: banner }] || [],
-          }}
-          onSubmit={submitEvent}
-          validateOnChange={formSubmittedOnce}
-          validate={validateForm}
-        >
-          {({ values, setFieldValue, submitForm, errors }) => {
-            return (
-              <div
-                className={cx(
-                  uploadStyle,
-                  css({ height: "100%", justifyContent: "space-around" })
-                )}
-              >
+        <div>
+          <Formik
+            enableReinitialize
+            initialValues={{
+              title: title || "",
+              description: description || "",
+              date: (date && date.split("T")[0]) || undefined,
+              time: props.id ? time : null,
+              price: price || 0,
+              poster: [{ data_url: poster }] || [],
+              banner: [{ data_url: banner }] || [],
+            }}
+            onSubmit={submitEvent}
+            validateOnChange={formSubmittedOnce}
+            validate={validateForm}
+          >
+            {({ values, setFieldValue, submitForm, errors }) => {
+              return (
                 <div
-                  className={css({
-                    display: "flex",
-                    flexDirection: "row",
-                    marginTop: 40,
-                    justifyContent: "space-around",
-                    width: "100%",
-                    height: "100%",
-                  })}
+                  className={cx(
+                    uploadStyle,
+                    css({ height: "100%", justifyContent: "space-around" })
+                  )}
                 >
                   <div
-                    style={{
+                    className={css({
                       display: "flex",
-                      flexDirection: "column",
-                      height: "100%",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <div>
-                      <div className={smallHeading}>Title*</div>
-                      <TextField
-                        value={values.title}
-                        placeholder="Title"
-                        onChange={(e) => {
-                          setFieldValue("title", e.target.value);
-                        }}
-                        InputProps={{
-                          classes: {
-                            underline: classes.underline,
-                            root: classes.root,
-                          },
-                        }}
-                        error={!!errors.title}
-                      />
-                      {errors.title && (
-                        <div className={errorStyle}>{errors.title}</div>
-                      )}
-                    </div>
-                    <div>
-                      <div className={smallHeading}>Description*</div>
-                      <TextField
-                        value={values.description}
-                        multiline
-                        placeholder="Description"
-                        onChange={(e) => {
-                          setFieldValue("description", e.target.value);
-                        }}
-                        InputProps={{
-                          classes: {
-                            underline: classes.underline,
-                            root: classes.root,
-                          },
-                        }}
-                        error={!!errors.description}
-                      />
-                      {errors.description && (
-                        <div className={errorStyle}>{errors.description}</div>
-                      )}
-                    </div>
-                    <div>
-                      <div className={smallHeading}>Price*</div>
-                      <TextField
-                        type="number"
-                        value={values.price}
-                        placeholder="Price"
-                        onChange={(e) => {
-                          setFieldValue("price", e.target.value);
-                        }}
-                        InputProps={{
-                          classes: {
-                            underline: classes.underline,
-                            root: classes.root,
-                          },
-                          inputProps: { min: 0 },
-                        }}
-                        error={!!errors.price}
-                      />
-                      {errors.price && (
-                        <div className={errorStyle}>{errors.price}</div>
-                      )}
-                    </div>
-                    <div>
-                      <div className={smallHeading}>Date*</div>
-                      <TextField
-                        key={values.poster?.[0]?.data_url}
-                        type="date"
-                        value={values.date}
-                        placeholder="Date"
-                        onChange={(e) => {
-                          setFieldValue("date", e.target.value);
-                        }}
-                        InputProps={{
-                          classes: {
-                            underline: classes.underline,
-                            root: classes.root,
-                          },
-                        }}
-                        error={!!errors.date}
-                      />
-                      {errors.date && (
-                        <div className={errorStyle}>{errors.date}</div>
-                      )}
-                    </div>
-                    <div>
-                      <div className={smallHeading}>Time*</div>
-                      <TextField
-                        key={values.poster?.[0]?.data_url}
-                        type="time"
-                        value={values.time}
-                        placeholder="Time"
-                        onChange={(e) => {
-                          setFieldValue("time", e.target.value);
-                        }}
-                        InputProps={{
-                          classes: {
-                            underline: classes.underline,
-                            root: classes.root,
-                          },
-                        }}
-                        error={!!errors.time}
-                      />
-                      {errors.time && (
-                        <div className={errorStyle}>{errors.time}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
+                      flexDirection: "row",
                       marginTop: 40,
-                    }}
+                      justifyContent: "space-around",
+                      flexWrap: "wrap",
+                      width: "100%",
+                      height: "100%",
+                    })}
                   >
-                    <div className={uploadStyle}>
-                      <div className={smallHeading}>Upload Poster Image*</div>
-                      <ImageUploading
-                        value={values.poster}
-                        onChange={(e) => {
-                          setFieldValue("poster", e);
-                        }}
-                        maxNumber={maxNumber}
-                        dataURLKey="data_url"
-                      >
-                        {({
-                          imageList,
-                          onImageUpload,
-                          onImageRemoveAll,
-                          onImageUpdate,
-                          onImageRemove,
-                          isDragging,
-                          dragProps,
-                        }) => (
-                          // write your building UI
-                          <div>
-                            <div
-                              className={cx(
-                                uploadStyle,
-                                css({ margin: "50px 0px" })
-                              )}
-                            >
-                              {imageList.map((image, index) => (
-                                <div key={index}>
-                                  <img
-                                    src={image["data_url"]}
-                                    alt=""
-                                    width="100"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                            <div>
-                              <Button
-                                className={styles.sign}
-                                style={buttonStyle}
-                                onClick={onImageUpload}
-                                {...dragProps}
-                                variant="outline-primary"
-                              >
-                                Click or Drop here
-                              </Button>
-                              &nbsp;
-                              <Button
-                                className={styles.sign}
-                                style={buttonStyle}
-                                onClick={onImageRemoveAll}
-                                variant="outline-primary"
-                              >
-                                Remove
-                              </Button>
-                            </div>
-                          </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        height: "100%",
+                        justifyContent: "space-around",
+                        padding: "0px 20px",
+                      }}
+                    >
+                      <div>
+                        <div className={smallHeading}>Title*</div>
+                        <TextField
+                          value={values.title}
+                          placeholder="Title"
+                          onChange={(e) => {
+                            setFieldValue("title", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                          }}
+                          error={!!errors.title}
+                        />
+                        {errors.title && (
+                          <div className={errorStyle}>{errors.title}</div>
                         )}
-                      </ImageUploading>
-                    </div>
-                    {errors.poster && (
-                      <div
-                        className={cx(errorStyle, css({ textAlign: "center" }))}
-                      >
-                        {errors.poster}
                       </div>
-                    )}
-                    <div className={cx(uploadStyle, css({ marginTop: 50 }))}>
-                      <div className={smallHeading}>Upload Banner Image</div>
-                      <ImageUploading
-                        value={values.banner}
-                        onChange={(e) => {
-                          setFieldValue("banner", e);
-                        }}
-                        maxNumber={maxNumber}
-                        dataURLKey="data_url"
-                      >
-                        {({
-                          imageList,
-                          onImageUpload,
-                          onImageRemoveAll,
-                          onImageUpdate,
-                          onImageRemove,
-                          isDragging,
-                          dragProps,
-                        }) => (
-                          // write your building UI
-                          <div>
-                            <div
-                              className={cx(
-                                uploadStyle,
-                                css({ margin: "50px 0px" })
-                              )}
-                            >
-                              {imageList.map((image, index) => (
-                                <div key={index}>
-                                  <img
-                                    src={image["data_url"]}
-                                    alt=""
-                                    width="100"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                            <div>
-                              <Button
-                                className={styles.sign}
-                                style={buttonStyle}
-                                onClick={onImageUpload}
-                                {...dragProps}
-                                variant="outline-primary"
-                              >
-                                Click or Drop here
-                              </Button>
-                              &nbsp;
-                              <Button
-                                className={styles.sign}
-                                style={buttonStyle}
-                                onClick={onImageRemoveAll}
-                                variant="outline-primary"
-                              >
-                                Remove
-                              </Button>
-                            </div>
-                          </div>
+                      <div>
+                        <div className={smallHeading}>Description*</div>
+                        <TextField
+                          value={values.description}
+                          multiline
+                          placeholder="Description"
+                          onChange={(e) => {
+                            setFieldValue("description", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                          }}
+                          error={!!errors.description}
+                        />
+                        {errors.description && (
+                          <div className={errorStyle}>{errors.description}</div>
                         )}
-                      </ImageUploading>
+                      </div>
+                      <div>
+                        <div className={smallHeading}>Price*</div>
+                        <TextField
+                          type="number"
+                          value={values.price}
+                          placeholder="Price"
+                          onChange={(e) => {
+                            setFieldValue("price", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                            inputProps: { min: 0 },
+                          }}
+                          error={!!errors.price}
+                        />
+                        {errors.price && (
+                          <div className={errorStyle}>{errors.price}</div>
+                        )}
+                      </div>
+                      <div>
+                        <div className={smallHeading}>Date*</div>
+                        <TextField
+                          key={values.poster?.[0]?.data_url}
+                          type="date"
+                          value={values.date}
+                          placeholder="Date"
+                          onChange={(e) => {
+                            setFieldValue("date", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                          }}
+                          error={!!errors.date}
+                        />
+                        {errors.date && (
+                          <div className={errorStyle}>{errors.date}</div>
+                        )}
+                      </div>
+                      <div>
+                        <div className={smallHeading}>Time*</div>
+                        <TextField
+                          key={values.poster?.[0]?.data_url}
+                          type="time"
+                          value={values.time}
+                          placeholder="Time"
+                          onChange={(e) => {
+                            setFieldValue("time", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                          }}
+                          error={!!errors.time}
+                        />
+                        {errors.time && (
+                          <div className={errorStyle}>{errors.time}</div>
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-start",
+                        marginTop: 40,
+                      }}
+                    >
+                      <div className={uploadStyle}>
+                        <div className={smallHeading}>Upload Poster Image*</div>
+                        <ImageUploading
+                          value={values.poster}
+                          onChange={(e) => {
+                            setFieldValue("poster", e);
+                          }}
+                          maxNumber={maxNumber}
+                          dataURLKey="data_url"
+                        >
+                          {({
+                            imageList,
+                            onImageUpload,
+                            onImageRemoveAll,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                          }) => (
+                            // write your building UI
+                            <div>
+                              <div
+                                className={cx(
+                                  uploadStyle,
+                                  css({ margin: "50px 0px" })
+                                )}
+                              >
+                                {imageList.map((image, index) => (
+                                  <div key={index}>
+                                    <img
+                                      src={image["data_url"]}
+                                      alt=""
+                                      width="100"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                              <div>
+                                <Button
+                                  className={styles.sign}
+                                  style={buttonStyle}
+                                  onClick={onImageUpload}
+                                  {...dragProps}
+                                  variant="outline-primary"
+                                >
+                                  Click or Drop here
+                                </Button>
+                                &nbsp;
+                                <Button
+                                  className={styles.sign}
+                                  style={buttonStyle}
+                                  onClick={onImageRemoveAll}
+                                  variant="outline-primary"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </ImageUploading>
+                      </div>
+                      {errors.poster && (
+                        <div
+                          className={cx(
+                            errorStyle,
+                            css({ textAlign: "center" })
+                          )}
+                        >
+                          {errors.poster}
+                        </div>
+                      )}
+                      <div className={cx(uploadStyle, css({ marginTop: 50 }))}>
+                        <div className={smallHeading}>Upload Banner Image</div>
+                        <ImageUploading
+                          value={values.banner}
+                          onChange={(e) => {
+                            setFieldValue("banner", e);
+                          }}
+                          maxNumber={maxNumber}
+                          dataURLKey="data_url"
+                        >
+                          {({
+                            imageList,
+                            onImageUpload,
+                            onImageRemoveAll,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                          }) => (
+                            // write your building UI
+                            <div>
+                              <div
+                                className={cx(
+                                  uploadStyle,
+                                  css({ margin: "50px 0px" })
+                                )}
+                              >
+                                {imageList.map((image, index) => (
+                                  <div key={index}>
+                                    <img
+                                      src={image["data_url"]}
+                                      alt=""
+                                      width="100"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                              <div>
+                                <Button
+                                  className={styles.sign}
+                                  style={buttonStyle}
+                                  onClick={onImageUpload}
+                                  {...dragProps}
+                                  variant="outline-primary"
+                                >
+                                  Click or Drop here
+                                </Button>
+                                &nbsp;
+                                <Button
+                                  className={styles.sign}
+                                  style={buttonStyle}
+                                  onClick={onImageRemoveAll}
+                                  variant="outline-primary"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                        </ImageUploading>
+                      </div>
                     </div>
                   </div>
+                  <div>
+                    <Button
+                      className={styles.sign}
+                      style={{
+                        borderRadius: "50px",
+                        borderWidth: 2,
+                        fontFamily: "Poppins-Medium",
+                        borderColor: "#d94b58",
+                        color: "#ffffff",
+                        margin: "50px 0px",
+                        fontSize: 14,
+                      }}
+                      onClick={() => {
+                        setFormSubmittedOnce(true);
+                        submitForm();
+                      }}
+                      variant="outline-primary"
+                    >
+                      Create
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Button
-                    className={styles.sign}
-                    style={{
-                      borderRadius: "50px",
-                      borderWidth: 2,
-                      fontFamily: "Poppins-Medium",
-                      borderColor: "#d94b58",
-                      color: "#ffffff",
-                      margin: "50px 0px",
-                      fontSize: 14,
-                    }}
-                    onClick={() => {
-                      setFormSubmittedOnce(true);
-                      submitForm();
-                    }}
-                    variant="outline-primary"
-                  >
-                    Create
-                  </Button>
-                </div>
-              </div>
-            );
-          }}
-        </Formik>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
     </>
   );

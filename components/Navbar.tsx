@@ -30,19 +30,21 @@ const Navbar = () => {
   const { data: session, status } = useSession();
   return (
     <div style={mainStyle}>
-      <div style={{ cursor: "pointer" }}>
-        <p
-          style={{
-            fontSize: 20,
-            fontFamily: "Poppins",
-            fontWeight: 700,
-            margin: 0,
-            color: "#5a5a5a",
-          }}
-        >
-          Sta<span style={{ color: "#d94b58" }}>gio</span>
-        </p>
-      </div>
+      <Link href={"/"}>
+        <div style={{ cursor: "pointer" }}>
+          <p
+            style={{
+              fontSize: 20,
+              fontFamily: "Poppins",
+              fontWeight: 700,
+              margin: 0,
+              color: "#5a5a5a",
+            }}
+          >
+            Sta<span style={{ color: "#d94b58" }}>gio</span>
+          </p>
+        </div>
+      </Link>
       <div
         style={{
           display: "flex",
