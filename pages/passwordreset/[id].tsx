@@ -29,6 +29,8 @@ const PasswordReset = (props: Props) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        flexWrap: "wrap",
+        padding: 10,
       })}
     >
       <div
@@ -38,6 +40,7 @@ const PasswordReset = (props: Props) => {
           fontWeight: 500,
           color: "#ffffff",
           marginTop: 20,
+          textAlign: "center",
         })}
       >
         Change Your <span style={{ color: "#d94b58" }}>Password</span>

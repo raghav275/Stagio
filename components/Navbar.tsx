@@ -34,7 +34,7 @@ const Navbar = () => {
         <div style={{ cursor: "pointer" }}>
           <p
             style={{
-              fontSize: 20,
+              fontSize: "2.1vmax",
               fontFamily: "Poppins",
               fontWeight: 700,
               margin: 0,

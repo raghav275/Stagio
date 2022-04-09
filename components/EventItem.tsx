@@ -16,18 +16,22 @@ const EventItem = (props: Props) => {
         flexDirection: "row",
         alignItems: "center",
         padding: 20,
+        flexWrap: "wrap",
         borderBottom: "1px solid #5a5a5a",
       }}
     >
       <div
-        className={css({
-          minWidth: 200,
-        })}
+        className={
+          //   css({
+          //   minWidth: 200,
+          // })
+          "col-lg-3 col-md-12"
+        }
       >
         <p
           style={{
             textAlign: "center",
-            fontSize: 30,
+            fontSize: "2.5vmax",
             fontWeight: 800,
             color: "#5a5a5a",
           }}
@@ -40,22 +44,27 @@ const EventItem = (props: Props) => {
         </p>
       </div>
       <div
-        className={css({ display: "flex", flex: 1, justifyContent: "center" })}
+        className={
+          // css({ display: "flex", flex: 1, justifyContent: "center" })
+          "col-lg-6 col-sm-12"
+        }
       >
         <p
           style={{
             textAlign: "center",
-            fontSize: 20,
+            fontSize: "2vmax",
             fontWeight: 300,
             color: "#ffffff",
             wordWrap: "normal",
-            padding: 30,
           }}
         >
           {title}
         </p>
       </div>
-      <div>
+      <div
+        className="col-lg-3 col-sm-12"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
         <Link href={`/event-details/${id}`}>
           <Button
             style={{

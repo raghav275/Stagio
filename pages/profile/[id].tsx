@@ -19,6 +19,12 @@ interface Props {
 }
 
 const Profile = (props: Props) => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window !== undefined && window.innerWidth < 800 && !isMobile) {
+      setIsMobile(true);
+    }
+  });
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { username, email, events_bought, events_created, profilePic, name } =
@@ -43,7 +49,191 @@ const Profile = (props: Props) => {
     setHover(false);
   };
   const { isSelf } = props;
-  return (
+  return isMobile ? (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#181818",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div
+        onMouseEnter={onHover}
+        onMouseLeave={onLeave}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          width: "80%",
+          height: "80%",
+          borderRadius: 180,
+          margin: "20px 0px",
+        }}
+      >
+        <img
+          style={{
+            opacity: hover ? 0.5 : 1,
+            objectFit: "cover",
+            width: "80%",
+            height: "80%",
+            borderRadius: 180,
+            transition: ".5s ease",
+          }}
+          src={profileImg || profilePic}
+        ></img>
+        {isUser && (
+          <div
+            className={
+              hover
+                ? css({
+                    width: "80%",
+                    height: "80%",
+                    borderRadius: 180,
+                    backgroundColor: "black",
+                    position: "absolute",
+                    top: 60,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    opacity: hover ? 0.5 : 0,
+                    transition: ".5s ease",
+                  })
+                : ""
+            }
+          >
+            {
+              <div
+                className={css({
+                  display: "flex",
+                  height: "100%",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                })}
+              >
+                <input
+                  ref={inputRef}
+                  className="d-none"
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  onChange={() => {
+                    handleDisplayFileDetails();
+                  }}
+                />
+                <button
+                  onClick={handleUpload}
+                  className={css({
+                    background: "transparent",
+                    border: "none",
+                    fontSize: 20,
+                    color: "#ffffff",
+                  })}
+                >
+                  {uploadedFileName
+                    ? uploadedFileName
+                    : "Update Profile Picture"}
+                </button>
+              </div>
+            }
+          </div>
+        )}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          overflow: "auto",
+          height: "100%",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              marginBottom: 0,
+              color: "#ffffff",
+              fontSize: 40,
+              fontWeight: 800,
+            }}
+          >
+            {name}
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            margin: 20,
+            paddingLeft: 20,
+            width: "100%",
+          }}
+        >
+          <p
+            style={{
+              borderBottom: "7px solid #d94b58",
+              color: "#ffffff",
+              marginBottom: 0,
+              fontSize: "3.5vmax",
+            }}
+          >
+            Upcoming Live Shows
+          </p>
+        </div>
+        <div
+          style={{
+            alignSelf: "center",
+            width: "90%",
+            overflow: "auto",
+            minHeight: "400px",
+          }}
+        >
+          {events_created.map((event: Event, i: number) => {
+            return <EventItem key={i} event={event} />;
+          })}
+        </div>
+        {isSelf && (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                margin: 20,
+                paddingLeft: 20,
+                width: "100%",
+              }}
+            >
+              <p
+                style={{
+                  borderBottom: "7px solid #d94b58",
+                  color: "#ffffff",
+                  marginBottom: 0,
+                  fontSize: "3.5vmax",
+                }}
+              >
+                Live Shows Bought
+              </p>
+            </div>
+            <div
+              style={{
+                alignSelf: "center",
+                width: "90%",
+                overflow: "auto",
+                minHeight: "400px",
+              }}
+            >
+              {events_bought.map((event: Event, i: number) => {
+                return <EventItem key={i} event={event} />;
+              })}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  ) : (
     <div
       style={{
         display: "flex",
@@ -223,7 +413,7 @@ const Profile = (props: Props) => {
               borderBottom: "7px solid #d94b58",
               color: "#ffffff",
               marginBottom: 0,
-              fontSize: 40,
+              fontSize: "3.5vmax",
             }}
           >
             Upcoming Live Shows
@@ -258,7 +448,7 @@ const Profile = (props: Props) => {
                   borderBottom: "7px solid #d94b58",
                   color: "#ffffff",
                   marginBottom: 0,
-                  fontSize: 40,
+                  fontSize: "3.5vmax",
                 }}
               >
                 Live Shows Bought

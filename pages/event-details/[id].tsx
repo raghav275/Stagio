@@ -166,7 +166,9 @@ const EventPage = (props: Props) => {
       style={{
         display: "flex",
         width: "100%",
-        backgroundImage: banner && `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})`,
+        backgroundImage:
+          banner &&
+          `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -176,7 +178,7 @@ const EventPage = (props: Props) => {
         alignItems: "center",
         minHeight: "calc(100vh - 60px)",
         justifyContent: "center",
-        padding:30
+        padding: 30,
       }}
     >
       {/* <div
@@ -362,7 +364,13 @@ const EventPage = (props: Props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className={css({ display: "flex", flexDirection: "row" })}>
+          <div
+            className={css({
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            })}
+          >
             <img
               className={css({
                 width: "50%",
