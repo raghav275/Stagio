@@ -11,6 +11,7 @@ export interface Event {
   poster: string;
   banner?: string;
   status: number;
+  tickets_sold:number;
 }
 export interface Razorpay {
   amount: number;

@@ -53,6 +53,7 @@ const EventPage = (props: Props) => {
     users,
     owner,
     status,
+    tickets_sold,
   } = props.event;
   const [bookingStat, setBookingStat] = useState(0);
   const [isOwner, setIsOwner] = useState(false);
@@ -161,6 +162,7 @@ const EventPage = (props: Props) => {
       setCancelOpen(false);
     }
   };
+  console.log(tickets_sold);
   return (
     <div
       style={{
@@ -265,6 +267,7 @@ const EventPage = (props: Props) => {
               </p>
             </div>
           )}
+          Tickets Sold : {tickets_sold}
           <Button
             className={buttonStyle}
             onClick={() => {
@@ -575,7 +578,6 @@ const EventPage = (props: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await getEvent(params?.id as string);
-
   return {
     props: {
       event: res.event,
