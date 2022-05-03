@@ -70,7 +70,7 @@ h5 {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 100px;
+  font-size: 60px;
   color: #a5a5a5d1;
   font-weight: 800;
   font-family: "Poppins", sans-serif;
@@ -91,7 +91,7 @@ button.close {
 
 .description {
   color: #fff;
-  width: 68%;
+  width: 100%;
 }
 
 .container {

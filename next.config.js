@@ -15,5 +15,5 @@ module.exports = {
     BASE_URL: process.env.BASE_URL,
     RZP_KEY: process.env.RZP_KEY,
     NEXTAUTH_SECRET:process.env.NEXTAUTH_SECRET
-  },
+  }
 };

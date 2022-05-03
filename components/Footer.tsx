@@ -7,6 +7,7 @@ import { useStore } from "react-redux";
 import PrivacyPolicy from "./PrivacyPolicy";
 import TermsConditions from "./TermsConditions";
 import { css } from "@emotion/css";
+import Link from "next/link";
 
 const Footer = () => {
   const [isOpen, setOpen] = useState(false);
@@ -73,6 +74,17 @@ const Footer = () => {
             alignItems: "center",
           }}
         >
+          <Link href={"/about"}>
+            <p
+              className={css({
+                width: "max-content",
+                margin: 10,
+                wordWrap: "break-word",
+              })}
+            >
+              About Us
+            </p>
+          </Link>
           <p
             onClick={() => {
               setOpen(true);

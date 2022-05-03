@@ -104,7 +104,7 @@ const EventPage = (props: Props) => {
         toast.dark("Transaction Successful");
         setTimeout(() => {
           router.reload();
-        }, 5000);
+        }, 3000);
       },
       prefill: {
         name: user.username,
@@ -159,10 +159,12 @@ const EventPage = (props: Props) => {
     } catch (e) {
       toast.dark(e?.response?.data?.message);
     } finally {
+      setTimeout(() => {
+        router.reload();
+      }, 3000);
       setCancelOpen(false);
     }
   };
-  console.log(tickets_sold);
   return (
     <div
       style={{
@@ -194,8 +196,11 @@ const EventPage = (props: Props) => {
       ></div> */}
       <div
         style={{
-          paddingLeft: 20,
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "wrap",
           margin: "auto",
+          flex: 1,
         }}
       >
         {isOwner && (
@@ -227,6 +232,7 @@ const EventPage = (props: Props) => {
             display: "flex",
             width: "100%",
             padding: 10,
+            flexWrap: "wrap",
           }}
         >
           <p style={{ color: "#ffffff", fontSize: 50, fontWeight: 800 }}>
@@ -235,10 +241,12 @@ const EventPage = (props: Props) => {
         </div>
         <div
           style={{
+            display: "flex",
             padding: 10,
             color: "#d94b58",
             fontSize: 30,
             fontWeight: 600,
+            flexWrap: "wrap",
           }}
         >
           <p>
@@ -247,8 +255,26 @@ const EventPage = (props: Props) => {
             {format(parse(time, "HH:mm", new Date()), "hh:mm a")}
           </p>
         </div>
-        <div style={{ padding: 10, fontSize: 20 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            padding: 10,
+            fontSize: 20,
+          }}
+        >
           <p style={{ color: "#ffffff" }}>{description}</p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            padding: 10,
+            color: "#ffffff",
+          }}
+        >
+          Tickets Sold : &nbsp;
+          <span className={css({ color: "#d94b58" })}> {tickets_sold}</span>
         </div>
         <div
           style={{
@@ -267,7 +293,7 @@ const EventPage = (props: Props) => {
               </p>
             </div>
           )}
-          Tickets Sold : {tickets_sold}
+
           <Button
             className={buttonStyle}
             onClick={() => {
@@ -332,8 +358,8 @@ const EventPage = (props: Props) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          padding: 100,
           margin: "auto",
+          flex: 1,
         })}
       >
         <img

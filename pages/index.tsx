@@ -89,36 +89,40 @@ function Home(props: Props) {
       >
         <Carousel>
           <Carousel.Item
-            style={{
+            className={css({
+              cursor: "pointer",
               maxHeight: "700px",
               overflow: "hidden",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
-            }}
+            })}
           >
-            <img
-              width="100%"
-              height="auto"
-              src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
-              alt="First slide"
-            />
+            <Link href={"/about"}>
+              <img
+                width="100%"
+                height="auto"
+                src={"../banner_slide.png"}
+                alt="First slide"
+              />
+            </Link>
           </Carousel.Item>
           <Carousel.Item
-            style={{
+            className={css({
+              cursor: "pointer",
               maxHeight: "700px",
               overflow: "hidden",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
-            }}
+            })}
           >
             <img
               width="100%"
               height="auto"
-              src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
+              src={"../banner_slide1.png"}
               alt="Second slide"
             />
           </Carousel.Item>
-          <Carousel.Item
+          {/* <Carousel.Item
             style={{
               maxHeight: "700px",
               overflow: "hidden",
@@ -132,7 +136,7 @@ function Home(props: Props) {
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
               alt="Third slide"
             />
-          </Carousel.Item>
+          </Carousel.Item> */}
         </Carousel>
       </div>
       <div
