@@ -139,7 +139,9 @@ const EventPage = (props: Props) => {
     rzp1.open();
   };
   const startEvent = async () => {
-    const res = await setStatus(id, EventStatus.Started);
+    if (isOwner) {
+      const res = await setStatus(id, EventStatus.Started);
+    }
     router.push(`/room/${id}`);
   };
   const endEvent = async () => {
