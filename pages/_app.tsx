@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import NextNProgress from "nextjs-progressbar";
 import { injectStyle } from "react-toastify/dist/inject-style";
+import Head from "next/head";
 
 import "../styles/globals.css";
 
@@ -22,6 +23,14 @@ export default function MyApp({
 }: AppProps) {
   return (
     <Provider store={store}>
+      <Head>
+        <title>Stagio | Attend Live Shows Of Artists At Home</title>
+        <meta
+          property="og:title"
+          content="Stagio | Attend Live Shows Of Artists At Home"
+          key="title"
+        />
+      </Head>
       <CookiesProvider>
         <script src="https://meet.jit.si/external_api.js" />
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -32,7 +41,7 @@ export default function MyApp({
             stopDelayMs={200}
             height={3}
             showOnShallow={true}
-            options={{showSpinner:false}}
+            options={{ showSpinner: false }}
           />
           <div
             style={{
