@@ -27,7 +27,7 @@ export default function MyApp({
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <SessionProvider session={session}>
           <NextNProgress
-            color="#29D"
+            color="#bb86fc"
             startPosition={0.3}
             stopDelayMs={200}
             height={3}
