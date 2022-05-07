@@ -12,6 +12,7 @@ import Carousel from "react-bootstrap/Carousel";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
+import { GetServerSideProps } from "next";
 
 const mainStyle = css({
   width: "100%",
@@ -304,12 +305,14 @@ function Home(props: Props) {
     </div>
   );
 }
-Home.getInitialProps = async (ctx: NextPageContext) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { event } = await getEvent();
   const { user } = await getProfile(false);
   return {
-    events: event,
-    artists: user,
+    props: {
+      events: event,
+      artists: user,
+    },
   };
 };
 export default Home;
