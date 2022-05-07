@@ -7,6 +7,9 @@ import styles from "../../styles/Navbar.module.css";
 import { css, cx } from "@emotion/css";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
+import Spinner from "react-bootstrap/Spinner";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
+import { loading } from "slices/loadingSlice";
 interface Props {
   status: boolean;
   showButton: boolean;
@@ -17,10 +20,15 @@ const Register = (props: Props) => {
     padding: 10,
     marginBottom: 10,
     borderRadius: 60,
-    border: "2px solid #d94b58",
+    border: "2px solid #DE636F",
     background: "transparent",
     color: "#ffffff",
     outline: "none",
+  });
+  const inputBoxHeading = css({
+    marginBottom: 0,
+    padding: 10,
+    color: "#DE636F",
   });
   const { status, showButton } = props;
   const [open, setOpen] = useState(status);
@@ -35,13 +43,14 @@ const Register = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  const [loadingState,setLoadingState] = useState(false);
   const onSubmit = async (e: { preventDefault: () => void }) => {
     if (confirmPass !== password) {
       toast.dark("Passwords Don't Match");
       return;
     }
     e.preventDefault();
+    setLoadingState(true);
     try {
       const res = await register(name, username, email, password);
       toast.dark("Registered Succesfully");
@@ -55,6 +64,7 @@ const Register = (props: Props) => {
       const error = err?.response?.data?.error.split(",");
       error.map((e: string) => toast.dark(e));
     }
+    setLoadingState(false);
   };
 
   return (
@@ -68,7 +78,6 @@ const Register = (props: Props) => {
             fontFamily: "Poppins-Medium",
             borderColor: "#d94b58",
             color: "#ffffff",
-
             fontSize: 14,
           }}
           onClick={handleOpen}
@@ -87,18 +96,16 @@ const Register = (props: Props) => {
           backgroundColor: "#181818",
         })}
       >
-        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+        <Modal.Header closeButton style={{ border: "none", color: "#DE636F" }}>
           <Modal.Title
-            style={{ color: "#d94b58" }}
+            style={{ color: "#DE636F" }}
             id="contained-modal-title-vcenter "
           >
             Register
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
-            Enter Your Full Name
-          </p>
+          <p className={inputBoxHeading}>Enter Your Full Name</p>
           <input
             className={inputBoxStyle}
             type="text"
@@ -107,9 +114,7 @@ const Register = (props: Props) => {
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter Here"
           ></input>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
-            Enter Your Username
-          </p>
+          <p className={inputBoxHeading}>Enter Your Username</p>
           <input
             className={inputBoxStyle}
             type="text"
@@ -118,9 +123,7 @@ const Register = (props: Props) => {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter Here"
           ></input>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
-            Enter Your Email
-          </p>
+          <p className={inputBoxHeading}>Enter Your Email</p>
           <input
             className={inputBoxStyle}
             type="text"
@@ -129,9 +132,7 @@ const Register = (props: Props) => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter Here"
           ></input>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
-            Enter Your Password
-          </p>
+          <p className={inputBoxHeading}>Enter Your Password</p>
           <input
             className={inputBoxStyle}
             type="password"
@@ -140,9 +141,7 @@ const Register = (props: Props) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter Here"
           ></input>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
-            Confirm Your Password
-          </p>
+          <p className={inputBoxHeading}>Confirm Your Password</p>
           <input
             className={inputBoxStyle}
             type="password"
@@ -154,14 +153,23 @@ const Register = (props: Props) => {
         </Modal.Body>
         <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
           <Button
-            style={{
+            className={css({
               border: "none",
-              backgroundColor: "#d94b58",
+              backgroundColor: "#D94B58",
               borderRadius: 20,
-            }}
+            })}
             onClick={onSubmit}
           >
             Register
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

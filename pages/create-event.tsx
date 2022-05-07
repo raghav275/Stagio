@@ -1,5 +1,6 @@
 import { createEvent, getEvent } from "@actions/event";
-import { useAppSelector } from "@app/hooks";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
+import { loading } from "slices/loadingSlice";
 import { css, cx } from "@emotion/css";
 import { makeStyles, TextField } from "@material-ui/core";
 import { Event } from "@typings/event";
@@ -14,6 +15,7 @@ import Button from "react-bootstrap/Button";
 import ImageUploading, { ImageType } from "react-images-uploading";
 import { toast } from "react-toastify";
 import styles from "../styles/Navbar.module.css";
+import Spinner from "react-bootstrap/Spinner";
 
 const useStyles = makeStyles({
   underline: {
@@ -42,7 +44,8 @@ const CreateEvent = (props: Props) => {
   useEffect(() => {
     setEventState(props.event || {});
   }, [props]);
-  const userState = useAppSelector((state) => state.user);
+
+  const [loadingState, setLoadingState] = useState(false);
   const classes = useStyles();
   const [formSubmittedOnce, setFormSubmittedOnce] =
     React.useState<boolean>(false);
@@ -62,7 +65,7 @@ const CreateEvent = (props: Props) => {
   });
   const smallHeading = css({
     marginTop: 20,
-    color: "#d94b58",
+    color: "#DE636F",
   });
   const { data: session, status } = useSession();
   const [url, setUrl] = useState<string>();
@@ -79,6 +82,7 @@ const CreateEvent = (props: Props) => {
         ? banner[0]?.data_url?.split(",")[1]
         : banner[0]?.data_url);
     try {
+      setLoadingState(true);
       const res = await createEvent(
         title,
         description,
@@ -98,6 +102,7 @@ const CreateEvent = (props: Props) => {
       }
       toast.dark(err);
     }
+    setLoadingState(false);
   };
   interface ErrorForm {
     title?: string;
@@ -467,6 +472,15 @@ const CreateEvent = (props: Props) => {
                       variant="outline-primary"
                     >
                       Create
+                      {loadingState && (
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      )}
                     </Button>
                   </div>
                 </div>

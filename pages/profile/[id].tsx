@@ -64,6 +64,8 @@ const Profile = (props: Props) => {
         onMouseLeave={onLeave}
         style={{
           display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
           justifyContent: "center",
           width: "80%",
           height: "80%",
@@ -84,58 +86,36 @@ const Profile = (props: Props) => {
         ></img>
         {isUser && (
           <div
-            className={
-              hover
-                ? css({
-                    width: "80%",
-                    height: "80%",
-                    borderRadius: 180,
-                    backgroundColor: "black",
-                    position: "absolute",
-                    top: 60,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    opacity: hover ? 0.5 : 0,
-                    transition: ".5s ease",
-                  })
-                : ""
-            }
+            className={css({
+              display: "flex",
+              height: "100%",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center",
+            })}
           >
-            {
-              <div
-                className={css({
-                  display: "flex",
-                  height: "100%",
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "center",
-                })}
-              >
-                <input
-                  ref={inputRef}
-                  className="d-none"
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  onChange={() => {
-                    handleDisplayFileDetails();
-                  }}
-                />
-                <button
-                  onClick={handleUpload}
-                  className={css({
-                    background: "transparent",
-                    border: "none",
-                    fontSize: 20,
-                    color: "#ffffff",
-                  })}
-                >
-                  {uploadedFileName
-                    ? uploadedFileName
-                    : "Update Profile Picture"}
-                </button>
-              </div>
-            }
+            <input
+              ref={inputRef}
+              className="d-none"
+              type="file"
+              accept="image/png, image/jpeg"
+              onChange={() => {
+                handleDisplayFileDetails();
+              }}
+            />
+            <button
+              onClick={handleUpload}
+              className={css({
+                background: "transparent",
+                border: "none",
+                fontSize: 15,
+                color: "#ffffff",
+                marginTop: 5,
+                textDecoration: "underline",
+              })}
+            >
+              Update Profile Picture
+            </button>
           </div>
         )}
       </div>

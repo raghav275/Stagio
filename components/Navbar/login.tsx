@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import Modal from "react-bootstrap/Modal";
 import styles from "../../styles/Navbar.module.css";
 import Register from "./register";
 import Forgot from "./forgot-password";
 import { useAppDispatch, useAppSelector } from "app/hooks";
-import { user } from "slices/userSlice";
+import { loading } from "slices/loadingSlice";
 import { useCookies } from "react-cookie";
 import { login } from "@actions/auth";
 import { useSession, signIn, SignInResponse } from "next-auth/react";
@@ -24,7 +25,8 @@ const Login = (props: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookie, setCookie] = useCookies(["user"]);
-  const dispatch = useAppDispatch();
+
+  const [loadingState, setLoadingState] = useState(false);
   const handleOpen = () => {
     setOpen(true);
     setSelected("Login");
@@ -34,6 +36,7 @@ const Login = (props: Props) => {
   };
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
+    setLoadingState(true);
     e.preventDefault();
     // const res = await login(email, password);
     // setCookie("user", "Bearer " + res.token, {
@@ -54,7 +57,9 @@ const Login = (props: Props) => {
     setEmail("");
     setPassword("");
     setOpen(false);
+    setLoadingState(false);
   };
+
   return (
     <>
       {showButton && (
@@ -88,17 +93,17 @@ const Login = (props: Props) => {
         >
           <Modal.Header
             closeButton
-            style={{ border: "none", color: "#d94b58" }}
+            style={{ border: "none", color: "#DE636F" }}
           >
             <Modal.Title
-              style={{ color: "#d94b58" }}
+              style={{ color: "#DE636F" }}
               id="contained-modal-title-vcenter"
             >
               Sign In
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
+            <p style={{ marginBottom: 0, padding: 10, color: "#DE636F" }}>
               Enter Your Email
             </p>
             <input
@@ -107,7 +112,7 @@ const Login = (props: Props) => {
                 padding: 10,
                 marginBottom: 10,
                 borderRadius: 60,
-                border: "2px solid #d94b58",
+                border: "2px solid #DE636F",
                 background: "transparent",
                 color: "#ffffff",
                 outline: "none",
@@ -118,7 +123,7 @@ const Login = (props: Props) => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter Here"
             ></input>
-            <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
+            <p style={{ marginBottom: 0, padding: 10, color: "#DE636F" }}>
               Enter Your Password
             </p>
             <input
@@ -127,7 +132,7 @@ const Login = (props: Props) => {
                 padding: 10,
                 marginBottom: 10,
                 borderRadius: 60,
-                border: "2px solid #d94b58",
+                border: "2px solid #DE636F",
                 background: "transparent",
                 color: "#ffffff",
                 outline: "none",
@@ -139,12 +144,15 @@ const Login = (props: Props) => {
               placeholder="Enter Here"
             ></input>
             <p
-              style={{
+              className={css({
                 color: "#ffffff",
                 cursor: "pointer",
                 paddingLeft: 10,
                 fontSize: 15,
-              }}
+                "&:hover": {
+                  textDecoration: "underline",
+                },
+              })}
               onClick={() => {
                 setSelected("Forgot Password");
               }}
@@ -161,7 +169,16 @@ const Login = (props: Props) => {
               }}
               onClick={onSubmit}
             >
-              Sign In
+              Sign In{" "}
+              {loadingState && (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              )}
             </Button>
             <div style={{ marginLeft: 10 }}>
               <p

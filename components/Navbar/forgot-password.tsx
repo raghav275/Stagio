@@ -2,8 +2,11 @@ import { forgot } from "@actions/auth";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import Spinner from "react-bootstrap/Spinner";
 import styles from "../../styles/Navbar.module.css";
 import { css } from "@emotion/css";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { loading } from "slices/loadingSlice";
 
 interface Props {
   status: boolean;
@@ -12,6 +15,7 @@ const Forgot = (props: Props) => {
   const { status } = props;
   const [open, setOpen] = useState(status);
   const [email, setEmail] = useState("");
+  const [loadingState,setLoadingState] =useState(false); 
   const handleOpen = () => {
     setOpen(true);
   };
@@ -20,11 +24,13 @@ const Forgot = (props: Props) => {
   };
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
+    setLoadingState(true);
     e.preventDefault();
     let user = { email };
     const res = await forgot(email);
     setEmail("");
     setOpen(false);
+    setLoadingState(false);
   };
 
   return (
@@ -39,16 +45,16 @@ const Forgot = (props: Props) => {
           backgroundColor: "#181818",
         })}
       >
-        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+        <Modal.Header closeButton style={{ border: "none", color: "#DE636F" }}>
           <Modal.Title
-            style={{ color: "#d94b58" }}
+            style={{ color: "#DE636F" }}
             id="contained-modal-title-vcenter"
           >
             Forgot Password
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p style={{ marginBottom: 0, padding: 10, color: "#d94b58" }}>
+          <p style={{ marginBottom: 0, padding: 10, color: "#DE636F" }}>
             Enter Your Email
           </p>
           <input
@@ -57,7 +63,7 @@ const Forgot = (props: Props) => {
               padding: 10,
               marginBottom: 10,
               borderRadius: 60,
-              border: "2px solid #d94b58",
+              border: "2px solid #DE636F",
               background: "transparent",
               color: "#ffffff",
               outline: "none",
@@ -79,6 +85,15 @@ const Forgot = (props: Props) => {
             onClick={onSubmit}
           >
             Submit
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

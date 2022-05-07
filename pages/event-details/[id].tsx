@@ -20,6 +20,9 @@ import Link from "next/link";
 import Modal from "react-bootstrap/Modal";
 import InfoIcon from "@material-ui/icons/Info";
 import ToolTip from "@material-ui/core/Tooltip";
+import Spinner from "react-bootstrap/Spinner";
+import { useAppDispatch, useAppSelector } from "@app/hooks";
+import { loading } from "slices/loadingSlice";
 declare global {
   interface Window {
     Razorpay: any;
@@ -77,6 +80,7 @@ const EventPage = (props: Props) => {
     formatISO(new Date(date)),
     formatISO(parse(time, "HH:mm", new Date()))
   );
+  const [loadingState, setLoadingState] = useState(false);
   const showRazorpay = async () => {
     const res = await razorpay(id);
     const options = {
@@ -139,12 +143,16 @@ const EventPage = (props: Props) => {
   };
   const startEvent = async () => {
     if (isOwner) {
+      setLoadingState(true);
       const res = await setStatus(id, EventStatus.Started);
+      setLoadingState(false);
     }
     router.push(`/room/${id}`);
   };
   const endEvent = async () => {
+    setLoadingState(true);
     const res = await setStatus(id, EventStatus.Ended);
+    setLoadingState(false);
   };
   const buyTicket = () => {
     if (!session?.user) {
@@ -154,6 +162,7 @@ const EventPage = (props: Props) => {
     }
   };
   const cancelBooking = async () => {
+    setLoadingState(true);
     try {
       const res = await cancel(id, user?.email);
       toast.dark("Booking cancelled");
@@ -165,6 +174,7 @@ const EventPage = (props: Props) => {
       }, 3000);
       setCancelOpen(false);
     }
+    setLoadingState(false);
   };
   return (
     <div
@@ -312,7 +322,17 @@ const EventPage = (props: Props) => {
           >
             {status !== EventStatus.Ended
               ? isOwner
-                ? "Start Now"
+                ? `Start Now ${
+                    loadingState && (
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                    )
+                  }`
                 : bookingStat === BookingStatus.Bought
                 ? status === EventStatus.Started
                   ? "Join Now"
@@ -542,6 +562,15 @@ const EventPage = (props: Props) => {
             onClick={() => endEvent()}
           >
             Proceed
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -596,6 +625,15 @@ const EventPage = (props: Props) => {
             onClick={() => cancelBooking()}
           >
             Proceed
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

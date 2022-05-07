@@ -188,7 +188,7 @@ function Home(props: Props) {
             <div
               className={css({
                 color: "#ffffff",
-                fontSize: 30,
+                fontSize: "2.5vmax",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
