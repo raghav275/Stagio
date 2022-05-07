@@ -7,8 +7,8 @@ import React, { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import NextNProgress from "nextjs-progressbar";
 import { injectStyle } from "react-toastify/dist/inject-style";
-
 
 import "../styles/globals.css";
 
@@ -26,6 +26,13 @@ export default function MyApp({
         <script src="https://meet.jit.si/external_api.js" />
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <SessionProvider session={session}>
+          <NextNProgress
+            color="#29D"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={3}
+            showOnShallow={true}
+          />
           <div
             style={{
               marginBottom: 0,
@@ -37,6 +44,7 @@ export default function MyApp({
           >
             <Navbar />
           </div>
+
           <Component {...pageProps} />
           <ToastContainer
             position="top-right"
