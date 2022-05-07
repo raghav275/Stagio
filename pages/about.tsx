@@ -21,8 +21,7 @@ const ComingSoon = () => {
           width: "100%",
           height: "100%",
           flexDirection: "column",
-          alignContent: "center",
-          justifyContent: "center",
+          overflowY: "scroll",
           color: "#ffffff",
         }}
       >

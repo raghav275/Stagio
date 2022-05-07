@@ -184,17 +184,35 @@ function Home(props: Props) {
             paddingRight: 25,
           }}
         >
-          <Slider {...settings}>
-            {props.events.map((event: Event, i: number) => {
-              return (
-                <div key={i} style={{ background: "transparent", padding: 30 }}>
-                  <div style={{ padding: 30 }}>
-                    <Card event={event} />
+          {!props.events || (props.events && props.events.length === 0) ? (
+            <div
+              className={css({
+                color: "#ffffff",
+                fontSize: 30,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 60,
+              })}
+            >
+              <p>No Upcoming Shows But There's Always Room For One</p>
+            </div>
+          ) : (
+            <Slider {...settings}>
+              {props.events.map((event: Event, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    style={{ background: "transparent", padding: 30 }}
+                  >
+                    <div style={{ padding: 30 }}>
+                      <Card event={event} />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </Slider>
+                );
+              })}
+            </Slider>
+          )}
         </div>
       </div>
       <div
