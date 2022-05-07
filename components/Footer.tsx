@@ -80,6 +80,7 @@ const Footer = () => {
                 width: "max-content",
                 margin: 10,
                 wordWrap: "break-word",
+                cursor: "pointer",
               })}
             >
               About Us
@@ -90,7 +91,11 @@ const Footer = () => {
               setOpen(true);
               setFlag(1);
             }}
-            className={css({ width: "max-content", margin: 10 })}
+            className={css({
+              width: "max-content",
+              margin: 10,
+              cursor: "pointer",
+            })}
           >
             Privacy Policy
           </p>
@@ -99,6 +104,7 @@ const Footer = () => {
               width: "max-content",
               margin: 10,
               wordWrap: "break-word",
+              cursor: "pointer",
             })}
             onClick={() => {
               setOpen(true);

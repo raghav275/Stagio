@@ -1,5 +1,4 @@
 import {
-  bookEvent,
   bookingStatus,
   getEvent,
   razorpay,

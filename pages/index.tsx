@@ -115,12 +115,14 @@ function Home(props: Props) {
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
             })}
           >
-            <img
-              width="100%"
-              height="auto"
-              src={"../banner_slide1.png"}
-              alt="Second slide"
-            />
+            <Link href={"/about"}>
+              <img
+                width="100%"
+                height="auto"
+                src={"../banner_slide1.png"}
+                alt="Second slide"
+              />
+            </Link>
           </Carousel.Item>
           {/* <Carousel.Item
             style={{
@@ -283,9 +285,12 @@ function Home(props: Props) {
                 <Link key={id} href={`/profile/${artist.username}`}>
                   <div
                     key={id}
-                    style={{ background: "transparent", padding: 30 }}
+                    style={{
+                      background: "transparent",
+                      padding: 30,
+                    }}
                   >
-                    <div style={{ padding: 30 }}>
+                    <div style={{ padding: 30, cursor: "pointer" }}>
                       <Circle user={artist} />
                     </div>
                   </div>
