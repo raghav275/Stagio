@@ -64,7 +64,7 @@ const Profile = (props: Props) => {
         onMouseLeave={onLeave}
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           width: "80%",
