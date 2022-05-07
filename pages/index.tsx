@@ -102,7 +102,7 @@ function Home(props: Props) {
               <img
                 width="100%"
                 height="auto"
-                src={"../banner_slide.png"}
+                src="https://ik.imagekit.io/stagiotest/banner_slide_g3WKEtyip.png?ik-sdk-version=javascript-1.4.3&updatedAt=1651912129480"
                 alt="First slide"
               />
             </Link>
@@ -120,7 +120,7 @@ function Home(props: Props) {
               <img
                 width="100%"
                 height="auto"
-                src={"../banner_slide1.png"}
+                src="https://ik.imagekit.io/stagiotest/banner_slide1_plf_rEWRp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1651911413080"
                 alt="Second slide"
               />
             </Link>
@@ -201,7 +201,8 @@ function Home(props: Props) {
         style={{
           width: "92%",
           height: "auto",
-          background: "url(/banner1.png)",
+          background:
+            "url(https://ik.imagekit.io/stagiotest/banner1_Wn7J5Dp4j.png?ik-sdk-version=javascript-1.4.3&updatedAt=1651911413138)",
           backgroundSize: "100% auto",
           backgroundRepeat: "no-repeat",
           alignSelf: "center",
