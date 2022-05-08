@@ -12,6 +12,7 @@ import EventItem from "@components/EventItem";
 import { css } from "@emotion/css";
 import { useSession } from "next-auth/react";
 import getBase64 from "@utils/getBase64";
+import Circle from "@components/Circle";
 
 interface Props {
   profile: User;
@@ -62,28 +63,15 @@ const Profile = (props: Props) => {
       <div
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "80%",
-          height: "80%",
-          borderRadius: 180,
-          margin: "20px 0px",
-        }}
+        className={css({ marginTop: 10 })}
       >
-        <img
-          style={{
-            opacity: hover ? 0.5 : 1,
-            objectFit: "cover",
-            width: "80%",
-            height: "80%",
-            borderRadius: 180,
-            transition: ".5s ease",
+        <Circle
+          user={{
+            ...props.profile,
+            name: "",
+            profilePic: profileImg || profilePic,
           }}
-          src={profileImg || profilePic}
-        ></img>
+        />
         {isUser && (
           <div
             className={css({
@@ -123,7 +111,8 @@ const Profile = (props: Props) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
           height: "100%",
           alignItems: "center",
         }}

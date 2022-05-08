@@ -471,7 +471,7 @@ const CreateEvent = (props: Props) => {
                       }}
                       variant="outline-primary"
                     >
-                      Create
+                      Create{" "}
                       {loadingState && (
                         <Spinner
                           as="span"

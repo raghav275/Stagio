@@ -320,25 +320,32 @@ const EventPage = (props: Props) => {
                 : toast.dark("You've cancelled your booking earlier");
             }}
           >
-            {status !== EventStatus.Ended
-              ? isOwner
-                ? `Start Now ${
-                    loadingState && (
-                      <Spinner
-                        as="span"
-                        animation="border"
-                        size="sm"
-                        role="status"
-                        aria-hidden="true"
-                      />
-                    )
-                  }`
-                : bookingStat === BookingStatus.Bought
-                ? status === EventStatus.Started
-                  ? "Join Now"
-                  : "Already Bought"
-                : "Buy Now"
-              : "Event Ended"}
+            {status !== EventStatus.Ended ? (
+              isOwner ? (
+                <>
+                  Start Now
+                  {loadingState && (
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  )}
+                </>
+              ) : bookingStat === BookingStatus.Bought ? (
+                status === EventStatus.Started ? (
+                  "Join Now"
+                ) : (
+                  "Already Bought"
+                )
+              ) : (
+                "Buy Now"
+              )
+            ) : (
+              "Event Ended"
+            )}
           </Button>
           {isOwner && status !== EventStatus.Ended && (
             <Button
