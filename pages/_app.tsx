@@ -27,7 +27,7 @@ export default function MyApp({
         <title>Stagio | Attend Live Shows Of Artists At Home</title>
         <meta
           property="og:title"
-          content="Stagio | Attend Live Shows Of Artists At Home"
+          content="Stagio | Bringing Live Shows Of Artists To Your Home"
           key="title"
         />
         <meta
