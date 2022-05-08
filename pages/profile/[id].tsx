@@ -444,9 +444,11 @@ const Profile = (props: Props) => {
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   params,
+  req
 }) => {
   let isSelf = query && query.my ? true : false;
-  const res = await getProfile(isSelf, params?.id as string);
+  const cookies = req.headers.cookie;
+  const res = await getProfile(isSelf, params?.id as string,cookies);
   return {
     props: {
       profile: res.user,

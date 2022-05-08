@@ -4,17 +4,23 @@ import { User } from "@typings/profile";
 
 export async function getProfile(
   isSelf: boolean,
-  username?: string
+  username?: string,
+  cookies?: string
 ): Promise<{ sucess: string; user: User | User[] }> {
-  const res = await axios(`${process.env.BASE_URL}api/profile/getprofile`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    data: { username, isSelf },
-  }).then((response) => response);
-  //   console.log(res);
+  const res = await axios(
+    `${process.env.BASE_URL}api/profile/${
+      isSelf ? "getmyprofile" : "getprofile"
+    }`,
+    {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Cookie: isSelf ? cookies! : "",
+      },
+      data: { username },
+    }
+  ).then((response) => response);
   return res.data;
 }
 export async function updateProfilePic(

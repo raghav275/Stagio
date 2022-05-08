@@ -469,6 +469,7 @@ const CreateEvent = (props: Props) => {
                         setFormSubmittedOnce(true);
                         submitForm();
                       }}
+                      disabled={loadingState}
                       variant="outline-primary"
                     >
                       Create{" "}
