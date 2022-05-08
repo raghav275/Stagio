@@ -30,6 +30,11 @@ export default function MyApp({
           content="Stagio | Attend Live Shows Of Artists At Home"
           key="title"
         />
+        <meta
+          name="description"
+          content="A platform curated to narrow the gap between artists and their fans by hosting live shows giving you the front row experience at your home.
+          On Stagio, artists perform live, online shows from their laptop that are never recorded or archived. That's right! Every Stagio show is a once-in-a-lifetime experience that's not to be missed."
+        />
       </Head>
       <CookiesProvider>
         <script src="https://meet.jit.si/external_api.js" />
