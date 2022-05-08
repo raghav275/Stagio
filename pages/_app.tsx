@@ -24,7 +24,7 @@ export default function MyApp({
   return (
     <Provider store={store}>
       <Head>
-        <title>Stagio | Attend Live Shows Of Artists At Home</title>
+        <title>Stagio |  Bringing Live Shows Of Artists To Your Home</title>
         <meta
           property="og:title"
           content="Stagio | Bringing Live Shows Of Artists To Your Home"
