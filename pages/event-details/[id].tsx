@@ -458,7 +458,7 @@ const EventPage = (props: Props) => {
                   title={
                     <>
                       <div>Base Fee : {(price * 0.1).toFixed(2)}</div>
-                      <div>GST (18%) : {(price * 0.018).toFixed(2)}</div>
+                      {/* <div>GST (18%) : {(price * 0.018).toFixed(2)}</div> */}
                     </>
                   }
                   arrow

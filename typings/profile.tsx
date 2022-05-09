@@ -6,4 +6,5 @@ export interface User {
   events_bought:Event[];
   profilePic: string;
   name: string;
+  description:string;
 }

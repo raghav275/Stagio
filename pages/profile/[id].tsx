@@ -2,10 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
+import EditIcon from "@material-ui/icons/Edit";
 import Button from "react-bootstrap/Button";
 import { useAppSelector } from "@app/hooks";
 import { GetServerSideProps } from "next";
-import { getProfile, updateProfilePic } from "@actions/profile";
+import {
+  getProfile,
+  updateDescription,
+  updateProfilePic,
+} from "@actions/profile";
 import { User } from "@typings/profile";
 import { Event } from "@typings/event";
 import EventItem from "@components/EventItem";
@@ -13,6 +18,10 @@ import { css } from "@emotion/css";
 import { useSession } from "next-auth/react";
 import getBase64 from "@utils/getBase64";
 import Circle from "@components/Circle";
+import Modal from "react-bootstrap/Modal";
+import { Input } from "@material-ui/core";
+import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
 
 interface Props {
   profile: User;
@@ -28,13 +37,23 @@ const Profile = (props: Props) => {
   });
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { username, email, events_bought, events_created, profilePic, name } =
-    props.profile;
+  const {
+    username,
+    email,
+    events_bought,
+    events_created,
+    profilePic,
+    name,
+    description,
+  } = props.profile;
   const { data: session, status } = useSession();
   const user = session?.user;
   const [isUser, setIsUser] = useState(props.isSelf);
   const [profileImg, setProfileImg] = useState<string | undefined>(undefined);
   const [hover, setHover] = useState(false);
+  const [newDescription, setNewDescription] = useState(description);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [loadingState, setLoadingState] = useState(false);
   const handleUpload = () => {
     inputRef.current?.click();
   };
@@ -50,6 +69,17 @@ const Profile = (props: Props) => {
     setHover(false);
   };
   const { isSelf } = props;
+  const updateDescriptionFunc = async (description: string) => {
+    try {
+      setLoadingState(true);
+      const res = await updateDescription(email, description);
+      toast.dark("Description Updated Successfully");
+      setLoadingState(false);
+    } catch (e) {
+      const err = e?.response?.data?.message;
+      toast.dark(err);
+    }
+  };
   return isMobile ? (
     <div
       style={{
@@ -98,7 +128,6 @@ const Profile = (props: Props) => {
                 border: "none",
                 fontSize: 15,
                 color: "#ffffff",
-                marginTop: 5,
                 textDecoration: "underline",
               })}
             >
@@ -129,7 +158,38 @@ const Profile = (props: Props) => {
             {name}
           </p>
         </div>
-
+        <div
+          className={css({
+            paddingLeft: 20,
+            fontSize: 20,
+            color: "#ffffff",
+            marginTop: 10,
+          })}
+        >
+          <p className={css({ margin: 0 })}>
+            {newDescription.length === 0
+              ? isUser
+                ? "Tell Us About Yourself"
+                : ""
+              : newDescription}
+            &nbsp;{" "}
+            {isUser && (
+              <EditIcon
+                className={css({
+                  fontSize: 20,
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  "&:hover": {
+                    color: "#d94b58",
+                  },
+                })}
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+              />
+            )}
+          </p>
+        </div>
         <div
           style={{
             display: "flex",
@@ -201,6 +261,79 @@ const Profile = (props: Props) => {
           </>
         )}
       </div>
+      <Modal
+        show={isModalOpen}
+        onHide={() => setModalOpen(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        contentClassName={css({
+          backgroundColor: "#ffffff",
+          borderRadius: 20,
+        })}
+      >
+        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+          <Modal.Title
+            style={{ color: "#000000", marginLeft: 10 }}
+            id="contained-modal-title-vcenter"
+          >
+            Edit Description
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <Input
+              className={css({
+                width: "100%",
+              })}
+              placeholder="Tell Us About Yourself"
+              multiline
+              value={newDescription}
+              onChange={(e) => {
+                setNewDescription(e.target.value);
+              }}
+            ></Input>
+          </div>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
+          <div style={{ marginLeft: 10 }}>
+            <p
+              style={{
+                color: "#000000",
+                cursor: "pointer",
+                marginTop: 15,
+                paddingLeft: 10,
+                fontSize: 15,
+              }}
+              onClick={() => {
+                setNewDescription(description.length === 0 ? "" : description);
+                setModalOpen(false);
+              }}
+            >
+              Cancel
+            </p>
+          </div>
+          <Button
+            style={{
+              border: "none",
+              backgroundColor: "#d94b58",
+              borderRadius: 20,
+            }}
+            onClick={() => updateDescriptionFunc(newDescription)}
+          >
+            Proceed
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   ) : (
     <div
@@ -293,7 +426,8 @@ const Profile = (props: Props) => {
           display: "flex",
           flex: 3,
           flexDirection: "column",
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
           height: "100%",
         }}
       >
@@ -324,6 +458,7 @@ const Profile = (props: Props) => {
               {name}
             </p>
           </div>
+
           {/* <div
             style={{
               display: "flex",
@@ -367,6 +502,36 @@ const Profile = (props: Props) => {
             Follow to stay Updated
           </Button>
         </div> */}
+        <div
+          className={css({
+            paddingLeft: 20,
+            fontSize: 25,
+            color: "#ffffff",
+          })}
+        >
+          <p className={css({ margin: 0 })}>
+            {newDescription.length === 0
+              ? isUser
+                ? "Tell Us About Yourself"
+                : ""
+              : newDescription}
+            &nbsp;{" "}
+            {isUser && (
+              <EditIcon
+                className={css({
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                  "&:hover": {
+                    color: "#d94b58",
+                  },
+                })}
+                onClick={() => {
+                  setModalOpen(true);
+                }}
+              />
+            )}
+          </p>
+        </div>
         <div
           style={{
             display: "flex",
@@ -438,17 +603,90 @@ const Profile = (props: Props) => {
           </>
         )}
       </div>
+      <Modal
+        show={isModalOpen}
+        onHide={() => setModalOpen(false)}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        contentClassName={css({
+          backgroundColor: "#ffffff",
+          borderRadius: 20,
+        })}
+      >
+        <Modal.Header closeButton style={{ border: "none", color: "#d94b58" }}>
+          <Modal.Title
+            style={{ color: "#000000", marginLeft: 10 }}
+            id="contained-modal-title-vcenter"
+          >
+            Edit Description
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div>
+            <Input
+              className={css({
+                width: "100%",
+              })}
+              placeholder="Tell Us About Yourself"
+              multiline
+              value={newDescription}
+              onChange={(e) => {
+                setNewDescription(e.target.value);
+              }}
+            ></Input>
+          </div>
+        </Modal.Body>
+        <Modal.Footer style={{ justifyContent: "center", border: "none" }}>
+          <div style={{ marginLeft: 10 }}>
+            <p
+              style={{
+                color: "#000000",
+                cursor: "pointer",
+                marginTop: 15,
+                paddingLeft: 10,
+                fontSize: 15,
+              }}
+              onClick={() => {
+                setNewDescription(description.length === 0 ? "" : description);
+                setModalOpen(false);
+              }}
+            >
+              Cancel
+            </p>
+          </div>
+          <Button
+            style={{
+              border: "none",
+              backgroundColor: "#d94b58",
+              borderRadius: 20,
+            }}
+            onClick={() => updateDescriptionFunc(newDescription)}
+          >
+            Proceed
+            {loadingState && (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   params,
-  req
+  req,
 }) => {
   let isSelf = query && query.my ? true : false;
   const cookies = req.headers.cookie;
-  const res = await getProfile(isSelf, params?.id as string,cookies);
+  const res = await getProfile(isSelf, params?.id as string, cookies);
   return {
     props: {
       profile: res.user,

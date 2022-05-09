@@ -40,3 +40,21 @@ export async function updateProfilePic(
   ).then((response) => response);
   return res.data;
 }
+export async function updateDescription(
+  email: string,
+  description: string
+): Promise<{ success: string; description: string; message: string }> {
+  const res = await axios(
+    `${process.env.BASE_URL}api/profile/updatedescription`,
+    {
+      withCredentials:true,
+      method: "POST",
+      headers: {
+        Accept: "applciation/json",
+        "Content-Type": "application/json",
+      },
+      data: { email, description },
+    }
+  ).then((response) => response);
+  return res.data;
+}
