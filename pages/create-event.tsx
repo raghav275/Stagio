@@ -91,7 +91,8 @@ const CreateEvent = (props: Props) => {
         price,
         session?.user.email,
         posterBase64,
-        bannerBase64
+        bannerBase64,
+        props.id
       );
       toast.dark("Event created successfully");
       setTimeout(() => router.push(`/event-details/${res.event.id}`), 500);
