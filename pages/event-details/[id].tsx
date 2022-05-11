@@ -35,6 +35,9 @@ const buttonStyle = css({
   border: "none",
   backgroundColor: "#d94b58",
   borderRadius: 20,
+  "&:disabled": {
+    backgroundColor: "#d94b58 !important",
+  },
 });
 function mergeDateandTime(date: string, time: string) {
   return `${date.split("T")[0]}T${time.split("T")[1]}`;
@@ -307,6 +310,9 @@ const EventPage = (props: Props) => {
 
           <Button
             className={buttonStyle}
+            disabled={
+              isOwner && new Date(date).getDate() !== new Date().getDate()
+            }
             onClick={() => {
               isOwner ||
               (bookingStat === BookingStatus.Bought &&
@@ -347,7 +353,7 @@ const EventPage = (props: Props) => {
               "Event Ended"
             )}
           </Button>
-          {isOwner && status !== EventStatus.Ended && (
+          {isOwner && status===EventStatus.Started && (
             <Button
               className={cx(
                 buttonStyle,

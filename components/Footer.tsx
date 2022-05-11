@@ -50,7 +50,11 @@ const Footer = () => {
               justifyContent: "space-between",
             }}
           >
-            <InstagramIcon style={{ color: "#5a5a5a" }} />
+            <a href="https://www.instagram.com/stagiolive">
+              <InstagramIcon
+                className={css({ color: "#5a5a5a", cursor: "pointer" })}
+              />
+            </a>
             <FacebookIcon style={{ color: "#5a5a5a" }} />
             <TwitterIcon style={{ color: "#5a5a5a" }} />
           </div>
