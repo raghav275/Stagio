@@ -1,5 +1,6 @@
 import Navbar from "@components/Navbar";
 import { store } from "app/store";
+import Script from 'next/script'
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
@@ -10,8 +11,9 @@ import { ToastContainer } from "react-toastify";
 import NextNProgress from "nextjs-progressbar";
 import { injectStyle } from "react-toastify/dist/inject-style";
 import Head from "next/head";
-
+import * as gtag from "../lib/gtag";
 import "../styles/globals.css";
+import { useRouter } from "next/router";
 
 if (typeof window !== "undefined") {
   injectStyle();
@@ -21,10 +23,40 @@ export default function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: String) => {
+      gtag.pageview(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    router.events.on("hashChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+      router.events.off("hashChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
   return (
     <Provider store={store}>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
       <Head>
-        <title>Stagio |  Bringing Live Shows Of Artists To Your Home</title>
+        <title>Stagio | Bringing Live Shows Of Artists To Your Home</title>
         <meta
           property="og:title"
           content="Stagio | Bringing Live Shows Of Artists To Your Home"
