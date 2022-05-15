@@ -31,7 +31,6 @@ interface Props {
 
 const Profile = (props: Props) => {
   const { cookies } = props;
-  console.log(cookies);
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (typeof window !== undefined && window.innerWidth < 800 && !isMobile) {
