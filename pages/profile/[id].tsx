@@ -62,16 +62,18 @@ const Profile = (props: Props) => {
   const handleDisplayFileDetails = async () => {
     try {
       const img = await getBase64(inputRef.current?.files?.[0]!);
-      const res = await updateProfilePic(
-        user.email,
-        img.split(",")[1],
-        cookies
-      );
-      toast.promise(updateProfilePic(user.email, img.split(",")[1], cookies), {
-        pending: "Uploading Profile Picture",
-        success: "Uploaded Profile Picture Successfully",
-        error: "Error Uploading",
-      });
+      // const res = await updateProfilePic(
+      //   user.email,
+      //   img.split(",")[1],
+      //   cookies
+      // );
+      const res = await toast
+        .promise(updateProfilePic(user.email, img.split(",")[1], cookies), {
+          pending: "Uploading Profile Picture",
+          success: "Uploaded Profile Picture Successfully",
+          error: "Error Uploading",
+        })
+        .then((res) => res);
       setProfileImg(res.profile_pic);
     } catch (e) {
       const err = e?.response?.data?.message;
@@ -707,7 +709,9 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       profile: res.user,
       isSelf: isSelf,
-      cookies: req.cookies["__Secure-next-auth.session-token"] || req.cookies["next-auth.session-token"],
+      cookies:
+        req.cookies["__Secure-next-auth.session-token"] ||
+        req.cookies["next-auth.session-token"],
     },
   };
 };
