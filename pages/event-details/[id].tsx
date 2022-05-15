@@ -154,9 +154,8 @@ const EventPage = (props: Props) => {
         const res = await setStatus(id, EventStatus.Started, cookies);
         setLoadingState(false);
       }
-    } else {
-      router.push(`/room/${id}`);
     }
+    router.push(`/room/${id}`);
   };
   const endEvent = async () => {
     setLoadingState(true);
