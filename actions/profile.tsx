@@ -25,7 +25,8 @@ export async function getProfile(
 }
 export async function updateProfilePic(
   email: string,
-  profilePic: string
+  profilePic: string,
+  cookies:string
 ): Promise<{ success: string; profile_pic: string; message: string }> {
   const res = await axios(
     `${process.env.BASE_URL}api/profile/updateprofilepic`,
@@ -35,6 +36,7 @@ export async function updateProfilePic(
       headers: {
         Accept: "applciation/json",
         "Content-Type": "application/json",
+        Cookie:cookies
       },
       data: { email, profilePic },
     }
@@ -43,7 +45,8 @@ export async function updateProfilePic(
 }
 export async function updateDescription(
   email: string,
-  description: string
+  description: string,
+  cookies:string
 ): Promise<{ success: string; description: string; message: string }> {
   const res = await axios(
     `${process.env.BASE_URL}api/profile/updatedescription`,
@@ -53,6 +56,7 @@ export async function updateDescription(
       headers: {
         Accept: "applciation/json",
         "Content-Type": "application/json",
+        Cookie:cookies
       },
       data: { email, description },
     }

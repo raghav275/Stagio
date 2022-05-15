@@ -31,6 +31,7 @@ declare global {
 }
 interface Props {
   event: Event;
+  cookies: string;
 }
 const buttonStyle = css({
   border: "none",
@@ -61,6 +62,7 @@ const EventPage = (props: Props) => {
     status,
     tickets_sold,
   } = props.event;
+  const { cookies } = props;
   const [bookingStat, setBookingStat] = useState(0);
   const [isOwner, setIsOwner] = useState(false);
   const [isBuyOpen, setBuyOpen] = useState(false);
@@ -167,7 +169,7 @@ const EventPage = (props: Props) => {
     } else {
       if (price === 0) {
         try {
-          const res = await bookEvent(id, user.email);
+          const res = await bookEvent(id, user.email, cookies);
           toast.dark("Booked Succesfully");
           setBuyOpen(false);
           setTimeout(() => {
@@ -672,11 +674,16 @@ const EventPage = (props: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  params,
+}) => {
   const res = await getEvent(params?.id as string);
+  const cookies = req.headers.cookie;
   return {
     props: {
       event: res.event,
+      cookies: cookies,
     },
   };
 };

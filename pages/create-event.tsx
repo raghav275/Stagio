@@ -38,8 +38,10 @@ const errorStyle = css({
 interface Props {
   event: Event;
   id: string;
+  cookies: string;
 }
 const CreateEvent = (props: Props) => {
+  const { cookies } = props;
   const [eventState, setEventState] = useState(props.event);
   useEffect(() => {
     setEventState(props.event || {});
@@ -91,6 +93,7 @@ const CreateEvent = (props: Props) => {
         price,
         session?.user.email,
         posterBase64,
+        cookies,
         bannerBase64,
         props.id
       );
@@ -125,7 +128,7 @@ const CreateEvent = (props: Props) => {
     if (!date) {
       errors.date = "Select Date";
     }
-    if (price.length===0 || parseInt(price) < 0) {
+    if (price.length === 0 || parseInt(price) < 0) {
       errors.price = "Select a positive number";
     }
     if (!time) {
@@ -493,7 +496,11 @@ const CreateEvent = (props: Props) => {
     </>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  query,
+}) => {
+  const cookies = req.headers.cookie;
   if (query.id) {
     let id = query.id;
     let res = await getEvent(id as string);
@@ -501,6 +508,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         event: res.event,
         id: id,
+        cookies: cookies,
       },
     };
   } else {
@@ -508,6 +516,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       props: {
         event: null,
         id: null,
+        cookies: cookies,
       },
     };
   }
