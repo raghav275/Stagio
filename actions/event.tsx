@@ -19,7 +19,7 @@ export const createEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
-      Cookie:cookies
+      Authorization:cookies
     },
     data: {
       title,
@@ -63,7 +63,7 @@ export const checkEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
-      Cookie: cookies,
+      Authorization: cookies,
     },
   });
   return res.data;
@@ -104,7 +104,7 @@ export const bookEvent = async (id: string, email: string,cookies:string): Promi
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Cookie:cookies
+      Authorization:cookies
     },
     data: {
       id,

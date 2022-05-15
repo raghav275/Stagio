@@ -16,7 +16,7 @@ export async function getProfile(
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Cookie: isSelf ? cookies! : "",
+        Authorization: isSelf ? cookies! : "",
       },
       data: { username },
     }
@@ -56,7 +56,7 @@ export async function updateDescription(
       headers: {
         Accept: "applciation/json",
         "Content-Type": "application/json",
-        Cookie: cookies,
+        Authorization: cookies,
       },
       data: { email, description },
     }
