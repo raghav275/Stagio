@@ -82,6 +82,7 @@ function Home(props: Props) {
       },
     ],
   };
+  const banner_events = props.events.filter((i) => i.banner !== undefined);
   return (
     <div className={mainStyle}>
       <div
@@ -125,6 +126,29 @@ function Home(props: Props) {
               />
             </Link>
           </Carousel.Item>
+          {banner_events.map((event, i) => {
+            return (
+              <Carousel.Item
+                key={i}
+                className={css({
+                  cursor: "pointer",
+                  maxHeight: "700px",
+                  overflow: "hidden",
+                  WebkitMaskImage:
+                    "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
+                })}
+              >
+                <Link href={`/${event.id}`}>
+                  <img
+                    width="100%"
+                    height="auto"
+                    src={event.banner}
+                    alt="Third slide"
+                  />
+                </Link>
+              </Carousel.Item>
+            );
+          })}
           {/* <Carousel.Item
             style={{
               maxHeight: "700px",

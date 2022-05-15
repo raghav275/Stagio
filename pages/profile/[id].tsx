@@ -58,9 +58,19 @@ const Profile = (props: Props) => {
     inputRef.current?.click();
   };
   const handleDisplayFileDetails = async () => {
-    const img = await getBase64(inputRef.current?.files?.[0]!);
-    const res = await updateProfilePic(user.email, img.split(",")[1]);
-    setProfileImg(res.profile_pic);
+    try {
+      const img = await getBase64(inputRef.current?.files?.[0]!);
+      const res = await updateProfilePic(user.email, img.split(",")[1]);
+      toast.promise(updateProfilePic(user.email, img.split(",")[1]), {
+        pending: "Uploading Profile Picture",
+        success: "Uploaded Profile Picture Successfully",
+        error: "Error Uploading",
+      });
+      setProfileImg(res.profile_pic);
+    } catch (e) {
+      const err = e?.response?.data?.message;
+      toast.dark(err);
+    }
   };
   const onHover = () => {
     setHover(true);

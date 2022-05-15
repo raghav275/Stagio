@@ -38,7 +38,7 @@ export const getEvent = async (
   id?: string
 ): Promise<{ success: string; event: Event | Event[] }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/get`, {
-    withCredentials:true,
+    withCredentials: true,
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -105,6 +105,7 @@ export const bookEvent = async (id: string, email: string): Promise<Event> => {
     },
     data: {
       id,
+      email,
     },
   });
   return res.data;

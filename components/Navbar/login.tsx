@@ -44,20 +44,25 @@ const Login = (props: Props) => {
     //   maxAge: Date.now() + 10 * (60 * 1000), // Expires after 1hr
     //   sameSite: true,
     // });
-    const response = await login(email, password);
-    const res = await signIn<RedirectableProviderType>("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-    if (res?.error !== null) toast.dark("Invalid Credentials");
-    else {
-      toast.dark("Logged In Successfully");
+    try {
+      const res = await signIn<RedirectableProviderType>("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+      if (res?.error !== null) {
+        toast.dark("Invalid Credentials");
+      } else {
+        setEmail("");
+        setPassword("");
+        setOpen(false);
+        toast.dark("Logged In Successfully");
+      }
+    } catch (e) {
+      console.log(e.response.data);
+    } finally {
+      setLoadingState(false);
     }
-    setEmail("");
-    setPassword("");
-    setOpen(false);
-    setLoadingState(false);
   };
 
   return (

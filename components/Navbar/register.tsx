@@ -43,7 +43,7 @@ const Register = (props: Props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const [loadingState,setLoadingState] = useState(false);
+  const [loadingState, setLoadingState] = useState(false);
   const onSubmit = async (e: { preventDefault: () => void }) => {
     if (confirmPass !== password) {
       toast.dark("Passwords Don't Match");
@@ -63,8 +63,9 @@ const Register = (props: Props) => {
     } catch (err: any) {
       const error = err?.response?.data?.error.split(",");
       error.map((e: string) => toast.dark(e));
+    } finally {
+      setLoadingState(false);
     }
-    setLoadingState(false);
   };
 
   return (
@@ -160,7 +161,7 @@ const Register = (props: Props) => {
             })}
             onClick={onSubmit}
           >
-            Register
+            Register{" "}
             {loadingState && (
               <Spinner
                 as="span"

@@ -1,12 +1,10 @@
 import { login } from "@actions/auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import NextAuth, {
-  Session,
-  SessionStrategy,
-  User
-} from "next-auth";
+import NextAuth, { Session, SessionStrategy, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
+import jwt from "jsonwebtoken";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { useRouter } from "next/router";
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -27,7 +25,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
             credentials?.email!,
             credentials?.password!
           );
-          res.setHeader("Set-Cookie",response.headers['set-cookie']);
+          res.setHeader("Set-Cookie", response.headers["set-cookie"]);
           if (response) {
             var user = { ...response.data.user };
             return user;
@@ -37,7 +35,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
         },
       }),
     ],
-    refetchInterval: 1 * 24 * 60 * 60,
+    // refetchInterval: 1 * 24 * 60 * 60,
     secret: process.env.NEXTAUTH_SECRET,
     debug: true,
     session: {
@@ -45,6 +43,26 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
       maxAge: 3 * 24 * 60 * 60,
     },
     jwt: {
+      secret: process.env.NEXTAUTH_SECRET,
+      encode: async (data: any) => {
+        const { secret, token, maxAge } = data;
+        const jwtClaims = {
+          name: token.name,
+          email: token.email,
+          user: token.user,
+          id: token.id,
+        };
+        const encodedToken = jwt.sign(jwtClaims, secret, {
+          expiresIn: "3d",
+          algorithm: "HS512",
+        });
+        return encodedToken;
+      },
+      async decode(data: any) {
+        const { secret, token, maxAge } = data;
+        const verify = jwt.verify(token, secret) as JWT;
+        return verify;
+      },
       maxAge: 3 * 24 * 60 * 60,
     },
     callbacks: {
@@ -54,6 +72,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
             username: user.username,
             email: user.email,
             image: user.image,
+            id: user._id,
           });
         return token;
       },

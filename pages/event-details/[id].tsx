@@ -4,6 +4,7 @@ import {
   razorpay,
   setStatus,
   cancel,
+  bookEvent,
 } from "@actions/event";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -145,23 +146,40 @@ const EventPage = (props: Props) => {
     rzp1.open();
   };
   const startEvent = async () => {
-    if (isOwner) {
-      setLoadingState(true);
-      const res = await setStatus(id, EventStatus.Started);
-      setLoadingState(false);
+    if (bookingStat === EventStatus.Idle) {
+      if (isOwner) {
+        setLoadingState(true);
+        const res = await setStatus(id, EventStatus.Started);
+        setLoadingState(false);
+      }
+    } else {
+      router.push(`/room/${id}`);
     }
-    router.push(`/room/${id}`);
   };
   const endEvent = async () => {
     setLoadingState(true);
     const res = await setStatus(id, EventStatus.Ended);
     setLoadingState(false);
   };
-  const buyTicket = () => {
+  const buyTicket = async () => {
     if (!session?.user) {
       toast.dark("Please Login To Buy Ticket");
     } else {
-      showRazorpay();
+      if (price === 0) {
+        try {
+          const res = await bookEvent(id, user.email);
+          toast.dark("Booked Succesfully");
+          setBuyOpen(false);
+          setTimeout(() => {
+            router.reload();
+          }, 3000);
+        } catch (e) {
+          const err = e?.response?.data?.message;
+          toast.dark(err);
+        }
+      } else {
+        showRazorpay();
+      }
     }
   };
   const cancelBooking = async () => {
@@ -303,7 +321,7 @@ const EventPage = (props: Props) => {
               style={{ display: "flex", alignItems: "center", fontSize: 20 }}
             >
               <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
-                &#8377; {price}
+                {price !== 0 ? `\u20B9 ${price}` : "Free"}
               </p>
             </div>
           )}
@@ -329,7 +347,7 @@ const EventPage = (props: Props) => {
             {status !== EventStatus.Ended ? (
               isOwner ? (
                 <>
-                  Start Now
+                  {status === EventStatus.Started ? "Join In" : "Start Now"}
                   {loadingState && (
                     <Spinner
                       as="span"
@@ -353,7 +371,7 @@ const EventPage = (props: Props) => {
               "Event Ended"
             )}
           </Button>
-          {isOwner && status===EventStatus.Started && (
+          {isOwner && status === EventStatus.Started && (
             <Button
               className={cx(
                 buttonStyle,

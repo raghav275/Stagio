@@ -7,6 +7,7 @@ import styles from "../../styles/Navbar.module.css";
 import { css } from "@emotion/css";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import { loading } from "slices/loadingSlice";
+import { toast } from "react-toastify";
 
 interface Props {
   status: boolean;
@@ -15,7 +16,7 @@ const Forgot = (props: Props) => {
   const { status } = props;
   const [open, setOpen] = useState(status);
   const [email, setEmail] = useState("");
-  const [loadingState,setLoadingState] =useState(false); 
+  const [loadingState, setLoadingState] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -24,13 +25,20 @@ const Forgot = (props: Props) => {
   };
 
   const onSubmit = async (e: { preventDefault: () => void }) => {
-    setLoadingState(true);
-    e.preventDefault();
-    let user = { email };
-    const res = await forgot(email);
-    setEmail("");
-    setOpen(false);
-    setLoadingState(false);
+    try {
+      setLoadingState(true);
+      e.preventDefault();
+      let user = { email };
+      const res = await forgot(email);
+      setEmail("");
+      setOpen(false);
+      toast.dark("Reset Link Sent");
+    } catch (e) {
+      const err = e?.response?.data?.message;
+      toast.dark(err);
+    } finally {
+      setLoadingState(false);
+    }
   };
 
   return (
@@ -84,7 +92,7 @@ const Forgot = (props: Props) => {
             }}
             onClick={onSubmit}
           >
-            Submit
+            Submit{" "}
             {loadingState && (
               <Spinner
                 as="span"

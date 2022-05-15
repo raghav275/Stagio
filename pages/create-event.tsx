@@ -125,8 +125,7 @@ const CreateEvent = (props: Props) => {
     if (!date) {
       errors.date = "Select Date";
     }
-    console.log(price);
-    if (!price || price < 0) {
+    if (price.length===0 || parseInt(price) < 0) {
       errors.price = "Select a positive number";
     }
     if (!time) {
