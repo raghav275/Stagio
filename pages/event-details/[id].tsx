@@ -151,7 +151,7 @@ const EventPage = (props: Props) => {
     if (bookingStat === EventStatus.Idle) {
       if (isOwner) {
         setLoadingState(true);
-        const res = await setStatus(id, EventStatus.Started);
+        const res = await setStatus(id, EventStatus.Started, cookies);
         setLoadingState(false);
       }
     } else {
@@ -160,7 +160,7 @@ const EventPage = (props: Props) => {
   };
   const endEvent = async () => {
     setLoadingState(true);
-    const res = await setStatus(id, EventStatus.Ended);
+    const res = await setStatus(id, EventStatus.Ended, cookies);
     setLoadingState(false);
   };
   const buyTicket = async () => {
@@ -349,7 +349,7 @@ const EventPage = (props: Props) => {
             {status !== EventStatus.Ended ? (
               isOwner ? (
                 <>
-                  {status === EventStatus.Started ? "Join In" : "Start Now"}
+                  {status === EventStatus.Started ? "Join In" : "Start Now"}{" "}
                   {loadingState && (
                     <Spinner
                       as="span"

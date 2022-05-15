@@ -117,13 +117,18 @@ export const bookEvent = async (
   });
   return res.data;
 };
-export const setStatus = async (id: string, status: number) => {
+export const setStatus = async (
+  id: string,
+  status: number,
+  cookies: string
+) => {
   const res = await axios(`${process.env.BASE_URL}api/event/setstatus`, {
     withCredentials: true,
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: cookies,
     },
     data: {
       id,
