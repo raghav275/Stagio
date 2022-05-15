@@ -38,10 +38,10 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
     // refetchInterval: 1 * 24 * 60 * 60,
     secret: process.env.NEXTAUTH_SECRET,
     debug: true,
-    session: {
-      strategy: "jwt" as SessionStrategy,
-      maxAge: 3 * 24 * 60 * 60,
-    },
+    // session: {
+    //   strategy: "jwt" as SessionStrategy,
+    //   // maxAge: 3 * 24 * 60 * 60,
+    // },
     jwt: {
       secret: process.env.NEXTAUTH_SECRET,
       encode: async (data: any) => {
@@ -63,7 +63,7 @@ const nextAuthOptions = (req: NextApiRequest, res: NextApiResponse) => {
         const verify = jwt.verify(token, secret) as JWT;
         return verify;
       },
-      maxAge: 3 * 24 * 60 * 60,
+      // maxAge: 3 * 24 * 60 * 60,
     },
     callbacks: {
       jwt: async ({ token, user }: { token: JWT; user?: User }) => {

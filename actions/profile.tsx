@@ -29,7 +29,8 @@ export async function updateProfilePic(
 ): Promise<{ success: string; profile_pic: string; message: string }> {
   const res = await axios(
     `${process.env.BASE_URL}api/profile/updateprofilepic`,
-    {
+    { 
+      withCredentials:true,
       method: "POST",
       headers: {
         Accept: "applciation/json",
