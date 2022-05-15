@@ -26,11 +26,12 @@ import { Spinner } from "react-bootstrap";
 interface Props {
   profile: User;
   isSelf: boolean;
-  cookies:string
+  cookies: string;
 }
 
 const Profile = (props: Props) => {
-  const {cookies} = props
+  const { cookies } = props;
+  console.log(cookies);
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     if (typeof window !== undefined && window.innerWidth < 800 && !isMobile) {
@@ -62,8 +63,12 @@ const Profile = (props: Props) => {
   const handleDisplayFileDetails = async () => {
     try {
       const img = await getBase64(inputRef.current?.files?.[0]!);
-      const res = await updateProfilePic(user.email, img.split(",")[1],cookies);
-      toast.promise(updateProfilePic(user.email, img.split(",")[1],cookies), {
+      const res = await updateProfilePic(
+        user.email,
+        img.split(",")[1],
+        cookies
+      );
+      toast.promise(updateProfilePic(user.email, img.split(",")[1], cookies), {
         pending: "Uploading Profile Picture",
         success: "Uploaded Profile Picture Successfully",
         error: "Error Uploading",
@@ -84,7 +89,7 @@ const Profile = (props: Props) => {
   const updateDescriptionFunc = async (description: string) => {
     try {
       setLoadingState(true);
-      const res = await updateDescription(email, description,cookies);
+      const res = await updateDescription(email, description, cookies);
       toast.dark("Description Updated Successfully");
       setLoadingState(false);
     } catch (e) {
@@ -703,7 +708,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       profile: res.user,
       isSelf: isSelf,
-      cookies: cookies
+      cookies: cookies,
     },
   };
 };
