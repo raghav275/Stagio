@@ -9,9 +9,9 @@ export const createEvent = async (
   price: number,
   owner: string,
   poster: string,
-  cookies:string,
+  cookies: string,
   banner?: string,
-  event_id?: string,
+  event_id?: string
 ): Promise<{ success: string; event: Event }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/create`, {
     withCredentials: true,
@@ -19,7 +19,7 @@ export const createEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
-      Authorization:cookies
+      Authorization: cookies,
     },
     data: {
       title,
@@ -63,7 +63,7 @@ export const checkEvent = async (
     headers: {
       Accept: "application/json",
       "Access-Control-Allow-Credentials": "true",
-      Authorization: cookies,
+      Cookie: cookies,
     },
   });
   return res.data;
@@ -97,14 +97,18 @@ export const razorpay = async (id: string): Promise<Razorpay> => {
   });
   return res.data;
 };
-export const bookEvent = async (id: string, email: string,cookies:string): Promise<Event> => {
+export const bookEvent = async (
+  id: string,
+  email: string,
+  cookies: string
+): Promise<Event> => {
   const res = await axios(`${process.env.BASE_URL}api/event/book`, {
     withCredentials: true,
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization:cookies
+      Authorization: cookies,
     },
     data: {
       id,

@@ -16,7 +16,7 @@ export async function getProfile(
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: isSelf ? cookies! : "",
+        Cookie: isSelf ? cookies! : "",
       },
       data: { username },
     }
