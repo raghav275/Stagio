@@ -679,11 +679,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
 }) => {
   const res = await getEvent(params?.id as string);
-  const cookies = req.headers.cookie;
+  const cookies = req.cookies;
   return {
     props: {
       event: res.event,
-      cookies: cookies,
+      cookies:
+        cookies["__Secure-next-auth.session-token"] ||
+        cookies["next-auth.session-token"],
     },
   };
 };

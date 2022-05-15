@@ -500,7 +500,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   query,
 }) => {
-  const cookies = req.headers.cookie;
+  const cookies = req.cookies;
   if (query.id) {
     let id = query.id;
     let res = await getEvent(id as string);
@@ -508,7 +508,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
         event: res.event,
         id: id,
-        cookies: cookies,
+        cookies:  cookies["__Secure-next-auth.session-token"] || cookies["next-auth.session-token"],
       },
     };
   } else {
@@ -516,7 +516,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
         event: null,
         id: null,
-        cookies: cookies,
+        cookies: cookies["__Secure-next-auth.session-token"] || cookies["next-auth.session-token"],
       },
     };
   }

@@ -707,7 +707,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {
       profile: res.user,
       isSelf: isSelf,
-      cookies: cookies,
+      cookies: req.cookies["__Secure-next-auth.session-token"] || req.cookies["next-auth.session-token"],
     },
   };
 };
