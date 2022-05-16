@@ -339,7 +339,7 @@ const Profile = (props: Props) => {
             }}
             onClick={() => updateDescriptionFunc(newDescription)}
           >
-            Proceed
+            Proceed{" "}
             {loadingState && (
               <Spinner
                 as="span"
@@ -681,7 +681,7 @@ const Profile = (props: Props) => {
             }}
             onClick={() => updateDescriptionFunc(newDescription)}
           >
-            Proceed
+            Proceed{" "}
             {loadingState && (
               <Spinner
                 as="span"

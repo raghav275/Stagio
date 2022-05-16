@@ -593,7 +593,7 @@ const EventPage = (props: Props) => {
             }}
             onClick={() => endEvent()}
           >
-            Proceed
+            Proceed{" "}
             {loadingState && (
               <Spinner
                 as="span"
@@ -656,7 +656,7 @@ const EventPage = (props: Props) => {
             }}
             onClick={() => cancelBooking()}
           >
-            Proceed
+            Proceed{" "}
             {loadingState && (
               <Spinner
                 as="span"
