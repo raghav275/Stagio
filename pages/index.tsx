@@ -22,8 +22,9 @@ const mainStyle = css({
   backgroundSize: "cover",
 });
 interface Props {
-  events: Event[];
   artists: User[];
+  new_events: Event[];
+  old_events: Event[];
 }
 function Home(props: Props) {
   var settings = {
@@ -82,7 +83,7 @@ function Home(props: Props) {
       },
     ],
   };
-  const banner_events = props.events.filter((i) => i.banner !== undefined);
+  const banner_events = props.new_events.filter((i) => i.banner !== undefined);
   return (
     <div className={mainStyle}>
       <div
@@ -208,7 +209,8 @@ function Home(props: Props) {
             paddingRight: 25,
           }}
         >
-          {!props.events || (props.events && props.events.length === 0) ? (
+          {!props.new_events ||
+          (props.new_events && props.new_events.length === 0) ? (
             <div
               className={css({
                 color: "#ffffff",
@@ -223,7 +225,81 @@ function Home(props: Props) {
             </div>
           ) : (
             <Slider {...settings}>
-              {props.events.map((event: Event, i: number) => {
+              {props.new_events.map((event: Event, i: number) => {
+                return (
+                  <div
+                    key={i}
+                    style={{ background: "transparent", padding: 30 }}
+                  >
+                    <div style={{ padding: 30 }}>
+                      <Card event={event} />
+                    </div>
+                  </div>
+                );
+              })}
+            </Slider>
+          )}
+        </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          padding: 20,
+        }}
+      >
+        <div
+          className={css({
+            display: "flex",
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+          })}
+        >
+          <h3
+            style={{
+              marginLeft: "4vw",
+              fontFamily: "Poppins",
+              color: "#d94b58",
+              fontSize: "3.5vmax",
+            }}
+          >
+            Past Shows
+          </h3>
+        </div>
+        <div
+          style={{
+            border: "4px solid white",
+            width: "14.5vmax",
+            marginLeft: "4vw",
+          }}
+        ></div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            paddingLeft: 25,
+            paddingRight: 25,
+          }}
+        >
+          {!props.new_events ||
+          (props.new_events && props.new_events.length === 0) ? (
+            <div
+              className={css({
+                color: "#ffffff",
+                fontSize: "2.5vmax",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 60,
+              })}
+            >
+              <p>No Past Shows</p>
+            </div>
+          ) : (
+            <Slider {...settings}>
+              {props.old_events.map((event: Event, i: number) => {
                 return (
                   <div
                     key={i}
@@ -349,12 +425,13 @@ function Home(props: Props) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { event } = await getEvent();
+  const { event, new_events, old_events } = await getEvent();
   const { user } = await getProfile(false);
   return {
     props: {
-      events: event,
       artists: user,
+      new_events,
+      old_events,
     },
   };
 };

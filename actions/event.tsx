@@ -38,7 +38,12 @@ export const createEvent = async (
 
 export const getEvent = async (
   id?: string
-): Promise<{ success: string; event: Event | Event[] }> => {
+): Promise<{
+  success: string;
+  event: Event | Event[];
+  new_events: Event[];
+  old_events: Event[];
+}> => {
   const res = await axios(`${process.env.BASE_URL}api/event/get`, {
     withCredentials: true,
     method: "GET",
