@@ -204,8 +204,8 @@ const EventPage = (props: Props) => {
         display: "flex",
         width: "100%",
         backgroundImage:
-          banner &&
-          `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})`,
+          banner ?
+          `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})` : `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(https://ik.imagekit.io/stagiotest/default_6StvZx4Cp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1645810321356)`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",

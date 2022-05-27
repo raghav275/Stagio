@@ -139,7 +139,7 @@ function Home(props: Props) {
                     "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
                 })}
               >
-                <Link href={`/${event.id}`}>
+                <Link href={`/event-details/${event.id}`}>
                   <img
                     width="100%"
                     height="auto"
@@ -283,8 +283,8 @@ function Home(props: Props) {
             paddingRight: 25,
           }}
         >
-          {!props.new_events ||
-          (props.new_events && props.new_events.length === 0) ? (
+          {!props.old_events ||
+          (props.old_events && props.old_events.length === 0) ? (
             <div
               className={css({
                 color: "#ffffff",
@@ -425,7 +425,7 @@ function Home(props: Props) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { event, new_events, old_events } = await getEvent();
+  const { new_events, old_events } = await getEvent();
   const { user } = await getProfile(false);
   return {
     props: {

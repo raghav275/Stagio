@@ -7,6 +7,7 @@ import ErrorPage from "next/error";
 
 interface Props {
   errorCode: string;
+  userRole: number;
 }
 const Room = (props: Props) => {
   const { errorCode } = props;
@@ -21,7 +22,11 @@ const Room = (props: Props) => {
   return errorCode ? (
     <ErrorPage statusCode={404} />
   ) : (
-    <>{roomId && <JitsiComponent roomId={roomId as string} />}</>
+    <>
+      {roomId && (
+        <JitsiComponent userRole={props.userRole} roomId={roomId as string} />
+      )}
+    </>
   );
 };
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
@@ -33,6 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       errorCode: code,
+      userRole: res.user_role,
     },
   };
 };

@@ -10,6 +10,7 @@ declare global {
 }
 interface Props {
   roomId: string;
+  userRole: number;
 }
 let domain = "meet.jit.si";
 let api: any = {};
@@ -52,7 +53,6 @@ const JitsiComponent = (props: Props) => {
   });
   useEffect(() => {
     if (window.JitsiMeetExternalAPI) {
-      
       startMeet();
     } else {
       alert("JitsiMeetExternalAPI not loaded");
@@ -72,12 +72,15 @@ const JitsiComponent = (props: Props) => {
         // overwrite interface properties
         TOOLBAR_BUTTONS: [
           "microphone",
+          "mute-everyone",
           "camera",
           "closedcaptions",
-          "desktop",
+          // "desktop",
           "fullscreen",
-          "fodeviceselection",
+          // "fodeviceselection",
           "hangup",
+          "mute-everyone",
+          "mute-video-everyone",
           // 'profile',
           // 'info',
           "chat",
@@ -85,7 +88,7 @@ const JitsiComponent = (props: Props) => {
           // 'livestreaming',
           // 'etherpad',
           // 'sharedvideo',
-          "settings",
+          props.userRole === 0 ? "" : "settings",
           // 'raisehand',
           "videoquality",
           "filmstrip",

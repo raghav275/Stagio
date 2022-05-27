@@ -61,7 +61,7 @@ export const getEvent = async (
 export const checkEvent = async (
   url: string,
   cookies: string
-): Promise<{ success: string; messsage: string }> => {
+): Promise<{ success: string; messsage: string,user_role:number }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/check/` + url, {
     withCredentials: true,
     method: "GET",
