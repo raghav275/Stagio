@@ -57,6 +57,7 @@ const EventPage = (props: Props) => {
     poster,
     banner,
     id,
+    duration,
     users,
     owner,
     status,
@@ -198,6 +199,8 @@ const EventPage = (props: Props) => {
     }
     setLoadingState(false);
   };
+  const isNew =
+    new Date(date).getDate() >= new Date().getDate() && status !== 2;
   return (
     <div
       style={{
@@ -301,116 +304,136 @@ const EventPage = (props: Props) => {
         <div
           style={{
             display: "flex",
-            flexDirection: "row",
+            flexWrap: "wrap",
             padding: 10,
-            color: "#ffffff",
+            fontSize: 20,
           }}
         >
-          Tickets Sold : &nbsp;
-          <span className={css({ color: "#d94b58" })}> {tickets_sold}</span>
+          <p style={{ color: "#ffffff" }}>{duration} mins</p>
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            padding: 10,
-            alignItems: "center",
-          }}
-        >
-          {bookingStat === BookingStatus.None && (
+        {isNew && (
+          <>
             <div
-              style={{ display: "flex", alignItems: "center", fontSize: 20 }}
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                padding: 10,
+                color: "#ffffff",
+              }}
             >
-              <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
-                {price !== 0 ? `\u20B9 ${price}` : "Free"}
-              </p>
+              Tickets Sold : &nbsp;
+              <span className={css({ color: "#d94b58" })}> {tickets_sold}</span>
             </div>
-          )}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                padding: 10,
+                alignItems: "center",
+              }}
+            >
+              {bookingStat === BookingStatus.None && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: 20,
+                  }}
+                >
+                  <p style={{ margin: 0, paddingRight: 10, color: "#ffffff" }}>
+                    {price !== 0 ? `\u20B9 ${price}` : "Free"}
+                  </p>
+                </div>
+              )}
 
-          <Button
-            className={buttonStyle}
-            disabled={
-              (isOwner && new Date(date).getDate() !== new Date().getDate()) ||
-              (bookingStat !== BookingStatus.Bought &&
-                status === EventStatus.Started) ||
-              (bookingStat === BookingStatus.Bought &&
-                status !== EventStatus.Started) ||
-              (bookingStat !== BookingStatus.Bought &&
-                new Date(date).getDate() <= new Date().getDate())
-            }
-            onClick={() => {
-              isOwner ||
-              (bookingStat === BookingStatus.Bought &&
-                status === EventStatus.Started)
-                ? startEvent()
-                : bookingStat === BookingStatus.Bought &&
-                  status === EventStatus.Idle
-                ? toast.dark("Event has not yet started")
-                : bookingStat !== BookingStatus.Cancelled
-                ? setBuyOpen(true)
-                : toast.dark("You've cancelled your booking earlier");
-            }}
-          >
-            {status !== EventStatus.Ended ? (
-              isOwner ? (
-                <>
-                  {status === EventStatus.Started ? "Join In" : "Start Now"}{" "}
-                  {loadingState && (
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                    />
-                  )}
-                </>
-              ) : bookingStat === BookingStatus.Bought ? (
-                status === EventStatus.Started ? (
-                  "Join Now"
+              <Button
+                className={buttonStyle}
+                disabled={
+                  (isOwner &&
+                    new Date(date).getDate() < new Date().getDate()) ||
+                  (bookingStat !== BookingStatus.Bought &&
+                    status === EventStatus.Started) ||
+                  (bookingStat === BookingStatus.Bought &&
+                    status !== EventStatus.Started) ||
+                  (bookingStat !== BookingStatus.Bought &&
+                    new Date(date).getDate() <= new Date().getDate())
+                }
+                onClick={() => {
+                  isOwner ||
+                  (bookingStat === BookingStatus.Bought &&
+                    status === EventStatus.Started)
+                    ? startEvent()
+                    : bookingStat === BookingStatus.Bought &&
+                      status === EventStatus.Idle
+                    ? toast.dark("Event has not yet started")
+                    : bookingStat !== BookingStatus.Cancelled
+                    ? setBuyOpen(true)
+                    : toast.dark("You've cancelled your booking earlier");
+                }}
+              >
+                {status !== EventStatus.Ended ? (
+                  isOwner ? (
+                    <>
+                      {status === EventStatus.Started ? "Join In" : "Start Now"}{" "}
+                      {loadingState && (
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </>
+                  ) : bookingStat === BookingStatus.Bought ? (
+                    status === EventStatus.Started ? (
+                      "Join Now"
+                    ) : (
+                      "Already Bought"
+                    )
+                  ) : (
+                    "Buy Now"
+                  )
                 ) : (
-                  "Already Bought"
-                )
-              ) : (
-                "Buy Now"
-              )
-            ) : (
-              "Event Ended"
-            )}
-          </Button>
-          {isOwner && status === EventStatus.Started && (
-            <Button
-              className={cx(
-                buttonStyle,
-                css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
+                  "Event Ended"
+                )}
+              </Button>
+              {isOwner && status === EventStatus.Started && (
+                <Button
+                  className={cx(
+                    buttonStyle,
+                    css({ backgroundColor: "#5a5a5a", marginLeft: 10 })
+                  )}
+                  onClick={() => {
+                    setEndOpen(true);
+                  }}
+                >
+                  End Event
+                </Button>
               )}
-              onClick={() => {
-                setEndOpen(true);
-              }}
-            >
-              End Event
-            </Button>
-          )}
-          {bookingStat === BookingStatus.Bought && status === EventStatus.Idle && (
-            <Button
-              className={cx(
-                buttonStyle,
-                css({
-                  backgroundColor: "#5a5a5a",
-                  marginLeft: 10,
-                  "&:focus": {
-                    backgroundColor: "#5a5a5a !important",
-                  },
-                })
-              )}
-              onClick={() => {
-                setCancelOpen(true);
-              }}
-            >
-              Cancel Booking
-            </Button>
-          )}
-        </div>
+              {bookingStat === BookingStatus.Bought &&
+                status === EventStatus.Idle && (
+                  <Button
+                    className={cx(
+                      buttonStyle,
+                      css({
+                        backgroundColor: "#5a5a5a",
+                        marginLeft: 10,
+                        "&:focus": {
+                          backgroundColor: "#5a5a5a !important",
+                        },
+                      })
+                    )}
+                    onClick={() => {
+                      setCancelOpen(true);
+                    }}
+                  >
+                    Cancel Booking
+                  </Button>
+                )}
+            </div>
+          </>
+        )}
       </div>
       <div
         className={css({

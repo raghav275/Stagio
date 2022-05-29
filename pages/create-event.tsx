@@ -72,7 +72,8 @@ const CreateEvent = (props: Props) => {
   const { data: session, status } = useSession();
   const [url, setUrl] = useState<string>();
   const submitEvent = async (val: FormikValues) => {
-    const { title, description, date, time, price, poster, banner } = val;
+    const { title, description, date, time, price, poster, banner, duration } =
+      val;
     let posterBase64 =
       poster[0] &&
       (poster[0].data_url.includes(",")
@@ -93,6 +94,7 @@ const CreateEvent = (props: Props) => {
         price,
         session?.user.email,
         posterBase64,
+        duration,
         cookies,
         bannerBase64,
         props.id
@@ -115,10 +117,11 @@ const CreateEvent = (props: Props) => {
     date?: string;
     time?: string;
     poster?: string;
+    duration?: string;
   }
   const validateForm = (val: FormikValues) => {
     let errors: ErrorForm = {};
-    const { title, description, date, time, price, poster } = val;
+    const { title, description, date, time, price, poster, duration } = val;
     if (title.length === 0) {
       errors.title = "Enter title";
     }
@@ -131,6 +134,9 @@ const CreateEvent = (props: Props) => {
     if (price.length === 0 || parseInt(price) < 0) {
       errors.price = "Select a positive number";
     }
+    if (duration.length === 0 || parseInt(duration) < 0) {
+      errors.duration = "Select a positive number";
+    }
     if (!time) {
       errors.time = "Select Time";
     }
@@ -139,8 +145,17 @@ const CreateEvent = (props: Props) => {
     }
     return errors;
   };
-  const { title, description, price, date, time, id, poster, banner } =
-    eventState || {};
+  const {
+    title,
+    description,
+    price,
+    date,
+    time,
+    id,
+    poster,
+    banner,
+    duration,
+  } = eventState || {};
   const key = date ? "1" : "2";
   return (
     <>
@@ -171,6 +186,7 @@ const CreateEvent = (props: Props) => {
               date: (date && date.split("T")[0]) || undefined,
               time: props.id ? time : null,
               price: price || 0,
+              duration: duration || 0,
               poster: [{ data_url: poster }] || [],
               banner: [{ data_url: banner }] || [],
             }}
@@ -267,6 +283,28 @@ const CreateEvent = (props: Props) => {
                         />
                         {errors.price && (
                           <div className={errorStyle}>{errors.price}</div>
+                        )}
+                      </div>
+                      <div>
+                        <div className={smallHeading}>Duration (in mins)*</div>
+                        <TextField
+                          type="number"
+                          value={values.duration}
+                          placeholder="Duration"
+                          onChange={(e) => {
+                            setFieldValue("duration", e.target.value);
+                          }}
+                          InputProps={{
+                            classes: {
+                              underline: classes.underline,
+                              root: classes.root,
+                            },
+                            inputProps: { min: 0 },
+                          }}
+                          error={!!errors.duration}
+                        />
+                        {errors.duration && (
+                          <div className={errorStyle}>{errors.duration}</div>
                         )}
                       </div>
                       <div>
@@ -508,7 +546,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
         event: res.event,
         id: id,
-        cookies:  cookies["__Secure-next-auth.session-token"] || cookies["next-auth.session-token"],
+        cookies:
+          cookies["__Secure-next-auth.session-token"] ||
+          cookies["next-auth.session-token"],
       },
     };
   } else {
@@ -516,7 +556,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       props: {
         event: null,
         id: null,
-        cookies: cookies["__Secure-next-auth.session-token"] || cookies["next-auth.session-token"],
+        cookies:
+          cookies["__Secure-next-auth.session-token"] ||
+          cookies["next-auth.session-token"],
       },
     };
   }

@@ -9,6 +9,7 @@ export const createEvent = async (
   price: number,
   owner: string,
   poster: string,
+  duration: number,
   cookies: string,
   banner?: string,
   event_id?: string
@@ -29,6 +30,7 @@ export const createEvent = async (
       price,
       owner,
       poster,
+      duration,
       banner,
       event_id,
     },
@@ -61,7 +63,7 @@ export const getEvent = async (
 export const checkEvent = async (
   url: string,
   cookies: string
-): Promise<{ success: string; messsage: string,user_role:number }> => {
+): Promise<{ success: string; messsage: string; user_role: number }> => {
   const res = await axios(`${process.env.BASE_URL}api/event/check/` + url, {
     withCredentials: true,
     method: "GET",

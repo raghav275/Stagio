@@ -7,11 +7,12 @@ export interface Event {
   price: number;
   id: string;
   owner: string;
+  duration: number;
   url: string;
   poster: string;
   banner?: string;
   status: number;
-  tickets_sold:number;
+  tickets_sold: number;
 }
 export interface Razorpay {
   amount: number;
@@ -39,7 +40,7 @@ export enum BookingStatus {
   Cancelled = 2,
 }
 
-export enum Status{
-  NEW=1,
-  OLD=0
+export enum Status {
+  NEW = 1,
+  OLD = 0,
 }
