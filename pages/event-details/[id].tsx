@@ -203,9 +203,9 @@ const EventPage = (props: Props) => {
       style={{
         display: "flex",
         width: "100%",
-        backgroundImage:
-          banner ?
-          `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})` : `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(https://ik.imagekit.io/stagiotest/default_6StvZx4Cp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1645810321356)`,
+        backgroundImage: banner
+          ? `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(${banner})`
+          : `linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)),url(https://ik.imagekit.io/stagiotest/default_6StvZx4Cp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1645810321356)`,
         backgroundAttachment: "fixed",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -330,7 +330,13 @@ const EventPage = (props: Props) => {
           <Button
             className={buttonStyle}
             disabled={
-              isOwner && new Date(date).getDate() !== new Date().getDate()
+              (isOwner && new Date(date).getDate() !== new Date().getDate()) ||
+              (bookingStat !== BookingStatus.Bought &&
+                status === EventStatus.Started) ||
+              (bookingStat === BookingStatus.Bought &&
+                status !== EventStatus.Started) ||
+              (bookingStat !== BookingStatus.Bought &&
+                new Date(date).getDate() <= new Date().getDate())
             }
             onClick={() => {
               isOwner ||
@@ -684,7 +690,8 @@ export const getServerSideProps: GetServerSideProps = async ({
       event: res.event,
       cookies:
         cookies["__Secure-next-auth.session-token"] ||
-        cookies["next-auth.session-token"],
+        cookies["next-auth.session-token"] ||
+        null,
     },
   };
 };

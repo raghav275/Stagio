@@ -12,7 +12,7 @@ interface Props {
   roomId: string;
   userRole: number;
 }
-let domain = "meet.jit.si";
+let domain = "meet.stagiolive.com";
 let api: any = {};
 const JitsiComponent = (props: Props) => {
   const router = useRouter();
@@ -21,6 +21,9 @@ const JitsiComponent = (props: Props) => {
   const { roomId } = props;
   const [isFinished, setIsFinished] = useState(false);
   const handleClose = () => {
+    router.push(`/event-details/${roomId}`);
+  };
+  const handleLeaving = () => {
     router.push(`/event-details/${roomId}`);
   };
 
@@ -51,14 +54,17 @@ const JitsiComponent = (props: Props) => {
     isAudioMuted: false,
     isVideoMuted: false,
   });
+  // useEffect(() => {
+  //   if (session) {
+
+  //   }
+  // }, );
   useEffect(() => {
     if (window.JitsiMeetExternalAPI) {
-      startMeet();
-    } else {
-      alert("JitsiMeetExternalAPI not loaded");
+      startMeet(session?.user.username);
     }
   }, []);
-  const startMeet = () => {
+  const startMeet = (username: string) => {
     const options = {
       roomName: room.room,
 
@@ -105,22 +111,26 @@ const JitsiComponent = (props: Props) => {
         CLOSE_PAGE_GUEST_HINT: false,
         ENABLE_FEEDBACK_ANIMATION: false,
         SHOW_CHROME_EXTENSION_BANNER: false,
+        SHOW_JITSI_WATERMARK: false,
+        SHOW_BRAND_WATERMARK: false,
       },
 
       parentNode: document.querySelector("#jitsi-iframe"),
       userInfo: {
-        displayName: user?.username,
+        displayName: username,
       },
     };
     api = new window.JitsiMeetExternalAPI(domain, options);
     api.addEventListeners({
       readyToClose: handleClose,
+      videoConferenceLeft: handleLeaving,
       // participantLeft: handleParticipantLeft,
       // participantJoined: handleParticipantJoined,
       // audioMuteStatusChanged: handleMuteStatus,
       // videoMuteStatusChanged: handleVideoStatus,
     });
     // api.execute()
+    // api.executeCommand("displayName", `${room.user.name}`);
   };
   return (
     <div

@@ -109,6 +109,51 @@ button.close {
   margin-left: 30px;
   top: 30px;
 }
+@media screen and (max-width:4000px) {
+  .carousel-item img {
+    height: 1280px !important;
+  }
+  .carousel-item {
+    max-height: 1280px !important;
+  }
+  
+}
+@media screen and (max-width:1440px) {
+  .carousel-item img {
+    height: 740px !important;
+  }
+  .carousel-item {
+    max-height: 740px !important;
+  }
+  
+}
+@media screen and (max-width:1080px) {
+  .carousel-item img {
+   height: 500px !important;
+  }
+  .carousel-item {
+    max-height: 500px !important;
+  }
+  
+}
+@media screen and (max-width:640px) {
+  .carousel-item img {
+   height: 300px !important;
+  }
+  .carousel-item {
+    max-height: 300px !important;
+  }
+  
+}
+@media screen and (max-width:450px) {
+  .carousel-item img {
+   height: 230px !important;
+  }
+  .carousel-item {
+    max-height: 230px !important;
+  }
+  
+}
 @media only screen and (max-width: 768px) {
   .coming-soon {
     font-size: 40px;

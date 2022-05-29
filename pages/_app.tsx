@@ -1,6 +1,6 @@
 import Navbar from "@components/Navbar";
 import { store } from "app/store";
-import Script from 'next/script'
+import Script from "next/script";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
@@ -69,7 +69,7 @@ export default function MyApp({
         />
       </Head>
       <CookiesProvider>
-        <script src="https://meet.jit.si/external_api.js" />
+        <script src="https://meet.stagiolive.com/external_api.js" />
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <SessionProvider session={session}>
           <NextNProgress

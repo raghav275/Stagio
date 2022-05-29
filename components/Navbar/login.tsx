@@ -47,7 +47,7 @@ const Login = (props: Props) => {
     try {
       const res = await signIn<RedirectableProviderType>("credentials", {
         redirect: false,
-        email,
+        email: email.toLocaleLowerCase(),
         password,
       });
       if (res?.error !== null) {

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/Card.module.css";
 import Link from "next/link";
-import { css } from "@emotion/css";
-import { BookingStatus, Event } from "@typings/event";
+import { cx, css } from "@emotion/css";
+import { BookingStatus, Event, Status } from "@typings/event";
 import { useSession } from "next-auth/react";
 import { formatISO, parse } from "date-fns";
 import { bookingStatus } from "@actions/event";
 
 interface Props {
   event: Event;
+  status: Status;
 }
 const Card = (props: Props) => {
   const { data: session, status } = useSession();
@@ -44,8 +45,9 @@ const Card = (props: Props) => {
   function mergeDateandTime(date: string, time: string) {
     return `${date.split("T")[0]}T${time.split("T")[1]}`;
   }
+  const oldStyle = props.status === Status.OLD ? styles.old : "";
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${oldStyle}`}>
       <img src={poster} />
       <div className={styles.info}>
         <h3>{title}</h3>
@@ -57,8 +59,18 @@ const Card = (props: Props) => {
           {description}
         </p>
         <Link href={`/event-details/${id}`}>
-          <button>
-            {isOwner ? "View Show" : bookingStat===BookingStatus.Bought ? "Already Bought" : "Buy Ticket"}
+          <button
+            className={css({
+              "&:hover": {
+                backgroundColor: "#d94b58 !important",
+              },
+            })}
+          >
+            {isOwner || props.status === Status.OLD
+              ? "View Show"
+              : bookingStat === BookingStatus.Bought
+              ? "Already Bought"
+              : "Buy Ticket"}
           </button>
         </Link>
       </div>

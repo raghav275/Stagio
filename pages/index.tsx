@@ -4,7 +4,7 @@ import Card from "@components/Card";
 import Circle from "@components/Circle";
 import Footer from "@components/Footer";
 import { css } from "@emotion/css";
-import { Event } from "@typings/event";
+import { Event, Status } from "@typings/event";
 import { User } from "@typings/profile";
 import { NextPageContext } from "next";
 import Link from "next/link";
@@ -94,7 +94,7 @@ function Home(props: Props) {
           <Carousel.Item
             className={css({
               cursor: "pointer",
-              maxHeight: "700px",
+
               overflow: "hidden",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
@@ -112,7 +112,7 @@ function Home(props: Props) {
           <Carousel.Item
             className={css({
               cursor: "pointer",
-              maxHeight: "700px",
+
               overflow: "hidden",
               WebkitMaskImage:
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
@@ -133,7 +133,7 @@ function Home(props: Props) {
                 key={i}
                 className={css({
                   cursor: "pointer",
-                  maxHeight: "700px",
+
                   overflow: "hidden",
                   WebkitMaskImage:
                     "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
@@ -232,7 +232,7 @@ function Home(props: Props) {
                     style={{ background: "transparent", padding: 30 }}
                   >
                     <div style={{ padding: 30 }}>
-                      <Card event={event} />
+                      <Card status={Status.NEW} event={event} />
                     </div>
                   </div>
                 );
@@ -306,7 +306,7 @@ function Home(props: Props) {
                     style={{ background: "transparent", padding: 30 }}
                   >
                     <div style={{ padding: 30 }}>
-                      <Card event={event} />
+                      <Card status={Status.OLD} event={event} />
                     </div>
                   </div>
                 );

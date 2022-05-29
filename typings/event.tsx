@@ -38,3 +38,8 @@ export enum BookingStatus {
   Bought = 1,
   Cancelled = 2,
 }
+
+export enum Status{
+  NEW=1,
+  OLD=0
+}

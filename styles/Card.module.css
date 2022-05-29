@@ -43,6 +43,9 @@
   left: 0;
   border-radius: 15px;
 }
+.old:hover img{
+  filter: grayscale(100%);
+}
 .card .info {
   position: relative;
   z-index: 3;

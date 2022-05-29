@@ -29,7 +29,7 @@ const Forgot = (props: Props) => {
       setLoadingState(true);
       e.preventDefault();
       let user = { email };
-      const res = await forgot(email);
+      const res = await forgot(email.toLocaleLowerCase());
       setEmail("");
       setOpen(false);
       toast.dark("Reset Link Sent");

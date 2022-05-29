@@ -52,9 +52,18 @@ const Register = (props: Props) => {
     e.preventDefault();
     setLoadingState(true);
     try {
-      const res = await register(name, username, email, password);
+      const res = await register(
+        name,
+        username,
+        email.toLocaleLowerCase(),
+        password
+      );
       toast.dark("Registered Succesfully");
-      signIn("credentials", { redirect: false, email, password });
+      signIn("credentials", {
+        redirect: false,
+        email: email.toLocaleLowerCase(),
+        password,
+      });
       setName("");
       setUsername("");
       setEmail("");
