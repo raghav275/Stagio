@@ -111,10 +111,10 @@ button.close {
 }
 @media screen and (max-width:4000px) {
   .carousel-item img {
-    height: 1280px !important;
+    height: 1024px !important;
   }
   .carousel-item {
-    max-height: 1280px !important;
+    max-height: 1024px !important;
   }
   
 }
@@ -147,10 +147,10 @@ button.close {
 }
 @media screen and (max-width:450px) {
   .carousel-item img {
-   height: 230px !important;
+   height: 180px !important;
   }
   .carousel-item {
-    max-height: 230px !important;
+    max-height: 180px !important;
   }
   
 }
