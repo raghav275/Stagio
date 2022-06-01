@@ -199,7 +199,10 @@ const EventPage = (props: Props) => {
     }
     setLoadingState(false);
   };
-  const isNew = (new Date(e.date) - new Date()) / 36e5 >= -24 && e.status !== 2;
+  const currDate = new Date();
+  const eventDate = new Date(date);
+  const hourDiff = (currDate.valueOf() - eventDate.valueOf()) / 36e5;
+  const isNew = hourDiff >= -24 && status !== 2;
   return (
     <div
       style={{
