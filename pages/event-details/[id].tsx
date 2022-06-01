@@ -199,8 +199,7 @@ const EventPage = (props: Props) => {
     }
     setLoadingState(false);
   };
-  const isNew =
-    new Date(date).getDate() >= new Date().getDate() && status !== 2;
+  const isNew = (new Date(e.date) - new Date()) / 36e5 >= -24 && e.status !== 2;
   return (
     <div
       style={{
