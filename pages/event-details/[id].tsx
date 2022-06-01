@@ -201,7 +201,7 @@ const EventPage = (props: Props) => {
   };
   const currDate = new Date();
   const eventDate = new Date(date);
-  const hourDiff = (currDate.valueOf() - eventDate.valueOf()) / 36e5;
+  const hourDiff = (eventDate.valueOf() - currDate.valueOf()) / 36e5;
   const isNew = hourDiff >= -24 && status !== 2;
   return (
     <div
