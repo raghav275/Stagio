@@ -52,7 +52,7 @@ function Home(props: Props) {
     ],
   };
   var artistSettings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: 6,
