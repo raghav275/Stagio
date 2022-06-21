@@ -49,12 +49,17 @@ const Register = (props: Props) => {
       toast.dark("Passwords Don't Match");
       return;
     }
+    console.log(username.split(" "));
+     let usernameValidation = username;
+    if (usernameValidation.split(" ").length > 1) {
+      toast.dark("Username cannot contain spaces");
+    }
     e.preventDefault();
     setLoadingState(true);
     try {
       const res = await register(
         name,
-        username,
+        username.trim(),
         email.toLocaleLowerCase(),
         password
       );
