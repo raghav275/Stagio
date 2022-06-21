@@ -161,6 +161,11 @@ const EventPage = (props: Props) => {
   const endEvent = async () => {
     setLoadingState(true);
     const res = await setStatus(id, EventStatus.Ended, cookies);
+    setEndOpen(false);
+    toast.dark("Event Ended Succesfully");
+    setTimeout(() => {
+      router.reload();
+    }, 3000);
     setLoadingState(false);
   };
   const buyTicket = async () => {
@@ -351,14 +356,18 @@ const EventPage = (props: Props) => {
               <Button
                 className={buttonStyle}
                 disabled={
-                  (isOwner ?
-                    Math.abs(new Date(date).valueOf() - new Date().valueOf()) / 36e5 >= 24 :
-                  (bookingStat !== BookingStatus.Bought &&
-                    status === EventStatus.Started) ||
-                  (bookingStat === BookingStatus.Bought &&
-                    status !== EventStatus.Started) ||
-                  (bookingStat !== BookingStatus.Bought &&
-                    new Date(date).getDate() <= new Date().getDate()))
+                  isOwner
+                    ? Math.abs(
+                        new Date(date).valueOf() - new Date().valueOf()
+                      ) /
+                        36e5 >=
+                      24
+                    : (bookingStat !== BookingStatus.Bought &&
+                        status === EventStatus.Started) ||
+                      (bookingStat === BookingStatus.Bought &&
+                        status !== EventStatus.Started) ||
+                      (bookingStat !== BookingStatus.Bought &&
+                        new Date(date).getDate() <= new Date().getDate())
                 }
                 onClick={() => {
                   isOwner ||

@@ -56,7 +56,9 @@ const Footer = () => {
               />
             </a>
             <FacebookIcon style={{ color: "#5a5a5a" }} />
-            <TwitterIcon style={{ color: "#5a5a5a" }} />
+            <a href="https://www.twitter.com/stagiolive">
+              <TwitterIcon style={{ color: "#5a5a5a" }} />
+            </a>
           </div>
         </div>
       </div>

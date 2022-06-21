@@ -50,9 +50,10 @@ const Register = (props: Props) => {
       return;
     }
     console.log(username.split(" "));
-     let usernameValidation = username;
+    let usernameValidation = username;
     if (usernameValidation.split(" ").length > 1) {
       toast.dark("Username cannot contain spaces");
+      return;
     }
     e.preventDefault();
     setLoadingState(true);
