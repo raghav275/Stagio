@@ -24,6 +24,8 @@ import ToolTip from "@material-ui/core/Tooltip";
 import Spinner from "react-bootstrap/Spinner";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { loading } from "slices/loadingSlice";
+import Image from 'next/image';
+
 declare global {
   interface Window {
     Razorpay: any;
@@ -455,16 +457,16 @@ const EventPage = (props: Props) => {
           flex: 1,
         })}
       >
-        <img
-          style={{
+        <Image
+          className={css({
             objectFit: "cover",
             width: "280px",
             height: "360px",
             borderRadius: 20,
             boxShadow: "rgb(0 0 0 / 50%) 0px 0px 18px 20px",
-          }}
+          })}
           src={poster}
-        ></img>
+        />
       </div>
       <Modal
         show={isBuyOpen}
@@ -493,14 +495,14 @@ const EventPage = (props: Props) => {
               justifyContent: "space-evenly",
             })}
           >
-            <img
+            <Image
               className={css({
                 width: "50%",
                 margin: 20,
                 borderRadius: "22px",
               })}
               src={poster}
-            ></img>
+            />
             <div
               className={css({
                 display: "flex",

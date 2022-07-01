@@ -1,27 +1,24 @@
-import React, { useState, useEffect, useRef } from "react";
-import InstagramIcon from "@material-ui/icons/Instagram";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import TwitterIcon from "@material-ui/icons/Twitter";
-import EditIcon from "@material-ui/icons/Edit";
-import Button from "react-bootstrap/Button";
-import { useAppSelector } from "@app/hooks";
-import { GetServerSideProps } from "next";
 import {
   getProfile,
   updateDescription,
   updateProfilePic,
 } from "@actions/profile";
-import { User } from "@typings/profile";
-import { Event } from "@typings/event";
+import Circle from "@components/Circle";
 import EventItem from "@components/EventItem";
 import { css } from "@emotion/css";
-import { useSession } from "next-auth/react";
-import getBase64 from "@utils/getBase64";
-import Circle from "@components/Circle";
-import Modal from "react-bootstrap/Modal";
 import { Input } from "@material-ui/core";
-import { toast } from "react-toastify";
+import EditIcon from "@material-ui/icons/Edit";
+import { Event } from "@typings/event";
+import { User } from "@typings/profile";
+import getBase64 from "@utils/getBase64";
+import { GetServerSideProps } from "next";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+import React, { useEffect, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { toast } from "react-toastify";
 
 interface Props {
   profile: User;
@@ -369,8 +366,8 @@ const Profile = (props: Props) => {
         onMouseLeave={onLeave}
         style={{ width: "33.33vw" }}
       >
-        <img
-          style={{
+        <Image
+          className={css({
             opacity: hover ? 0.5 : 1,
             objectFit: "cover",
             height: "calc(100vh - 60px)",
@@ -378,9 +375,9 @@ const Profile = (props: Props) => {
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
             transition: ".5s ease",
-          }}
+          })}
           src={profileImg || profilePic}
-        ></img>
+        />
         {isUser && (
           <div
             className={

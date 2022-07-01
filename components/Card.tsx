@@ -6,6 +6,7 @@ import { BookingStatus, Event, Status } from "@typings/event";
 import { useSession } from "next-auth/react";
 import { formatISO, parse } from "date-fns";
 import { bookingStatus } from "@actions/event";
+import Image from "next/image";
 
 interface Props {
   event: Event;
@@ -48,7 +49,7 @@ const Card = (props: Props) => {
   const oldStyle = props.status === Status.OLD ? styles.old : "";
   return (
     <div className={`${styles.card} ${oldStyle}`}>
-      <img src={poster} />
+      <Image src={poster} />
       <div className={styles.info}>
         <h3>{title}</h3>
         <p

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { css, cx } from "@emotion/css";
 import { User } from "typings/profile";
+import Image from 'next/image';
 interface Props {
   user: User;
 }
@@ -20,12 +21,12 @@ const Circle = (props: Props) => {
           borderRadius: 360,
         }}
       >
-        <img
+        <Image
           width="180px"
           height="180px"
-          style={{ objectFit: "cover" }}
+          className={css({ objectFit: "cover" })}
           src={profilePic}
-        ></img>
+        />
       </div>
       <p
         style={{

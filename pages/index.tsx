@@ -13,6 +13,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 import { GetServerSideProps } from "next";
+import Image from 'next/image';
 
 const mainStyle = css({
   width: "100%",
@@ -101,7 +102,7 @@ function Home(props: Props) {
             })}
           >
             <Link href={"/about"}>
-              <img
+              <Image
                 width="100%"
                 height="auto"
                 src="https://ik.imagekit.io/stagiotest/banner_slide_anei1bMT8.png?ik-sdk-version=javascript-1.4.3&updatedAt=1656692325139"
@@ -119,7 +120,7 @@ function Home(props: Props) {
             })}
           >
             <Link href={"/about"}>
-              <img
+              <Image
                 width="100%"
                 height="auto"
                 src="https://ik.imagekit.io/stagiotest/banner_slide1_plf_rEWRp.png?ik-sdk-version=javascript-1.4.3&updatedAt=1651911413080"
@@ -140,10 +141,10 @@ function Home(props: Props) {
                 })}
               >
                 <Link href={`/event-details/${event.id}`}>
-                  <img
+                  <Image
                     width="100%"
                     height="auto"
-                    src={event.banner}
+                    src={event.banner!}
                     alt="Third slide"
                   />
                 </Link>
@@ -158,7 +159,7 @@ function Home(props: Props) {
                 "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%)",
             }}
           >
-            <img
+            <Image
               width="100%"
               height="auto"
               src="https://www.live-now.com/image/1920/1080/c627aebb-20d4-4872-b1d3-3e7dfb5d22ec.jpg?v=20210429120129"
