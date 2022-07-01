@@ -457,7 +457,7 @@ const EventPage = (props: Props) => {
           flex: 1,
         })}
       >
-        <Image
+        <img
           className={css({
             objectFit: "cover",
             width: "280px",
@@ -465,8 +465,6 @@ const EventPage = (props: Props) => {
             borderRadius: 20,
             boxShadow: "rgb(0 0 0 / 50%) 0px 0px 18px 20px",
           })}
-          width="280px"
-          height="360px"
           src={poster}
         />
       </div>
@@ -497,14 +495,12 @@ const EventPage = (props: Props) => {
               justifyContent: "space-evenly",
             })}
           >
-            <Image
+            <img
               className={css({
                 width: "50%",
                 margin: 20,
                 borderRadius: "22px",
               })}
-              width="50%"
-              layout="responsive"
               src={poster}
             />
             <div
