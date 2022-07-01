@@ -364,9 +364,9 @@ const Profile = (props: Props) => {
       <div
         onMouseEnter={onHover}
         onMouseLeave={onLeave}
-        style={{ width: "33.33vw" }}
+        style={{ width: "33.33vw", cursor: "pointer" }}
       >
-        <Image
+        <img
           className={css({
             opacity: hover ? 0.5 : 1,
             objectFit: "cover",
@@ -376,8 +376,6 @@ const Profile = (props: Props) => {
             borderBottomRightRadius: 20,
             transition: ".5s ease",
           })}
-          height="calc(100vh - 60px)"
-          width="33.33vw"
           src={profileImg || profilePic}
         />
         {isUser && (
@@ -710,7 +708,8 @@ export const getServerSideProps: GetServerSideProps = async ({
       isSelf: isSelf,
       cookies:
         req.cookies["__Secure-next-auth.session-token"] ||
-        req.cookies["next-auth.session-token"],
+        req.cookies["next-auth.session-token"] ||
+        null,
     },
   };
 };

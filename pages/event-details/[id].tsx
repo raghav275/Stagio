@@ -24,7 +24,7 @@ import ToolTip from "@material-ui/core/Tooltip";
 import Spinner from "react-bootstrap/Spinner";
 import { useAppDispatch, useAppSelector } from "@app/hooks";
 import { loading } from "slices/loadingSlice";
-import Image from 'next/image';
+import Image from "next/image";
 
 declare global {
   interface Window {
@@ -465,6 +465,8 @@ const EventPage = (props: Props) => {
             borderRadius: 20,
             boxShadow: "rgb(0 0 0 / 50%) 0px 0px 18px 20px",
           })}
+          width="280px"
+          height="360px"
           src={poster}
         />
       </div>
@@ -501,6 +503,8 @@ const EventPage = (props: Props) => {
                 margin: 20,
                 borderRadius: "22px",
               })}
+              width="50%"
+              layout="responsive"
               src={poster}
             />
             <div
