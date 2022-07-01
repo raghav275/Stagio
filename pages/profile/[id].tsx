@@ -376,6 +376,8 @@ const Profile = (props: Props) => {
             borderBottomRightRadius: 20,
             transition: ".5s ease",
           })}
+          height="calc(100vh - 60px)"
+          width="33.33vw"
           src={profileImg || profilePic}
         />
         {isUser && (

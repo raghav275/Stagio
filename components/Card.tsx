@@ -49,7 +49,7 @@ const Card = (props: Props) => {
   const oldStyle = props.status === Status.OLD ? styles.old : "";
   return (
     <div className={`${styles.card} ${oldStyle}`}>
-      <Image src={poster} />
+      <Image src={poster} layout="fill" />
       <div className={styles.info}>
         <h3>{title}</h3>
         <p
