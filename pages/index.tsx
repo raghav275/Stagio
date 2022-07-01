@@ -104,7 +104,7 @@ function Home(props: Props) {
               <img
                 width="100%"
                 height="auto"
-                src="https://ik.imagekit.io/stagiotest/banner_slide_g3WKEtyip.png?ik-sdk-version=javascript-1.4.3&updatedAt=1651912129480"
+                src="https://ik.imagekit.io/stagiotest/banner_slide_anei1bMT8.png?ik-sdk-version=javascript-1.4.3&updatedAt=1656692325139"
                 alt="First slide"
               />
             </Link>
