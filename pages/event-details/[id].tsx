@@ -5,6 +5,7 @@ import {
   setStatus,
   cancel,
   bookEvent,
+  qrDetails,
 } from "@actions/event";
 import { NextPageContext } from "next";
 import { useRouter } from "next/router";
@@ -369,7 +370,11 @@ const EventPage = (props: Props) => {
                       (bookingStat === BookingStatus.Bought &&
                         status !== EventStatus.Started) ||
                       (bookingStat !== BookingStatus.Bought &&
-                        new Date(date).getDate() <= new Date().getDate())
+                        new Date(date).valueOf() -
+                          new Date().valueOf() / 36e5 <=
+                          0) ||
+                      (bookingStat !== BookingStatus.Bought &&
+                        status === EventStatus.Started)
                 }
                 onClick={() => {
                   isOwner ||

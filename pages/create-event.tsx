@@ -16,7 +16,7 @@ import ImageUploading, { ImageType } from "react-images-uploading";
 import { toast } from "react-toastify";
 import styles from "../styles/Navbar.module.css";
 import Spinner from "react-bootstrap/Spinner";
-import Image from 'next/image';
+import Image from "next/image";
 
 const useStyles = makeStyles({
   underline: {
@@ -390,7 +390,7 @@ const CreateEvent = (props: Props) => {
                               >
                                 {imageList.map((image, index) => (
                                   <div key={index}>
-                                    <Image
+                                    <img
                                       src={image["data_url"]}
                                       alt=""
                                       width="100"
@@ -461,10 +461,10 @@ const CreateEvent = (props: Props) => {
                               >
                                 {imageList.map((image, index) => (
                                   <div key={index}>
-                                    <Image
+                                    <img
                                       src={image["data_url"]}
                                       alt=""
-                                      width="100"
+                                      width="100px"
                                     />
                                   </div>
                                 ))}

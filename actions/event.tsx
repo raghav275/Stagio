@@ -175,3 +175,17 @@ export const cancel = async (id: string, email: string) => {
   });
   return res.data;
 };
+
+export const qrDetails = async (id: string) => {
+  const res = await axios(`${process.env.BASE_URL}api/event/qrdetails`, {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    data: {
+      id,
+    },
+  });
+  return res.data;
+};

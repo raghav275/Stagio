@@ -13,6 +13,10 @@ export interface Event {
   banner?: string;
   status: number;
   tickets_sold: number;
+  qr:{
+    image:string;
+    amount:number;
+  }
 }
 export interface Razorpay {
   amount: number;

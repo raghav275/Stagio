@@ -18,6 +18,6 @@ module.exports = {
     NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   },
   images: {
-    domains: ["ik.imagekit.io"],
+    domains: ["ik.imagekit.io", "rzp.io"],
   },
 };
