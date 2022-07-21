@@ -20,7 +20,6 @@ interface Props {
 const Room = (props: Props) => {
   const { errorCode, qrDetails } = props;
   const [openModal, setOpenModal] = useState(false);
-  console.log(qrDetails, "here");
   const router = useRouter();
   const [roomId, setRoomId] = useState<string>();
   const sendDonation = () => {
@@ -89,10 +88,14 @@ const Room = (props: Props) => {
                   alignItems: "center",
                   justifyContent: "center",
                   overflow: "auto",
-                  marginTop: -70,
                 })}
               >
-                <Image src={qrDetails.qr_image} width="300px" height="700px" />
+                <Image
+                  src={qrDetails.qr_image}
+                  width="300px"
+                  height="400px"
+                  objectFit="cover"
+                />
               </div>
             </Modal.Body>
           </Modal>
